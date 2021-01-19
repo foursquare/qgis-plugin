@@ -1,0 +1,3 @@
+# Only for development purposes
+pytest~=6.0.1
+qgis_plugin_ci~=1.8.4

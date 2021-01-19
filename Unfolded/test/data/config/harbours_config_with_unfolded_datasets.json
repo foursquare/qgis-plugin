@@ -1,0 +1,280 @@
+{
+  "datasets": [
+    {
+      "version": "v1",
+      "id": "7d193484-21a7-47f4-8cbc-497474a39b64",
+      "label": "harbours",
+      "color": [
+        0,
+        92,
+        255
+      ],
+      "source": "harbours.csv",
+      "fields": [
+        {
+          "name": "fid",
+          "type": "integer",
+          "format": "",
+          "analyzerType": "INT"
+        },
+        {
+          "name": "nimi",
+          "type": "string",
+          "format": "",
+          "analyzerType": "STRING"
+        },
+        {
+          "name": "tonnia_vienti",
+          "type": "integer",
+          "format": "",
+          "analyzerType": "INT"
+        },
+        {
+          "name": "tonnia_tuonti",
+          "type": "integer",
+          "format": "",
+          "analyzerType": "INT"
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "format": "YYYY/M/D",
+          "analyzerType": "DATE"
+        },
+        {
+          "name": "datetime",
+          "type": "timestamp",
+          "format": "YYYY/M/D H:m:s",
+          "analyzerType": "DATETIME"
+        },
+        {
+          "name": "bool",
+          "type": "boolean",
+          "format": "",
+          "analyzerType": "BOOLEAN"
+        },
+        {
+          "name": "longitude",
+          "type": "real",
+          "format": "",
+          "analyzerType": "FLOAT"
+        },
+        {
+          "name": "latitude",
+          "type": "real",
+          "format": "",
+          "analyzerType": "FLOAT"
+        }
+      ]
+    }
+  ],
+  "config": {
+    "version": "v1",
+    "config": {
+      "visState": {
+        "filters": [],
+        "layers": [
+          {
+            "id": "7d19348",
+            "type": "point",
+            "config": {
+              "dataId": "7d193484-21a7-47f4-8cbc-497474a39b64",
+              "label": "harbours",
+              "color": [
+                241,
+                92,
+                23
+              ],
+              "columns": {
+                "lat": "latitude",
+                "lng": "longitude",
+                "altitude": null
+              },
+              "isVisible": true,
+              "visConfig": {
+                "radius": 10,
+                "fixedRadius": false,
+                "opacity": 0.8,
+                "outline": false,
+                "thickness": 1.0,
+                "strokeColor": null,
+                "strokeOpacity": null,
+                "colorRange": {
+                  "name": "Global Warming",
+                  "type": "sequential",
+                  "category": "Uber",
+                  "colors": [
+                    "#5A1846",
+                    "#900C3F",
+                    "#C70039",
+                    "#E3611C",
+                    "#F1920E",
+                    "#FFC300"
+                  ]
+                },
+                "strokeColorRange": {
+                  "name": "Global Warming",
+                  "type": "sequential",
+                  "category": "Uber",
+                  "colors": [
+                    "#5A1846",
+                    "#900C3F",
+                    "#C70039",
+                    "#E3611C",
+                    "#F1920E",
+                    "#FFC300"
+                  ]
+                },
+                "radiusRange": [
+                  0,
+                  50
+                ],
+                "filled": true
+              },
+              "hidden": false,
+              "textLabel": [
+                {
+                  "field": null,
+                  "color": [
+                    255,
+                    255,
+                    255
+                  ],
+                  "size": 18,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "anchor": "start",
+                  "alignment": "center"
+                }
+              ]
+            },
+            "visualChannels": {
+              "colorField": null,
+              "colorScale": "quantile",
+              "strokeColorField": null,
+              "strokeColorScale": "quantile",
+              "sizeField": null,
+              "sizeScale": "linear",
+              "heightField": null,
+              "radiusField": null
+            }
+          }
+        ],
+        "interactionConfig": {
+          "tooltip": {
+            "fieldsToShow": {
+              "7d193484-21a7-47f4-8cbc-497474a39b64": [
+                {
+                  "name": "fid",
+                  "format": null
+                },
+                {
+                  "name": "nimi",
+                  "format": null
+                },
+                {
+                  "name": "tonnia_vienti",
+                  "format": null
+                },
+                {
+                  "name": "tonnia_tuonti",
+                  "format": null
+                },
+                {
+                  "format": "YYYY/M/D",
+                  "name": "date"
+                },
+                {
+                  "format": "YYYY/M/D H:m:s",
+                  "name": "datetime"
+                },
+                {
+                  "format": null,
+                  "name": "bool"
+                }
+              ]
+            },
+            "compareMode": false,
+            "compareType": "absolute",
+            "enabled": true
+          },
+          "brush": {
+            "size": 0.5,
+            "enabled": false
+          },
+          "geocoder": {
+            "enabled": false
+          },
+          "coordinate": {
+            "enabled": false
+          }
+        },
+        "layerBlending": "normal",
+        "splitMaps": [],
+        "animationConfig": {
+          "currentTime": null,
+          "speed": 1
+        },
+        "metrics": [],
+        "geoKeys": [],
+        "groupBys": [],
+        "datasets": {
+          "fieldDisplayNames": {
+            "7d193484-21a7-47f4-8cbc-497474a39b64": {}
+          }
+        },
+        "joins": []
+      },
+      "mapState": {
+        "bearing": 0,
+        "dragRotate": false,
+        "latitude": 60.556795942038995,
+        "longitude": 23.383588699716316,
+        "pitch": 0,
+        "zoom": 6.759672619963176,
+        "isSplit": false,
+        "mapViewMode": "MODE_2D",
+        "globe": {
+          "enabled": false,
+          "config": {
+            "atmosphere": true,
+            "azimuth": false,
+            "azimuthAngle": 45,
+            "basemap": true,
+            "labels": false,
+            "terminator": true,
+            "terminatorOpacity": 0.85
+          }
+        }
+      },
+      "mapStyle": {
+        "styleType": "dark",
+        "topLayerGroups": {},
+        "visibleLayerGroups": {
+          "label": true,
+          "road": true,
+          "border": false,
+          "building": true,
+          "water": true,
+          "land": true,
+          "3d building": false
+        },
+        "threeDBuildingColor": [
+          9.665468314072013,
+          17.18305478057247,
+          31.1442867897876
+        ],
+        "mapStyles": {}
+      }
+    }
+  },
+  "info": {
+    "app": "kepler.gl",
+    "created_at": "Mon Jan 25 2021 11:37:43 EET+0200",
+    "title": "unfolded_nabzfz",
+    "description": "",
+    "source": "QGIS"
+  }
+}

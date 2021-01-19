@@ -1,0 +1,434 @@
+{
+  "datasets": [
+    {
+      "version": "v1",
+      "data": {
+        "id": "7d193484-21a7-47f4-8cbc-497474a39b64",
+        "label": "Polygons",
+        "color": [
+          192,
+          108,
+          132
+        ],
+        "allData": [
+          [
+            1,
+            13,
+            1,
+            3,
+            "Polygon ((22.50803 60.0204, 22.86569 60.09882, 22.95667 59.82226, 22.50803 60.0204))"
+          ],
+          [
+            2,
+            13,
+            6,
+            1,
+            "Polygon ((22.50803 60.0204, 22.74995 60.1712, 22.86569 60.09882, 22.50803 60.0204))"
+          ],
+          [
+            3,
+            4,
+            3,
+            5,
+            "Polygon ((25.17551 60.22284, 22.95667 59.82226, 24.00769 60.04306, 25.17551 60.22284))"
+          ],
+          [
+            4,
+            8,
+            14,
+            9,
+            "Polygon ((22.0923 60.44687, 22.22377 60.43468, 22.30066 60.29697, 22.0923 60.44687))"
+          ],
+          [
+            5,
+            9,
+            6,
+            13,
+            "Polygon ((22.30066 60.29697, 22.74995 60.1712, 22.50803 60.0204, 22.30066 60.29697))"
+          ],
+          [
+            6,
+            2,
+            4,
+            12,
+            "Polygon ((26.94052 60.46855, 25.17551 60.22284, 25.5374 60.2941, 26.94052 60.46855))"
+          ],
+          [
+            7,
+            13,
+            8,
+            9,
+            "Polygon ((22.50803 60.0204, 22.0923 60.44687, 22.30066 60.29697, 22.50803 60.0204))"
+          ],
+          [
+            8,
+            1,
+            5,
+            3,
+            "Polygon ((22.86569 60.09882, 24.00769 60.04306, 22.95667 59.82226, 22.86569 60.09882))"
+          ],
+          [
+            9,
+            2,
+            3,
+            4,
+            "Polygon ((26.94052 60.46855, 22.95667 59.82226, 25.17551 60.22284, 26.94052 60.46855))"
+          ],
+          [
+            10,
+            13,
+            15,
+            8,
+            "Polygon ((22.50803 60.0204, 21.38951 60.797, 22.0923 60.44687, 22.50803 60.0204))"
+          ],
+          [
+            11,
+            14,
+            6,
+            9,
+            "Polygon ((22.22377 60.43468, 22.74995 60.1712, 22.30066 60.29697, 22.22377 60.43468))"
+          ],
+          [
+            12,
+            11,
+            8,
+            15,
+            "Polygon ((21.45215 61.12832, 22.0923 60.44687, 21.38951 60.797, 21.45215 61.12832))"
+          ],
+          [
+            13,
+            0,
+            8,
+            11,
+            "Polygon ((21.48781 61.24682, 22.0923 60.44687, 21.45215 61.12832, 21.48781 61.24682))"
+          ],
+          [
+            14,
+            0,
+            14,
+            8,
+            "Polygon ((21.48781 61.24682, 22.22377 60.43468, 22.0923 60.44687, 21.48781 61.24682))"
+          ],
+          [
+            15,
+            11,
+            10,
+            0,
+            "Polygon ((21.45215 61.12832, 21.48514 61.59316, 21.48781 61.24682, 21.45215 61.12832))"
+          ],
+          [
+            16,
+            10,
+            14,
+            0,
+            "Polygon ((21.48514 61.59316, 22.22377 60.43468, 21.48781 61.24682, 21.48514 61.59316))"
+          ],
+          [
+            17,
+            6,
+            5,
+            1,
+            "Polygon ((22.74995 60.1712, 24.00769 60.04306, 22.86569 60.09882, 22.74995 60.1712))"
+          ],
+          [
+            18,
+            10,
+            6,
+            14,
+            "Polygon ((21.48514 61.59316, 22.74995 60.1712, 22.22377 60.43468, 21.48514 61.59316))"
+          ],
+          [
+            19,
+            10,
+            5,
+            6,
+            "Polygon ((21.48514 61.59316, 24.00769 60.04306, 22.74995 60.1712, 21.48514 61.59316))"
+          ],
+          [
+            20,
+            15,
+            10,
+            11,
+            "Polygon ((21.38951 60.797, 21.48514 61.59316, 21.45215 61.12832, 21.38951 60.797))"
+          ],
+          [
+            21,
+            10,
+            4,
+            5,
+            "Polygon ((21.48514 61.59316, 25.17551 60.22284, 24.00769 60.04306, 21.48514 61.59316))"
+          ],
+          [
+            22,
+            10,
+            12,
+            4,
+            "Polygon ((21.48514 61.59316, 25.5374 60.2941, 25.17551 60.22284, 21.48514 61.59316))"
+          ],
+          [
+            23,
+            12,
+            7,
+            2,
+            "Polygon ((25.5374 60.2941, 28.32973 61.05645, 26.94052 60.46855, 25.5374 60.2941))"
+          ],
+          [
+            24,
+            10,
+            7,
+            12,
+            "Polygon ((21.48514 61.59316, 28.32973 61.05645, 25.5374 60.2941, 21.48514 61.59316))"
+          ]
+        ],
+        "fields": [
+          {
+            "name": "fid",
+            "type": "integer",
+            "format": "",
+            "analyzerType": "INT"
+          },
+          {
+            "name": "POINTA",
+            "type": "integer",
+            "format": "",
+            "analyzerType": "INT"
+          },
+          {
+            "name": "POINTB",
+            "type": "integer",
+            "format": "",
+            "analyzerType": "INT"
+          },
+          {
+            "name": "POINTC",
+            "type": "integer",
+            "format": "",
+            "analyzerType": "INT"
+          },
+          {
+            "name": "geometry",
+            "type": "geojson",
+            "format": "",
+            "analyzerType": "PAIR_GEOMETRY_FROM_STRING"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "version": "v1",
+    "config": {
+      "visState": {
+        "filters": [],
+        "layers": [
+          {
+            "id": "7d19348",
+            "type": "geojson",
+            "config": {
+              "dataId": "7d193484-21a7-47f4-8cbc-497474a39b64",
+              "label": "Polygons",
+              "color": [
+                0,
+                0,
+                4
+              ],
+              "columns": {
+                "geojson": "geometry"
+              },
+              "isVisible": true,
+              "visConfig": {
+                "opacity": 1.0,
+                "strokeOpacity": 0.7,
+                "thickness": 0.5,
+                "strokeColor": [
+                  255,
+                  139,
+                  227
+                ],
+                "colorRange": {
+                  "category": "Custom",
+                  "colors": [
+                    "#000004",
+                    "#3b0f6f",
+                    "#8c2981",
+                    "#de4969",
+                    "#fe9f6d",
+                    "#fcfdbf"
+                  ],
+                  "name": "Custom palette",
+                  "type": "custom"
+                },
+                "strokeColorRange": {
+                  "category": "Custom",
+                  "colors": [
+                    "#ff8be3",
+                    "#ff20d7",
+                    "#ffb417",
+                    "#7ed887",
+                    "#ff99ff",
+                    "#ffcb99"
+                  ],
+                  "name": "Custom palette",
+                  "type": "custom"
+                },
+                "radius": 10,
+                "sizeRange": [
+                  0,
+                  10
+                ],
+                "radiusRange": [
+                  0,
+                  50
+                ],
+                "heightRange": [
+                  0,
+                  500
+                ],
+                "elevationScale": 5,
+                "stroked": true,
+                "filled": true,
+                "enable3d": false,
+                "wireframe": false
+              },
+              "hidden": false,
+              "textLabel": [
+                {
+                  "field": null,
+                  "color": [
+                    255,
+                    255,
+                    255
+                  ],
+                  "size": 18,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "anchor": "start",
+                  "alignment": "center"
+                }
+              ]
+            },
+            "visualChannels": {
+              "colorField": {
+                "name": "POINTB",
+                "type": "real"
+              },
+              "colorScale": "quantile",
+              "strokeColorField": {
+                "name": "POINTB",
+                "type": "real"
+              },
+              "strokeColorScale": "quantile",
+              "sizeField": null,
+              "sizeScale": "linear",
+              "heightField": null,
+              "heightScale": "linear",
+              "radiusField": null,
+              "radiusScale": "linear"
+            }
+          }
+        ],
+        "interactionConfig": {
+          "tooltip": {
+            "fieldsToShow": {
+              "7d193484-21a7-47f4-8cbc-497474a39b64": [
+                {
+                  "name": "fid",
+                  "format": null
+                },
+                {
+                  "name": "POINTA",
+                  "format": null
+                },
+                {
+                  "name": "POINTB",
+                  "format": null
+                },
+                {
+                  "name": "POINTC",
+                  "format": null
+                }
+              ]
+            },
+            "compareMode": false,
+            "compareType": "absolute",
+            "enabled": true
+          },
+          "brush": {
+            "size": 0.5,
+            "enabled": false
+          },
+          "geocoder": {
+            "enabled": false
+          },
+          "coordinate": {
+            "enabled": false
+          }
+        },
+        "layerBlending": "normal",
+        "splitMaps": [],
+        "animationConfig": {
+          "currentTime": null,
+          "speed": 1
+        },
+        "metrics": [],
+        "geoKeys": [],
+        "groupBys": [],
+        "datasets": {
+          "fieldDisplayNames": {
+            "7d193484-21a7-47f4-8cbc-497474a39b64": {}
+          }
+        },
+        "joins": []
+      },
+      "mapState": {
+        "bearing": 0,
+        "dragRotate": false,
+        "latitude": 60.899271172714855,
+        "longitude": 24.871518704939465,
+        "pitch": 0,
+        "zoom": 6.139508929944764,
+        "isSplit": false,
+        "mapViewMode": "MODE_2D",
+        "globe": {
+          "enabled": false,
+          "config": {
+            "atmosphere": true,
+            "azimuth": false,
+            "azimuthAngle": 45,
+            "basemap": true,
+            "labels": false,
+            "terminator": true,
+            "terminatorOpacity": 0.85
+          }
+        }
+      },
+      "mapStyle": {
+        "styleType": "dark",
+        "topLayerGroups": {},
+        "visibleLayerGroups": {
+          "label": true,
+          "road": true,
+          "border": false,
+          "building": true,
+          "water": true,
+          "land": true,
+          "3d building": false
+        },
+        "threeDBuildingColor": [
+          9.665468314072013,
+          17.18305478057247,
+          31.1442867897876
+        ],
+        "mapStyles": {}
+      }
+    }
+  },
+  "info": {
+    "app": "kepler.gl",
+    "created_at": "Tue Feb 02 2021 12:23:30 GMT+0200 (Eastern European Standard Time)",
+    "title": "unfoldedgl_gy6wqin",
+    "description": ""
+  }
+}
