@@ -59,3 +59,12 @@ def to_class(c: Type[T], x: Any) -> dict:
 def from_none(x: Any) -> Any:
     assert x is None
     return x
+
+
+def from_union(fs, x):
+    for f in fs:
+        try:
+            return f(x)
+        except:
+            pass
+    assert False

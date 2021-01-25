@@ -23,8 +23,29 @@ from ..qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 
 def test_map_config_model_points():
-    with open(plugin_test_data_path('config', 'harbours_config.json')) as f:
+    with open(plugin_test_data_path('config', 'harbours_config_point.json')) as f:
         map_config_dict = json.load(f)
     map_config = MapConfig.from_dict(map_config_dict)
     assert map_config.datasets[0].version == 'v1'
+    assert map_config.to_dict() == map_config_dict
+
+
+def test_map_config_model_polygon_points():
+    with open(plugin_test_data_path('config', 'harbours_config.json')) as f:
+        map_config_dict = json.load(f)
+    map_config = MapConfig.from_dict(map_config_dict)
+    assert map_config.to_dict() == map_config_dict
+
+
+def test_map_config_model_polygon_points_2():
+    with open(plugin_test_data_path('config', 'harbours_config2.json')) as f:
+        map_config_dict = json.load(f)
+    map_config = MapConfig.from_dict(map_config_dict)
+    assert map_config.to_dict() == map_config_dict
+
+
+def test_map_config_model_polygon_points_3():
+    with open(plugin_test_data_path('config', 'harbours_config3.json')) as f:
+        map_config_dict = json.load(f)
+    map_config = MapConfig.from_dict(map_config_dict)
     assert map_config.to_dict() == map_config_dict

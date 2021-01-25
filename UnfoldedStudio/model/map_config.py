@@ -21,11 +21,76 @@
 Initial version generated using https://app.quicktype.io/ from json file
 """
 
-from typing import Any, List
+from typing import Any, List, Optional
 from uuid import UUID
 
 from .conversion_utils import (from_int, from_bool, from_float, to_float, from_str, from_list,
-                               to_class, from_none)
+                               to_class, from_none, from_union)
+
+
+class GlobeConfig:
+    atmosphere: bool
+    azimuth: bool
+    azimuth_angle: int
+    basemap: bool
+    labels: bool
+    terminator: bool
+    terminator_opacity: float
+
+    def __init__(self, atmosphere: bool, azimuth: bool, azimuth_angle: int, basemap: bool, labels: bool,
+                 terminator: bool, terminator_opacity: float) -> None:
+        self.atmosphere = atmosphere
+        self.azimuth = azimuth
+        self.azimuth_angle = azimuth_angle
+        self.basemap = basemap
+        self.labels = labels
+        self.terminator = terminator
+        self.terminator_opacity = terminator_opacity
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'GlobeConfig':
+        assert isinstance(obj, dict)
+        atmosphere = from_bool(obj.get("atmosphere"))
+        azimuth = from_bool(obj.get("azimuth"))
+        azimuth_angle = from_int(obj.get("azimuthAngle"))
+        basemap = from_bool(obj.get("basemap"))
+        labels = from_bool(obj.get("labels"))
+        terminator = from_bool(obj.get("terminator"))
+        terminator_opacity = from_float(obj.get("terminatorOpacity"))
+        return GlobeConfig(atmosphere, azimuth, azimuth_angle, basemap, labels, terminator, terminator_opacity)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["atmosphere"] = from_bool(self.atmosphere)
+        result["azimuth"] = from_bool(self.azimuth)
+        result["azimuthAngle"] = from_int(self.azimuth_angle)
+        result["basemap"] = from_bool(self.basemap)
+        result["labels"] = from_bool(self.labels)
+        result["terminator"] = from_bool(self.terminator)
+        result["terminatorOpacity"] = to_float(self.terminator_opacity)
+        return result
+
+
+class Globe:
+    enabled: bool
+    config: GlobeConfig
+
+    def __init__(self, enabled: bool, config: GlobeConfig) -> None:
+        self.enabled = enabled
+        self.config = config
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Globe':
+        assert isinstance(obj, dict)
+        enabled = from_bool(obj.get("enabled"))
+        config = GlobeConfig.from_dict(obj.get("config"))
+        return Globe(enabled, config)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["enabled"] = from_bool(self.enabled)
+        result["config"] = to_class(GlobeConfig, self.config)
+        return result
 
 
 class MapState:
@@ -36,9 +101,11 @@ class MapState:
     pitch: int
     zoom: float
     is_split: bool
+    map_view_mode: Optional[str]
+    globe: Optional[Globe]
 
     def __init__(self, bearing: int, drag_rotate: bool, latitude: float, longitude: float, pitch: int, zoom: float,
-                 is_split: bool) -> None:
+                 is_split: bool, map_view_mode: Optional[str] = None, globe: Optional[Globe] = None) -> None:
         self.bearing = bearing
         self.drag_rotate = drag_rotate
         self.latitude = latitude
@@ -46,6 +113,8 @@ class MapState:
         self.pitch = pitch
         self.zoom = zoom
         self.is_split = is_split
+        self.map_view_mode = map_view_mode
+        self.globe = globe
 
     @staticmethod
     def from_dict(obj: Any) -> 'MapState':
@@ -57,7 +126,9 @@ class MapState:
         pitch = from_int(obj.get("pitch"))
         zoom = from_float(obj.get("zoom"))
         is_split = from_bool(obj.get("isSplit"))
-        return MapState(bearing, drag_rotate, latitude, longitude, pitch, zoom, is_split)
+        map_view_mode = from_union([from_str, from_none], obj.get("mapViewMode"))
+        globe = from_union([Globe.from_dict, from_none], obj.get("globe"))
+        return MapState(bearing, drag_rotate, latitude, longitude, pitch, zoom, is_split, map_view_mode, globe)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -68,6 +139,10 @@ class MapState:
         result["pitch"] = from_int(self.pitch)
         result["zoom"] = to_float(self.zoom)
         result["isSplit"] = from_bool(self.is_split)
+        if self.map_view_mode:
+            result["mapViewMode"] = from_union([from_str, from_none], self.map_view_mode)
+        if self.globe:
+            result["globe"] = from_union([lambda x: to_class(Globe, x), from_none], self.globe)
         return result
 
 
@@ -343,21 +418,63 @@ class InteractionConfig:
         return result
 
 
-class Columns:
-    geojson: str
+class ColumnsColumns:
+    lat: Optional[str]
+    lng: Optional[str]
+    altitude: None
 
-    def __init__(self, geojson: str) -> None:
+    def __init__(self, lat: Optional[str], lng: Optional[str], altitude: None) -> None:
+        self.lat = lat
+        self.lng = lng
+        self.altitude = altitude
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'ColumnsColumns':
+        assert isinstance(obj, dict)
+        lat = from_union([from_str, from_none], obj.get("lat"))
+        lng = from_union([from_str, from_none], obj.get("lng"))
+        altitude = from_none(obj.get("altitude"))
+        return ColumnsColumns(lat, lng, altitude)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["lat"] = from_union([from_str, from_none], self.lat)
+        result["lng"] = from_union([from_str, from_none], self.lng)
+        result["altitude"] = from_none(self.altitude)
+        return result
+
+
+class Columns:
+    geojson: Optional[str]
+    columns: Optional[ColumnsColumns]
+    lat: Optional[str]
+    lng: Optional[str]
+    altitude: Optional[str]
+
+    def __init__(self, geojson: Optional[str], lat: Optional[str], lng: Optional[str], altitude: None) -> None:
         self.geojson = geojson
+        self.lat = lat
+        self.lng = lng
+        self.altitude = altitude
 
     @staticmethod
     def from_dict(obj: Any) -> 'Columns':
         assert isinstance(obj, dict)
-        geojson = from_str(obj.get("geojson"))
-        return Columns(geojson)
+        geojson = from_union([from_str, from_none], obj.get("geojson"))
+        lat = from_union([from_str, from_none], obj.get("lat"))
+        lng = from_union([from_str, from_none], obj.get("lng"))
+        altitude = from_union([from_str, from_none], obj.get("altitude"))
+        return Columns(geojson, lat, lng, altitude)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["geojson"] = from_str(self.geojson)
+        if self.geojson:
+            result["geojson"] = from_union([from_str, from_none], self.geojson)
+        if self.lat is not None:
+            result["lat"] = from_union([from_str, from_none], self.lat)
+            result["lng"] = from_union([from_str, from_none], self.lng)
+            result["altitude"] = from_union([from_str, from_none], self.altitude)
+
         return result
 
 
@@ -432,25 +549,28 @@ class ColorRange:
 
 class VisConfig:
     opacity: float
-    stroke_opacity: float
+    stroke_opacity: Optional[float]
     thickness: float
     stroke_color: None
     color_range: ColorRange
     stroke_color_range: ColorRange
     radius: int
-    size_range: List[int]
+    size_range: Optional[List[int]]
     radius_range: List[int]
-    height_range: List[int]
-    elevation_scale: int
-    stroked: bool
-    filled: bool
-    enable3_d: bool
-    wireframe: bool
+    height_range: Optional[List[int]]
+    elevation_scale: Optional[int]
+    stroked: Optional[bool]
+    filled: Optional[bool]
+    enable3_d: Optional[bool]
+    wireframe: Optional[bool]
+    fixed_radius: Optional[bool]
+    outline: Optional[bool]
 
-    def __init__(self, opacity: float, stroke_opacity: float, thickness: float, stroke_color: None,
-                 color_range: ColorRange, stroke_color_range: ColorRange, radius: int, size_range: List[int],
-                 radius_range: List[int], height_range: List[int], elevation_scale: int, stroked: bool, filled: bool,
-                 enable3_d: bool, wireframe: bool) -> None:
+    def __init__(self, opacity: float, stroke_opacity: Optional[float], thickness: float, stroke_color: None,
+                 color_range: ColorRange, stroke_color_range: ColorRange, radius: int, size_range: Optional[List[int]],
+                 radius_range: List[int], height_range: Optional[List[int]], elevation_scale: Optional[int],
+                 stroked: Optional[bool], filled: Optional[bool], enable3_d: Optional[bool],
+                 wireframe: Optional[bool], fixed_radius: Optional[bool], outline: Optional[bool]) -> None:
         self.opacity = opacity
         self.stroke_opacity = stroke_opacity
         self.thickness = thickness
@@ -466,45 +586,63 @@ class VisConfig:
         self.filled = filled
         self.enable3_d = enable3_d
         self.wireframe = wireframe
+        self.fixed_radius = fixed_radius
+        self.outline = outline
 
     @staticmethod
     def from_dict(obj: Any) -> 'VisConfig':
         assert isinstance(obj, dict)
         opacity = from_float(obj.get("opacity"))
-        stroke_opacity = from_float(obj.get("strokeOpacity"))
+        stroke_opacity = from_union([from_float, from_none], obj.get("strokeOpacity"))
         thickness = from_float(obj.get("thickness"))
         stroke_color = from_none(obj.get("strokeColor"))
         color_range = ColorRange.from_dict(obj.get("colorRange"))
         stroke_color_range = ColorRange.from_dict(obj.get("strokeColorRange"))
         radius = from_int(obj.get("radius"))
-        size_range = from_list(from_int, obj.get("sizeRange"))
+        size_range = from_union([lambda x: from_list(from_int, x), from_none], obj.get("sizeRange"))
         radius_range = from_list(from_int, obj.get("radiusRange"))
-        height_range = from_list(from_int, obj.get("heightRange"))
-        elevation_scale = from_int(obj.get("elevationScale"))
-        stroked = from_bool(obj.get("stroked"))
-        filled = from_bool(obj.get("filled"))
-        enable3_d = from_bool(obj.get("enable3d"))
-        wireframe = from_bool(obj.get("wireframe"))
+        height_range = from_union([lambda x: from_list(from_int, x), from_none], obj.get("heightRange"))
+        elevation_scale = from_union([from_int, from_none], obj.get("elevationScale"))
+        stroked = from_union([from_bool, from_none], obj.get("stroked"))
+        filled = from_union([from_bool, from_none], obj.get("filled"))
+        enable3_d = from_union([from_bool, from_none], obj.get("enable3d"))
+        wireframe = from_union([from_bool, from_none], obj.get("wireframe"))
+        fixed_radius = from_union([from_bool, from_none], obj.get("fixedRadius"))
+        outline = from_union([from_bool, from_none], obj.get("outline"))
         return VisConfig(opacity, stroke_opacity, thickness, stroke_color, color_range, stroke_color_range, radius,
-                         size_range, radius_range, height_range, elevation_scale, stroked, filled, enable3_d, wireframe)
+                         size_range, radius_range, height_range, elevation_scale, stroked, filled, enable3_d, wireframe,
+                         fixed_radius, outline)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["opacity"] = to_float(self.opacity)
-        result["strokeOpacity"] = to_float(self.stroke_opacity)
+        result["strokeOpacity"] = from_union([to_float, from_none], self.stroke_opacity)
         result["thickness"] = to_float(self.thickness)
         result["strokeColor"] = from_none(self.stroke_color)
         result["colorRange"] = to_class(ColorRange, self.color_range)
         result["strokeColorRange"] = to_class(ColorRange, self.stroke_color_range)
         result["radius"] = from_int(self.radius)
-        result["sizeRange"] = from_list(from_int, self.size_range)
         result["radiusRange"] = from_list(from_int, self.radius_range)
-        result["heightRange"] = from_list(from_int, self.height_range)
-        result["elevationScale"] = from_int(self.elevation_scale)
-        result["stroked"] = from_bool(self.stroked)
-        result["filled"] = from_bool(self.filled)
-        result["enable3d"] = from_bool(self.enable3_d)
-        result["wireframe"] = from_bool(self.wireframe)
+
+        if self.stroked is not None:
+            result["stroked"] = from_union([from_bool, from_none], self.stroked)
+        if self.filled is not None:
+            result["filled"] = from_union([from_bool, from_none], self.filled)
+        if self.enable3_d is not None:
+            result["enable3d"] = from_union([from_bool, from_none], self.enable3_d)
+        if self.wireframe is not None:
+            result["wireframe"] = from_union([from_bool, from_none], self.wireframe)
+        if self.elevation_scale:
+            result["elevationScale"] = from_union([from_int, from_none], self.elevation_scale)
+        if self.size_range:
+            result["sizeRange"] = from_union([lambda x: from_list(from_int, x), from_none], self.size_range)
+        if self.height_range:
+            result["heightRange"] = from_union([lambda x: from_list(from_int, x), from_none], self.height_range)
+        if self.fixed_radius is not None:
+            result["fixedRadius"] = from_union([from_bool, from_none], self.fixed_radius)
+        if self.outline is not None:
+            result["outline"] = from_union([from_bool, from_none], self.outline)
+
         return result
 
 
@@ -555,43 +693,55 @@ class LayerConfig:
         return result
 
 
-class ColorField:
+class Field:
     name: str
     type: str
+    format: Optional[str]
+    analyzer_type: Optional[str]
 
-    def __init__(self, name: str, type: str) -> None:
+    def __init__(self, name: str, type: str, format: Optional[str] = None, analyzer_type: Optional[str] = None) -> None:
         self.name = name
         self.type = type
+        self.format = format
+        self.analyzer_type = analyzer_type
 
     @staticmethod
-    def from_dict(obj: Any) -> 'ColorField':
+    def from_dict(obj: Any) -> 'Field':
         assert isinstance(obj, dict)
         name = from_str(obj.get("name"))
         type = from_str(obj.get("type"))
-        return ColorField(name, type)
+        format = from_union([from_str, from_none], obj.get("format"))
+        analyzer_type = from_union([from_str, from_none], obj.get("analyzerType"))
+        return Field(name, type, format, analyzer_type)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["name"] = from_str(self.name)
         result["type"] = from_str(self.type)
+
+        if self.format is not None:
+            result["format"] = from_union([from_str, from_none], self.format)
+        if self.analyzer_type is not None:
+            result["analyzerType"] = from_union([from_str, from_none], self.analyzer_type)
         return result
 
 
 class VisualChannels:
-    color_field: ColorField
+    color_field: Optional[Field]
     color_scale: str
-    stroke_color_field: None
+    stroke_color_field: Optional[Field]
     stroke_color_scale: str
-    size_field: None
+    size_field: Optional[Field]
     size_scale: str
-    height_field: None
-    height_scale: str
-    radius_field: None
-    radius_scale: str
+    height_field: Optional[Field]
+    height_scale: Optional[str]
+    radius_field: Optional[Field]
+    radius_scale: Optional[str]
 
-    def __init__(self, color_field: ColorField, color_scale: str, stroke_color_field: None, stroke_color_scale: str,
-                 size_field: None, size_scale: str, height_field: None, height_scale: str, radius_field: None,
-                 radius_scale: str) -> None:
+    def __init__(self, color_field: Optional[Field], color_scale: str, stroke_color_field: Optional[Field],
+                 stroke_color_scale: str,
+                 size_field: Optional[Field], size_scale: str, height_field: Optional[Field],
+                 height_scale: Optional[str], radius_field: Optional[Field], radius_scale: Optional[str]) -> None:
         self.color_field = color_field
         self.color_scale = color_scale
         self.stroke_color_field = stroke_color_field
@@ -606,31 +756,34 @@ class VisualChannels:
     @staticmethod
     def from_dict(obj: Any) -> 'VisualChannels':
         assert isinstance(obj, dict)
-        color_field = ColorField.from_dict(obj.get("colorField"))
+        color_field = from_union([Field.from_dict, from_none], obj.get("colorField"))
         color_scale = from_str(obj.get("colorScale"))
-        stroke_color_field = from_none(obj.get("strokeColorField"))
+        stroke_color_field = from_union([Field.from_dict, from_none], obj.get("strokeColorField"))
         stroke_color_scale = from_str(obj.get("strokeColorScale"))
-        size_field = from_none(obj.get("sizeField"))
+        size_field = from_union([Field.from_dict, from_none], obj.get("sizeField"))
         size_scale = from_str(obj.get("sizeScale"))
-        height_field = from_none(obj.get("heightField"))
-        height_scale = from_str(obj.get("heightScale"))
-        radius_field = from_none(obj.get("radiusField"))
-        radius_scale = from_str(obj.get("radiusScale"))
+        height_field = from_union([Field.from_dict, from_none], obj.get("heightField"))
+        height_scale = from_union([from_str, from_none], obj.get("heightScale"))
+        radius_field = from_union([Field.from_dict, from_none], obj.get("radiusField"))
+        radius_scale = from_union([from_str, from_none], obj.get("radiusScale"))
         return VisualChannels(color_field, color_scale, stroke_color_field, stroke_color_scale, size_field, size_scale,
                               height_field, height_scale, radius_field, radius_scale)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["colorField"] = to_class(ColorField, self.color_field)
+        result["colorField"] = from_union([lambda x: to_class(Field, x), from_none], self.color_field)
         result["colorScale"] = from_str(self.color_scale)
-        result["strokeColorField"] = from_none(self.stroke_color_field)
+        result["strokeColorField"] = from_union([lambda x: to_class(Field, x), from_none], self.stroke_color_field)
         result["strokeColorScale"] = from_str(self.stroke_color_scale)
-        result["sizeField"] = from_none(self.size_field)
+        result["sizeField"] = from_union([lambda x: to_class(Field, x), from_none], self.size_field)
         result["sizeScale"] = from_str(self.size_scale)
-        result["heightField"] = from_none(self.height_field)
-        result["heightScale"] = from_str(self.height_scale)
-        result["radiusField"] = from_none(self.radius_field)
-        result["radiusScale"] = from_str(self.radius_scale)
+
+        result["heightField"] = from_union([lambda x: to_class(Field, x), from_none], self.height_field)
+        result["radiusField"] = from_union([lambda x: to_class(Field, x), from_none], self.radius_field)
+        if self.height_scale:
+            result["heightScale"] = from_union([from_str, from_none], self.height_scale)
+        if self.radius_scale:
+            result["radiusScale"] = from_union([from_str, from_none], self.radius_scale)
         return result
 
 
@@ -778,9 +931,9 @@ class Data:
     label: str
     color: List[int]
     all_data: List[Any]
-    fields: List[Any]
+    fields: List[Field]
 
-    def __init__(self, id: UUID, label: str, color: List[int], all_data: List[Any], fields: List[Any]) -> None:
+    def __init__(self, id: UUID, label: str, color: List[int], all_data: List[Any], fields: List[Field]) -> None:
         self.id = id
         self.label = label
         self.color = color
@@ -794,7 +947,7 @@ class Data:
         label = from_str(obj.get("label"))
         color = from_list(from_int, obj.get("color"))
         all_data = from_list(lambda x: x, obj.get("allData"))
-        fields = from_list(lambda x: x, obj.get("fields"))
+        fields = from_list(Field.from_dict, obj.get("fields"))
         return Data(id, label, color, all_data, fields)
 
     def to_dict(self) -> dict:
@@ -803,24 +956,24 @@ class Data:
         result["label"] = from_str(self.label)
         result["color"] = from_list(from_int, self.color)
         result["allData"] = from_list(lambda x: x, self.all_data)
-        result["fields"] = from_list(lambda x: x, self.fields)
+        result["fields"] = from_list(lambda x: to_class(Field, x), self.fields)
         return result
 
 
 class Dataset:
-    version: str
     data: Data
+    version: str = 'v1'
 
-    def __init__(self, version: str, data: Data) -> None:
-        self.version = version
+    def __init__(self, data: Data, version: Optional[str] = None) -> None:
         self.data = data
+        self.version = version if version is not None else Dataset.version
 
     @staticmethod
     def from_dict(obj: Any) -> 'Dataset':
         assert isinstance(obj, dict)
         version = from_str(obj.get("version"))
         data = Data.from_dict(obj.get("data"))
-        return Dataset(version, data)
+        return Dataset(data, version)
 
     def to_dict(self) -> dict:
         result: dict = {}
