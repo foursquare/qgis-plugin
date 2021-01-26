@@ -23,6 +23,7 @@ from typing import Optional, List, Tuple
 from qgis.core import (QgsTask, QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol)
 
 from ..exceptions import ProcessInterruptedException, InvalidInputException
+from ..utils import extract_color
 from ...definitions.settings import Settings
 from ...definitions.types import UnfoldedLayerType, SymbolType, SymbolLayerType
 from ...model.map_config import Layer, LayerConfig, VisualChannels, VisConfig, Columns, TextLabel, ColorRange
@@ -100,14 +101,6 @@ class LayerToLayerConfig(QgsTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    @staticmethod
-    def _extract_color(color: str):
-        _color = list(map(int, color.split(",")))
-        rgb_value = _color[:-1]
-        hex_value = '#{:02x}{:02x}{:02x}'.format(*rgb_value)
-        alpha = _color[-1] / 255.0
-        return rgb_value, hex_value, alpha
-
     def _extract_layer_style(self, symbol: QgsSymbol) -> Tuple[List[int], VisConfig]:
         symbol_opacity: float = symbol.opacity()
         symbol_layer: QgsSymbolLayer = symbol.symbolLayers()[0]
@@ -120,9 +113,9 @@ class LayerToLayerConfig(QgsTask):
         size_range, height_range, elevation_scale, stroked, enable3_d, wireframe, fixed_radius = [None] * 7
 
         if isinstance(symbol, QgsMarkerSymbol):
-            fill_rgb, _, aplha = self._extract_color(properties['color'])
+            fill_rgb, _, aplha = extract_color(properties['color'])
             opacity = round(symbol_opacity * aplha, 2)
-            stroke_rgb, _, stroke_aplha = self._extract_color(properties['outline_color'])
+            stroke_rgb, _, stroke_aplha = extract_color(properties['outline_color'])
             stroke_opacity = round(symbol_opacity * stroke_aplha, 2)
             thickness = float(properties['outline_width'])
             radius = int(properties['size'])
