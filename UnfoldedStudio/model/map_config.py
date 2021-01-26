@@ -80,6 +80,12 @@ class Globe:
         self.config = config
 
     @staticmethod
+    def create_default():
+        return Globe.from_dict({"enabled": False,
+                                "config": {"atmosphere": True, "azimuth": False, "azimuthAngle": 45, "basemap": True,
+                                           "labels": False, "terminator": True, "terminatorOpacity": 0.85}})
+
+    @staticmethod
     def from_dict(obj: Any) -> 'Globe':
         assert isinstance(obj, dict)
         enabled = from_bool(obj.get("enabled"))
@@ -101,7 +107,7 @@ class MapState:
     pitch: int
     zoom: float
     is_split: bool
-    map_view_mode: Optional[str]
+    map_view_mode: Optional[str] = "MODE_2D"
     globe: Optional[Globe]
 
     def __init__(self, bearing: int, drag_rotate: bool, latitude: float, longitude: float, pitch: int, zoom: float,
@@ -182,6 +188,12 @@ class VisibleLayerGroups:
         self.the_3_d_building = the_3_d_building
 
     @staticmethod
+    def create_default():
+        return VisibleLayerGroups.from_dict(
+            {"label": True, "road": True, "border": False, "building": True, "water": True, "land": True,
+             "3d building": False})
+
+    @staticmethod
     def from_dict(obj: Any) -> 'VisibleLayerGroups':
         assert isinstance(obj, dict)
         label = from_bool(obj.get("label"))
@@ -207,10 +219,10 @@ class VisibleLayerGroups:
 
 class MapStyle:
     style_type: str
-    top_layer_groups: AnyDict
+    top_layer_groups: AnyDict = AnyDict({})
     visible_layer_groups: VisibleLayerGroups
-    three_d_building_color: List[float]
-    map_styles: AnyDict
+    three_d_building_color: List[float] = [9.665468314072013, 17.18305478057247, 31.1442867897876]
+    map_styles: AnyDict = AnyDict({})
 
     def __init__(self, style_type: str, top_layer_groups: AnyDict, visible_layer_groups: VisibleLayerGroups,
                  three_d_building_color: List[float], map_styles: AnyDict) -> None:
@@ -242,7 +254,7 @@ class MapStyle:
 
 class AnimationConfig:
     current_time: None
-    speed: int
+    speed: int = 1
 
     def __init__(self, current_time: None, speed: int) -> None:
         self.current_time = current_time
@@ -360,8 +372,8 @@ class FieldsToShow:
 
 class Tooltip:
     fields_to_show: FieldsToShow
-    compare_mode: bool
-    compare_type: str
+    compare_mode: bool = False
+    compare_type: str = "absolute"
     enabled: bool
 
     def __init__(self, fields_to_show: FieldsToShow, compare_mode: bool, compare_type: str, enabled: bool) -> None:
@@ -937,7 +949,7 @@ class ConfigConfig:
 
 
 class Config:
-    version: str
+    version: str = 'v1'
     config: ConfigConfig
 
     def __init__(self, version: str, config: ConfigConfig) -> None:
@@ -1015,7 +1027,7 @@ class Dataset:
 
 
 class Info:
-    app: str
+    app: str = 'kepler.gl'
     created_at: str
     title: str
     description: str
