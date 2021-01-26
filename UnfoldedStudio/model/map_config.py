@@ -458,6 +458,10 @@ class Columns:
         self.altitude = altitude
 
     @staticmethod
+    def for_point_2d() -> 'Columns':
+        return Columns(None, 'latitude', 'longitude', None)
+
+    @staticmethod
     def from_dict(obj: Any) -> 'Columns':
         assert isinstance(obj, dict)
         geojson = from_union([from_str, from_none], obj.get("geojson"))
@@ -496,6 +500,24 @@ class TextLabel:
         self.alignment = alignment
 
     @staticmethod
+    def create_default() -> 'TextLabel':
+        return TextLabel.from_dict({
+            "field": None,
+            "color": [
+                255,
+                255,
+                255
+            ],
+            "size": 18,
+            "offset": [
+                0,
+                0
+            ],
+            "anchor": "start",
+            "alignment": "center"
+        })
+
+    @staticmethod
     def from_dict(obj: Any) -> 'TextLabel':
         assert isinstance(obj, dict)
         field = from_none(obj.get("field"))
@@ -530,6 +552,11 @@ class ColorRange:
         self.colors = colors
 
     @staticmethod
+    def create_default() -> 'ColorRange':
+        colors = ["#5A1846", "#900C3F", "#C70039", "#E3611C", "#F1920E", "#FFC300"]
+        return ColorRange("Global Warming", "sequential", "Uber", colors)
+
+    @staticmethod
     def from_dict(obj: Any) -> 'ColorRange':
         assert isinstance(obj, dict)
         name = from_str(obj.get("name"))
@@ -550,13 +577,13 @@ class ColorRange:
 class VisConfig:
     opacity: float
     stroke_opacity: Optional[float]
-    thickness: float
-    stroke_color: None
+    thickness: float = 2.0
+    stroke_color: Optional[List[int]]
     color_range: ColorRange
     stroke_color_range: ColorRange
     radius: int
     size_range: Optional[List[int]]
-    radius_range: List[int]
+    radius_range: List[int] = [0, 50]
     height_range: Optional[List[int]]
     elevation_scale: Optional[int]
     stroked: Optional[bool]
@@ -566,7 +593,8 @@ class VisConfig:
     fixed_radius: Optional[bool]
     outline: Optional[bool]
 
-    def __init__(self, opacity: float, stroke_opacity: Optional[float], thickness: float, stroke_color: None,
+    def __init__(self, opacity: float, stroke_opacity: Optional[float], thickness: float,
+                 stroke_color: Optional[List[int]],
                  color_range: ColorRange, stroke_color_range: ColorRange, radius: int, size_range: Optional[List[int]],
                  radius_range: List[int], height_range: Optional[List[int]], elevation_scale: Optional[int],
                  stroked: Optional[bool], filled: Optional[bool], enable3_d: Optional[bool],
@@ -595,7 +623,7 @@ class VisConfig:
         opacity = from_float(obj.get("opacity"))
         stroke_opacity = from_union([from_float, from_none], obj.get("strokeOpacity"))
         thickness = from_float(obj.get("thickness"))
-        stroke_color = from_none(obj.get("strokeColor"))
+        stroke_color = from_union([lambda x: from_list(from_int, x), from_none], obj.get("strokeColor"))
         color_range = ColorRange.from_dict(obj.get("colorRange"))
         stroke_color_range = ColorRange.from_dict(obj.get("strokeColorRange"))
         radius = from_int(obj.get("radius"))
@@ -618,7 +646,7 @@ class VisConfig:
         result["opacity"] = to_float(self.opacity)
         result["strokeOpacity"] = from_union([to_float, from_none], self.stroke_opacity)
         result["thickness"] = to_float(self.thickness)
-        result["strokeColor"] = from_none(self.stroke_color)
+        result["strokeColor"] = from_union([from_int, from_none], self.stroke_color)
         result["colorRange"] = to_class(ColorRange, self.color_range)
         result["strokeColorRange"] = to_class(ColorRange, self.stroke_color_range)
         result["radius"] = from_int(self.radius)
@@ -739,9 +767,9 @@ class VisualChannels:
     radius_scale: Optional[str]
 
     def __init__(self, color_field: Optional[Field], color_scale: str, stroke_color_field: Optional[Field],
-                 stroke_color_scale: str,
-                 size_field: Optional[Field], size_scale: str, height_field: Optional[Field],
-                 height_scale: Optional[str], radius_field: Optional[Field], radius_scale: Optional[str]) -> None:
+                 stroke_color_scale: str, size_field: Optional[Field], size_scale: str,
+                 height_field: Optional[Field] = None, height_scale: Optional[str] = None,
+                 radius_field: Optional[Field] = None, radius_scale: Optional[str] = None) -> None:
         self.color_field = color_field
         self.color_scale = color_scale
         self.stroke_color_field = stroke_color_field
@@ -752,6 +780,10 @@ class VisualChannels:
         self.height_scale = height_scale
         self.radius_field = radius_field
         self.radius_scale = radius_scale
+
+    @staticmethod
+    def create_single_color_channels() -> 'VisualChannels':
+        return VisualChannels(None, "quantile", None, "quantile", None, "linear")
 
     @staticmethod
     def from_dict(obj: Any) -> 'VisualChannels':

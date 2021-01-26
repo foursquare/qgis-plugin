@@ -24,6 +24,7 @@ from ..qgis_plugin_tools.tools.settings import get_setting
 @enum.unique
 class Settings(enum.Enum):
     CRS = 'EPSG:4326'
+    SUPPORTED_SIZE_UNIT = 'Pixel'
 
     def get(self, typehint: type = str) -> any:
         """Gets the value of the setting"""

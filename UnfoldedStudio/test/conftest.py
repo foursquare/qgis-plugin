@@ -61,14 +61,21 @@ def harbour_points_3067(test_gpkg):
 
 
 @pytest.fixture
-def simple_harbour_points(harbour_points):
+def simple_harbour_points(new_project, harbour_points):
     add_layer(harbour_points)
     set_styles(harbour_points, 'harbour_simple.qml')
     return harbour_points
 
 
 @pytest.fixture
-def simple_harbour_points_3067(harbour_points_3067):
+def simple_harbour_points_invalid_size_units(new_project, harbour_points):
+    add_layer(harbour_points)
+    set_styles(harbour_points, 'harbour_simple_invalid_size_unit.qml')
+    return harbour_points
+
+
+@pytest.fixture
+def simple_harbour_points_3067(new_project, harbour_points_3067):
     add_layer(harbour_points_3067)
     set_styles(harbour_points_3067, 'harbour_simple.qml')
     return harbour_points_3067

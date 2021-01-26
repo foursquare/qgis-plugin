@@ -20,7 +20,7 @@
           <prop k="scale_method" v="diameter"/>
           <prop k="size" v="10"/>
           <prop k="size_map_unit_scale" v="3x:0,0,0,0,0,0"/>
-          <prop k="size_unit" v="Pixel"/>
+          <prop k="size_unit" v="Point"/>
           <prop k="vertical_anchor_point" v="1"/>
           <data_defined_properties>
             <Option type="Map">

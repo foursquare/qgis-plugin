@@ -16,12 +16,32 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
-from ..qgis_plugin_tools.tools.exceptions import QgsPluginException
+import enum
 
 
-class ProcessInterruptedException(QgsPluginException):
-    pass
+@enum.unique
+class UnfoldedLayerType(enum.Enum):
+    Point = 'point'
+    Geojson = 'geojson'
 
 
-class InvalidInputException(QgsPluginException):
-    pass
+"""
+Following classes are applied from the QGIS plugin Spatial Data Package Export created by Gispo Ltd.
+https://github.com/cividi/spatial-data-package-export/blob/master/SpatialDataPackageExport/definitions/symbols.py
+Licensed by GPLv3
+"""
+
+
+@enum.unique
+class SymbolType(enum.Enum):
+    categorizedSymbol = 'categorizedSymbol'
+    graduatedSymbol = 'graduatedSymbol'
+    singleSymbol = 'singleSymbol'
+
+
+@enum.unique
+class SymbolLayerType(enum.Enum):
+    SimpleMarker = 'SimpleMarker'
+    SimpleLine = 'SimpleLine'
+    CentroidFill = 'CentroidFill'
+    SimpleFill = 'SimpleFill'
