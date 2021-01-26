@@ -54,10 +54,24 @@ def harbour_points(test_gpkg):
 
 
 @pytest.fixture
+def harbour_points_3067(test_gpkg):
+    name = 'harbours_3067'
+    layer = get_layer(name, test_gpkg)
+    return layer
+
+
+@pytest.fixture
 def simple_harbour_points(harbour_points):
     add_layer(harbour_points)
     set_styles(harbour_points, 'harbour_simple.qml')
     return harbour_points
+
+
+@pytest.fixture
+def simple_harbour_points_3067(harbour_points_3067):
+    add_layer(harbour_points_3067)
+    set_styles(harbour_points_3067, 'harbour_simple.qml')
+    return harbour_points_3067
 
 
 def get_layer(name: str, gpkg):

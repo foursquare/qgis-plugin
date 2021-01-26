@@ -23,9 +23,11 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 
 from PyQt5.QtCore import QVariant
-from qgis.core import QgsTask, QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem
+from qgis.core import (QgsTask, QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem,
+                       QgsProject)
 
 from ..exceptions import ProcessInterruptedException
+from ...definitions.settings import Settings
 from ...model.map_config import Dataset, Data, Field
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginException, QgsPluginNotImplementedException
@@ -87,17 +89,28 @@ class LayerToDatasets(QgsTask):
 
         LOGGER.info(tr('Adding layer geometry to fields'))
 
+        crs: QgsCoordinateReferenceSystem = self.layer.crs().authid()
+        dest_crs = Settings.CRS.get()
+        do_transform = crs != dest_crs
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             LOGGER.info('Point layer')
-            self.layer.addExpressionField(' $x', QgsField('longitude', QVariant.Double))
-            self.layer.addExpressionField(' $y', QgsField('latitude', QVariant.Double))
+            if not do_transform:
+                self.layer.addExpressionField('$x', QgsField('longitude', QVariant.Double))
+                self.layer.addExpressionField('$y', QgsField('latitude', QVariant.Double))
+            else:
+                self.layer.addExpressionField(f"x(transform($geometry, '{crs}', '{dest_crs}'))",
+                                              QgsField('longitude', QVariant.Double))
+                self.layer.addExpressionField(f"y(transform($geometry, '{crs}', '{dest_crs}'))",
+                                              QgsField('latitude', QVariant.Double))
             # TODO: z coord
         else:
             raise QgsPluginNotImplementedException()
 
     def _remove_geom_from_fields(self):
         """ Removes virtual geometry field(s) from the layer """
+
+        LOGGER.info(tr('Removing layer geometry fields'))
 
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
@@ -113,34 +126,39 @@ class LayerToDatasets(QgsTask):
 
         for field in self.layer.fields():
             field_type = field.type()
+            format_ = ''
             if field_type in [QVariant.Int, QVariant.UInt, QVariant.LongLong, QVariant.ULongLong]:
                 type_, analyzer_type = 'integer', 'INT'
             elif field_type == QVariant.Double:
                 type_, analyzer_type = 'real', 'FLOAT'
             elif field_type == QVariant.String:
                 type_, analyzer_type = 'string', 'STRING'
-
-            else:
-                raise QgsPluginNotImplementedException(tr('Field type not implemented yet'))
-            # TODO: add support for rest
-            # elif field_type == QVariant.Bool:
-            #     type, analyzer_type = ('integer', 'INT')
-            # elif field_type == QVariant.Date:
-            #     type, analyzer_type = ('integer', 'INT')
-            # elif field_type == QVariant.DateTime:
-            #     type, analyzer_type = ('integer', 'INT')
-            # elif field_type == QVariant.Time:
-            #     type, analyzer_type = ('integer', 'INT')
+            elif field_type == QVariant.Bool:
+                type_, analyzer_type = ('boolean', 'BOOLEAN')
+            # TODO: check date time formats
+            elif field_type == QVariant.Date:
+                type_, analyzer_type = ('date', 'DATE')
+                format_ = 'YYYY/M/D'
+            elif field_type == QVariant.DateTime:
+                type_, analyzer_type = ('timestamp', 'DATETIME')
+                format_ = 'YYYY/M/D H:m:s'
+            elif field_type == QVariant.Time:
+                type_, analyzer_type = ('timestamp', 'INT')
+                format_ = 'H:m:s'
             # elif field_type == QVariant.ByteArray:
             #     type, analyzer_type = ('integer', 'INT')
-            # else:
-            #     type, analyzer_type = ('integer', 'INT')
-            fields.append(Field(field.name(), type_, '', analyzer_type))
+            else:
+                raise QgsPluginNotImplementedException('Field type not implemented yet')
+
+            fields.append(Field(field.name(), type_, format_, analyzer_type))
 
         return fields
 
     def _extract_all_data(self) -> List:
         """ Extract data either as csv, json or as file """
+
+        LOGGER.info(tr('Extracting layer data'))
+
         if self.output_directory:
             raise QgsPluginNotImplementedException()
         else:
@@ -150,10 +168,12 @@ class LayerToDatasets(QgsTask):
             for i, field_type in enumerate(field_types):
                 if field_types[i] in [QVariant.Int, QVariant.UInt, QVariant.LongLong,
                                       QVariant.ULongLong]:
-                    # There is a possible bug in QGIS csv export that surrounds integers with "
-                    conversion_functions[i] = lambda x: int(x.replace('"', ''))
+                    conversion_functions[i] = lambda x: int(x) if x else None
                 elif field_types[i] == QVariant.Double:
-                    conversion_functions[i] = lambda x: float(x)
+                    conversion_functions[i] = lambda x: float(x) if x else None
+                elif field_types[i] == QVariant.Bool:
+                    # There is a possible bug in QGIS csv export that exports booleans as '1', '0' or ''
+                    conversion_functions[i] = lambda x: bool(int(x)) if x else None
                 else:
                     conversion_functions[i] = lambda x: x
 
@@ -168,14 +188,23 @@ class LayerToDatasets(QgsTask):
                             all_data.append(data)
             return all_data
 
+    # noinspection PyArgumentList
     @staticmethod
     def _save_layer_to_file(layer: QgsVectorLayer, output_path: Path) -> Path:
         """ Save layer to file"""
         output_file = output_path / f'{layer.name()}.csv'
-        # noinspection PyArgumentList
-        _writer = QgsVectorFileWriter.writeAsVectorFormat(layer, str(output_file), "utf-8",
-                                                          QgsCoordinateReferenceSystem("EPSG:4326"),
-                                                          driverName="csv")
+
+        options = QgsVectorFileWriter.SaveVectorOptions()
+        options.driverName = "csv"
+        options.fileEncoding = "utf-8"
+        options.layerOptions = ["SEPARATOR=COMMA", "STRING_QUOTING=IF_NEEDED"]
+
+        # noinspection PyCallByClass
+        writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),
+                                                                 QgsProject.instance().transformContext(), options)
+
+        if msg:
+            raise ProcessInterruptedException(tr('Exception occurred during data extraction: {}', msg))
         return output_file
 
     def __check_if_canceled(self) -> None:

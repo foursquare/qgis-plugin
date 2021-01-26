@@ -20,6 +20,7 @@ import uuid
 
 import pytest
 from PyQt5.QtCore import QVariant
+from qgis.core import QgsVectorLayer
 
 from .conftest import get_map_config
 from ..core.processing.layer2dataset import LayerToDatasets
@@ -30,10 +31,13 @@ def alg(simple_harbour_points) -> LayerToDatasets:
     return LayerToDatasets(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points, (0, 92, 255))
 
 
-def test__add_geom_to_fields_w_points(alg, simple_harbour_points):
-    original_fields = simple_harbour_points.fields().toList()
+@pytest.mark.parametrize('layer', ['simple_harbour_points', 'simple_harbour_points_3067'])
+def test__add_geom_to_fields_w_points(alg, layer, request):
+    layer = request.getfixturevalue(layer)
+    original_fields = layer.fields().toList()
+    alg.layer = layer
     alg._add_geom_to_fields()
-    fields = simple_harbour_points.fields().toList()
+    fields = layer.fields().toList()
 
     assert len(fields) == len(original_fields) + 2
     assert fields[-1].name() == 'latitude'
@@ -42,11 +46,14 @@ def test__add_geom_to_fields_w_points(alg, simple_harbour_points):
     assert fields[-2].type() == QVariant.Double
 
 
-def test__remove_geom_from_fields_w_points(alg, simple_harbour_points):
-    original_fields = simple_harbour_points.fields().toList()
+@pytest.mark.parametrize('layer', ['simple_harbour_points', 'simple_harbour_points_3067'])
+def test__remove_geom_from_fields_w_points(alg, layer, request):
+    layer = request.getfixturevalue(layer)
+    original_fields = layer.fields().toList()
+    alg.layer = layer
     alg._add_geom_to_fields()
     alg._remove_geom_from_fields()
-    fields = simple_harbour_points.fields().toList()
+    fields = layer.fields().toList()
 
     assert fields == original_fields
 
@@ -60,15 +67,22 @@ def test__extract_fields(alg, simple_harbour_points):
     assert fields == map_config.datasets[0].data.to_dict()['fields']
 
 
-def test__extract_all_data(alg, simple_harbour_points):
+@pytest.mark.parametrize('layer', ['simple_harbour_points', 'simple_harbour_points_3067'])
+def test__extract_all_data(alg, layer, request):
+    layer = request.getfixturevalue(layer)
     map_config = get_map_config('harbours_config_point.json')
+    alg.layer = layer
     alg._add_geom_to_fields()
     data = alg._extract_all_data()
     assert data == map_config.datasets[0].data.all_data
 
 
-def test__convert_to_dataset(alg):
+@pytest.mark.parametrize('layer', ['simple_harbour_points', 'simple_harbour_points_3067'])
+def test__convert_to_dataset(layer, alg, request):
+    layer: QgsVectorLayer = request.getfixturevalue(layer)
+    layer.setName('harbours')
     map_config = get_map_config('harbours_config_point.json')
+    alg.layer = layer
     status = alg.run()
     dataset = alg.result_dataset
     assert status, alg.exception
