@@ -90,7 +90,7 @@ class LayerToDatasets(QgsTask):
         LOGGER.info(tr('Adding layer geometry to fields'))
 
         crs: QgsCoordinateReferenceSystem = self.layer.crs().authid()
-        dest_crs = Settings.CRS.get()
+        dest_crs = Settings.crs.get()
         do_transform = crs != dest_crs
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:

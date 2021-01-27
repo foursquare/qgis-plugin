@@ -53,9 +53,9 @@ class LayerToLayerConfig(QgsTask):
         super().__init__('LayerToLayerConfig', QgsTask.CanCancel)
         self.layer_uuid = layer_uuid
         self.layer = layer
-        self.supported_size_unit = Settings.SUPPORTED_SIZE_UNIT.get()
         self.result_layer_conf: Optional[Layer] = None
         self.exception: Optional[Exception] = None
+        self.__supported_size_unit = Settings.supported_size_unit.get()
 
     def run(self) -> bool:
         try:
@@ -120,9 +120,10 @@ class LayerToLayerConfig(QgsTask):
             thickness = float(properties['outline_width'])
             radius = int(properties['size'])
             size_unit = properties['size_unit']
-            if size_unit != self.supported_size_unit:
+            if size_unit != self.__supported_size_unit:
                 raise InvalidInputException(tr('Size unit "{}" is unsupported.', size_unit),
-                                            bar_msg=bar_msg(tr('Please use unit {} instead', self.supported_size_unit)))
+                                            bar_msg=bar_msg(
+                                                tr('Please use unit {} instead', self.__supported_size_unit)))
             # Fixed radius seems to always be False with point types
             fixed_radius = False
         else:
