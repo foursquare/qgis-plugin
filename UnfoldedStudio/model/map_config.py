@@ -658,7 +658,7 @@ class VisConfig:
         result["opacity"] = to_float(self.opacity)
         result["strokeOpacity"] = from_union([to_float, from_none], self.stroke_opacity)
         result["thickness"] = to_float(self.thickness)
-        result["strokeColor"] = from_union([from_int, from_none], self.stroke_color)
+        result["strokeColor"] = from_union([lambda x: from_list(from_int, x), from_none], self.stroke_color)
         result["colorRange"] = to_class(ColorRange, self.color_range)
         result["strokeColorRange"] = to_class(ColorRange, self.stroke_color_range)
         result["radius"] = from_int(self.radius)
