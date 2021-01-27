@@ -21,6 +21,7 @@
 This class contains fixtures and common helper function to keep the test files shorter
 """
 import json
+from pathlib import Path
 
 import pytest
 from qgis.core import QgsVectorLayer, QgsProject
@@ -81,6 +82,11 @@ def simple_harbour_points_3067(new_project, harbour_points_3067):
     return harbour_points_3067
 
 
+@pytest.fixture
+def tmpdir_pth(tmpdir) -> Path:
+    return Path(tmpdir)
+
+
 def get_layer(name: str, gpkg):
     layer = QgsVectorLayer(f'{gpkg}|layername={name}', name, 'ogr')
     assert layer.isValid()
@@ -102,5 +108,13 @@ def add_layer(layer: QgsVectorLayer) -> None:
 def get_map_config(config_name: str):
     """ Get map config from test data directory """
     with open(plugin_test_data_path('config', config_name)) as f:
+        map_config_dict = json.load(f)
+    return MapConfig.from_dict(map_config_dict)
+
+
+def get_loaded_map_config(conf_path: Path):
+    """ Get map config from path """
+    assert conf_path.exists()
+    with open(conf_path) as f:
         map_config_dict = json.load(f)
     return MapConfig.from_dict(map_config_dict)

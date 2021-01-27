@@ -22,14 +22,14 @@ import pytest
 from PyQt5.QtGui import QColor
 from qgis._core import QgsPointXY
 
-from .conftest import get_map_config
+from .conftest import get_map_config, get_loaded_map_config
 from ..core.config_creator import ConfigCreator
 
 
 @pytest.fixture
-def config_creator() -> ConfigCreator:
+def config_creator(tmpdir_pth) -> ConfigCreator:
     map_config = get_map_config('harbours_config_point.json')
-    creator = ConfigCreator("keplergl_nabzfz", "")
+    creator = ConfigCreator("keplergl_nabzfz", "", tmpdir_pth)
     creator.set_map_state(QgsPointXY(23.383588699716316, 60.556795942038995), 6.759672619963176)
     creator.set_map_style("dark")
     creator.set_animation_config(None, 1)
@@ -42,10 +42,12 @@ def config_creator() -> ConfigCreator:
 
 
 def test_map_config_creation_w_simple_points(config_creator, simple_harbour_points):
+    excpected_map_config = get_map_config('harbours_config_point.json')
+
     config_creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
                              QColor.fromRgb(0, 92, 255))
     config_creator._start_config_creation()
-    map_config = config_creator.created_map_config
-    excpected_map_config = get_map_config('harbours_config_point.json')
+
+    map_config = get_loaded_map_config(config_creator.created_configuration_path)
 
     assert map_config.to_dict() == excpected_map_config.to_dict()

@@ -19,9 +19,10 @@
 
 #  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded Studio QGIS plugin
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
-
+import json
 import logging
 import uuid
+from pathlib import Path
 from typing import Optional, Dict, List
 
 from PyQt5.QtCore import pyqtSignal
@@ -53,7 +54,7 @@ class ConfigCreator(QgsTask):
     finished = pyqtSignal(dict)
     canceled = pyqtSignal()
 
-    def __init__(self, title: str, description: str):
+    def __init__(self, title: str, description: str, output_directory: Path):
         """
         :param title: Title of the configuration
         :param description: Description of the configuration
@@ -61,10 +62,11 @@ class ConfigCreator(QgsTask):
         super().__init__('LayersToVisState', QgsTask.CanCancel)
         self.title = title
         self.description = description
+        self.output_directory = output_directory
 
         self.tasks = {}
         self.layers: Dict[uuid.UUID, QgsVectorLayer] = {}
-        self.created_map_config: Optional[MapConfig] = None
+        self.created_configuration_path = output_directory / f"{title.replace(' ', '_')}.json"
 
         self._shown_fields: Dict[uuid.UUID, List[str]] = {}
         self._vis_state_values = {}
@@ -224,8 +226,16 @@ class ConfigCreator(QgsTask):
             info = Info(Info.app, "Mon Jan 25 2021 11:37:43 GMT+0200 (Eastern European Standard Time)", self.title,
                         self.description)
 
-            self.created_map_config = MapConfig(datasets, config, info)
+            map_config = MapConfig(datasets, config, info)
+            with open(self.created_configuration_path, 'w') as f:
+                json.dump(map_config.to_dict(), f)
+
+            LOGGER.info(tr('Configuration created successfully'),
+                        extra=bar_msg(tr('The file can be found in {}', str(self.created_configuration_path)),
+                                      success=True))
+
         except Exception as e:
+            LOGGER.exception('Error occurred')
             raise InvalidInputException(tr('Config creation failed. Check the log for more details'),
                                         bar_msg=bar_msg(e))
 
