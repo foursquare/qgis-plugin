@@ -49,16 +49,32 @@ def test_gpkg():
 
 @pytest.fixture
 def harbour_points(test_gpkg):
-    name = 'harbours'
-    layer = get_layer(name, test_gpkg)
-    return layer
+    return get_layer('harbours', test_gpkg)
+
+
+@pytest.fixture
+def lines(test_gpkg):
+    return get_layer('lines', test_gpkg)
+
+
+@pytest.fixture
+def lines_3067(test_gpkg):
+    return get_layer('lines_3067', test_gpkg)
+
+
+@pytest.fixture
+def polygons(test_gpkg):
+    return get_layer('Polygons', test_gpkg)
+
+
+@pytest.fixture
+def polygons_3067(test_gpkg):
+    return get_layer('polygons_3067', test_gpkg)
 
 
 @pytest.fixture
 def harbour_points_3067(test_gpkg):
-    name = 'harbours_3067'
-    layer = get_layer(name, test_gpkg)
-    return layer
+    return get_layer('harbours_3067', test_gpkg)
 
 
 @pytest.fixture

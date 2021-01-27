@@ -1,8 +1,8 @@
 # Unfolded Studio QGIS plugin
-![](https://github.com/UnfoldedInc/UnfoldedStudio/workflows/Tests/badge.svg)
-![](https://github.com/UnfoldedInc/UnfoldedStudio/workflows/TestsLTR/badge.svg)
-[![codecov.io](https://codecov.io/github/UnfoldedInc/UnfoldedStudio/coverage.svg?branch=master)](https://codecov.io/github/UnfoldedInc/UnfoldedStudio?branch=master)
-![](https://github.com/UnfoldedInc/UnfoldedStudio/workflows/Release/badge.svg)
+![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Tests/badge.svg)
+![](https://github.com/UnfoldedInc/qgis-plugin/workflows/TestsLTR/badge.svg)
+[![codecov.io](https://codecov.io/github/UnfoldedInc/qgis-plugin/coverage.svg?branch=master)](https://codecov.io/github/UnfoldedInc/qgis-plugin?branch=master)
+![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Release/badge.svg)
 
 
 ### Development
