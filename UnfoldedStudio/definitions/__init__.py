@@ -17,5 +17,3 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 
-def test_1():
-    assert 1 == 1

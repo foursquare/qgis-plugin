@@ -24,9 +24,10 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QWidget
 from qgis.gui import QgisInterface
 
-from .qgis_plugin_tools.tools.custom_logging import setup_logger
+from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name
+from .ui.dialog import Dialog
 
 
 class Plugin:
@@ -36,7 +37,8 @@ class Plugin:
 
         self.iface = iface
 
-        setup_logger(plugin_name(), iface)
+        setup_logger(plugin_name())
+        setup_task_logger(plugin_name())
 
         # initialize locale
         locale, file_path = setup_translation()
@@ -142,4 +144,5 @@ class Plugin:
 
     def run(self):
         """Run method that performs all the real work"""
-        print("Hello QGIS plugin")
+        dialog = Dialog()
+        dialog.exec()
