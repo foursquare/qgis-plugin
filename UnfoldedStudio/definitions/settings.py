@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import enum
-import json
 from typing import Union, List
 
 from ..qgis_plugin_tools.tools.exceptions import QgsPluginException
@@ -32,13 +31,13 @@ class Settings(enum.Enum):
     supported_size_unit = 'Pixel'
     conf_output_dir = resources_path('configurations')
     layer_blending = 'normal'
+    basemap = 'dark'
 
-    _options = {'layer_blending': ['normal', 'additive', 'substractive']}
+    _options = {'layer_blending': ['normal', 'additive', 'substractive'],
+                'basemap': ['dark', 'light', 'muted', 'muted_night', 'satellite', 'satellite-street', 'streets']}
 
     def get(self, typehint: type = str) -> any:
         """Gets the value of the setting"""
-        if self == Settings.layer_blending:
-            return json.loads(get_setting(self.name, json.dumps(self.value), str))
         return get_setting(self.name, self.value, typehint)
 
     def set(self, value: Union[str, int, float, bool]) -> bool:
@@ -46,8 +45,6 @@ class Settings(enum.Enum):
         options = self.get_options()
         if options and value not in options:
             raise QgsPluginException(tr('Invalid option. Choose something from values {}', options))
-        if self == Settings.licences:
-            value = json.dumps(value)
         return set_setting(self.name, value)
 
     def get_options(self) -> List[any]:

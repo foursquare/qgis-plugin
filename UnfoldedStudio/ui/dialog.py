@@ -56,9 +56,9 @@ class Dialog(QDialog, FORM_CLASS):
         }
 
         self.responsive_elements = {
-            Panels.Export: set(),
-            Panels.Settings: set(),
-            Panels.About: set()
+            Panels.Export: [self.btn_export, self.gb_, self.gb_1, self.gb_2, self.gb_3],
+            Panels.Settings: [],
+            Panels.About: []
         }
 
         for i, panel in enumerate(self.panels):

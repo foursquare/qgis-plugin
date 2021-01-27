@@ -20,8 +20,11 @@
 import logging
 import webbrowser
 
+from qgis.gui import QgsFileWidget
+
 from .base_panel import BasePanel
 from ..definitions.gui import Panels
+from ..definitions.settings import Settings
 from ..qgis_plugin_tools.tools.custom_logging import get_log_level_key, LogTarget, get_log_level_name
 from ..qgis_plugin_tools.tools.resources import plugin_name, plugin_path
 from ..qgis_plugin_tools.tools.settings import set_setting
@@ -31,6 +34,7 @@ LOGGER = logging.getLogger(plugin_name())
 LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 
+# noinspection PyMethodMayBeStatic
 class SettingsPanel(BasePanel):
     """
     This file is adapted from https://github.com/GispoCoding/qaava-qgis-plugin licensed under GPL version 2
@@ -41,6 +45,12 @@ class SettingsPanel(BasePanel):
         self.panel = Panels.Settings
 
     def setup_panel(self):
+        f_conf_output: QgsFileWidget = self.dlg.f_conf_output
+        f_conf_output.setFilePath(Settings.conf_output_dir.get())
+
+        # noinspection PyUnresolvedReferences
+        f_conf_output.fileChanged.connect(self._conf_output_dir_changed)
+
         self.dlg.combo_box_log_level_file.clear()
         self.dlg.combo_box_log_level_console.clear()
 
@@ -56,3 +66,7 @@ class SettingsPanel(BasePanel):
             lambda level: set_setting(get_log_level_key(LogTarget.STREAM), level))
 
         self.dlg.btn_open_log.clicked.connect(lambda _: webbrowser.open(plugin_path("logs", f"{plugin_name()}.log")))
+
+    def _conf_output_dir_changed(self, new_dir: str):
+        if new_dir:
+            Settings.conf_output_dir.set(new_dir)
