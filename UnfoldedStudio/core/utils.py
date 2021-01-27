@@ -16,6 +16,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+import math
+import random
+
+from PyQt5.QtGui import QColor
+from qgis.core import QgsPointXY, QgsRectangle, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
+from qgis.gui import QgsMapCanvas
+
+from ..definitions.settings import Settings
+
+UNFOLDED_CRS = QgsCoordinateReferenceSystem(Settings.crs.get())
+
 
 def extract_color(color: str):
     """ Extract rgb, hex and aplha values from color string """
@@ -24,3 +35,30 @@ def extract_color(color: str):
     hex_value = '#{:02x}{:02x}{:02x}'.format(*rgb_value)
     alpha = _color[-1] / 255.0
     return rgb_value, hex_value, alpha
+
+
+def get_canvas_center(canvas: QgsMapCanvas) -> QgsPointXY:
+    """ Get canvas center in supported spatial reference system """
+    extent: QgsRectangle = canvas.extent()
+    center = extent.center()
+    # noinspection PyArgumentList
+    transformer = QgsCoordinateTransform(canvas.mapSettings().destinationCrs(), UNFOLDED_CRS, QgsProject.instance())
+    return transformer.transform(center)
+
+
+def generate_zoom_level(scale: float, dpi: int) -> float:
+    """
+    Generates zoom level from scale and dpi
+
+    Adapted from https://gis.stackexchange.com/a/268894/123927
+    """
+    max_scale_per_pixel = 156543.04
+    inches_per_meter = 39.37
+    zoomlevel = round(math.log(((dpi * inches_per_meter * max_scale_per_pixel) / scale), 2), 759672619963176)
+    return zoomlevel
+
+
+def random_color() -> QColor:
+    """ Generate random color. Adapted from https://stackoverflow.com/a/28999469/10068922 """
+    color = [random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]
+    return QColor(*color)
