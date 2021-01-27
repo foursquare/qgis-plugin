@@ -24,6 +24,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QComboBox
 from qgis._core import QgsProject
 from qgis.gui import QgsMapCanvas
+from qgis.utils import iface
 
 from .base_panel import BasePanel
 from ..core.config_creator import ConfigCreator
@@ -78,10 +79,10 @@ class ExportPanel(BasePanel):
         basemap = self.dlg.cb_basemap.currentText()
 
         # Map state
-        canvas: QgsMapCanvas = self.dlg.iface.mapCanvas()
+        canvas: QgsMapCanvas = iface.mapCanvas()
         center = get_canvas_center(canvas)
         # noinspection PyTypeChecker
-        zoom = generate_zoom_level(canvas.scale(), self.dlg.iface.mainWindow().physicalDpiX())
+        zoom = generate_zoom_level(canvas.scale(), iface.mainWindow().physicalDpiX())
 
         # Interaction
         tooltip_enabled = self.dlg.cb_tooltip.isChecked()

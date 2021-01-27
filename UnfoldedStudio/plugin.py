@@ -37,7 +37,7 @@ class Plugin:
 
         self.iface = iface
 
-        setup_logger(plugin_name(), iface)
+        setup_logger(plugin_name())
         setup_task_logger(plugin_name())
 
         # initialize locale
@@ -144,5 +144,5 @@ class Plugin:
 
     def run(self):
         """Run method that performs all the real work"""
-        dialog = Dialog(self.iface)
+        dialog = Dialog()
         dialog.exec()

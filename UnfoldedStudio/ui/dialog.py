@@ -40,11 +40,10 @@ class Dialog(QDialog, FORM_CLASS):
     from https://github.com/3liz/QuickOSM. Both projects are licenced under GPL version 2
     """
 
-    def __init__(self, iface, parent=None):
+    def __init__(self, parent=None):
         """Constructor."""
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.iface = iface
         self.is_running = False
 
         self._set_window_location()
