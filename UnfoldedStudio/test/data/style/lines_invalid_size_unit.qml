@@ -17,7 +17,7 @@
           <prop v="18,92,119,255" k="line_color"/>
           <prop v="solid" k="line_style"/>
           <prop v="0.5" k="line_width"/>
-          <prop v="MM" k="line_width_unit"/>
+          <prop v="Pixel" k="line_width_unit"/>
           <prop v="0" k="offset"/>
           <prop v="3x:0,0,0,0,0,0" k="offset_map_unit_scale"/>
           <prop v="MM" k="offset_unit"/>

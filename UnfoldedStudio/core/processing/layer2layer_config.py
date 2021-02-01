@@ -56,7 +56,8 @@ class LayerToLayerConfig(QgsTask):
         self.layer = layer
         self.result_layer_conf: Optional[Layer] = None
         self.exception: Optional[Exception] = None
-        self.__supported_size_unit = Settings.supported_size_unit.get()
+        self.__supported_radius_size_unit = Settings.supported_radius_size_unit.get()
+        self.__supported_width_size_unit = Settings.supported_width_size_unit.get()
 
     def run(self) -> bool:
         try:
@@ -139,7 +140,7 @@ class LayerToLayerConfig(QgsTask):
                 fixed_radius = False
 
                 radius = int(properties['size'])
-                self.__check_size_unit(properties['size_unit'])
+                self.__check_size_unit(properties['size_unit'], radius=True)
             else:
                 self.__check_size_unit(properties['outline_width_unit'])
                 size_range = VisConfig.size_range
@@ -172,12 +173,14 @@ class LayerToLayerConfig(QgsTask):
 
         return fill_rgb, vis_config
 
-    def __check_size_unit(self, size_unit: str):
+    def __check_size_unit(self, size_unit: str, radius: bool = False):
         """ Check whether size unit is supported"""
-        if size_unit != self.__supported_size_unit:
-            raise InvalidInputException(tr('Size unit "{}" is unsupported.', size_unit),
+        unit_to_compare = self.__supported_radius_size_unit if radius else self.__supported_width_size_unit
+        unit_name = tr('radius') if radius else tr('width')
+        if size_unit != unit_to_compare:
+            raise InvalidInputException(tr('Size unit "{}" is unsupported for {}.', size_unit, unit_name),
                                         bar_msg=bar_msg(
-                                            tr('Please use unit {} instead', self.__supported_size_unit)))
+                                            tr('Please use unit {} instead', unit_to_compare)))
 
     def __check_if_canceled(self) -> None:
         if self.isCanceled():

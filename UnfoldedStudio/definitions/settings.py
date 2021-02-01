@@ -28,7 +28,8 @@ from ..qgis_plugin_tools.tools.settings import get_setting, set_setting
 @enum.unique
 class Settings(enum.Enum):
     crs = 'EPSG:4326'
-    supported_size_unit = 'Pixel'
+    supported_radius_size_unit = 'Pixel'
+    supported_width_size_unit = 'MM'
     conf_output_dir = resources_path('configurations')
     layer_blending = 'normal'
     basemap = 'dark'

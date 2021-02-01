@@ -12,8 +12,8 @@
           <prop v="MM" k="offset_unit"/>
           <prop v="255,203,153,179" k="outline_color"/>
           <prop v="solid" k="outline_style"/>
-          <prop v="1.2" k="outline_width"/>
-          <prop v="Pixel" k="outline_width_unit"/>
+          <prop v="0.4" k="outline_width"/>
+          <prop v="MM" k="outline_width_unit"/>
           <prop v="solid" k="style"/>
           <data_defined_properties>
             <Option type="Map">
