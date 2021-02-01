@@ -43,6 +43,7 @@ LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
 class LayerToDatasets(QgsTask):
+    GEOM_FIELD = 'geometry'
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, color: Tuple[int, int, int],
                  output_directory: Optional[Path] = None):
@@ -94,7 +95,7 @@ class LayerToDatasets(QgsTask):
         do_transform = crs != dest_crs
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
-            LOGGER.info('Point layer')
+            LOGGER.debug('Point layer')
             if not do_transform:
                 self.layer.addExpressionField('$x', QgsField('longitude', QVariant.Double))
                 self.layer.addExpressionField('$y', QgsField('latitude', QVariant.Double))
@@ -104,8 +105,14 @@ class LayerToDatasets(QgsTask):
                 self.layer.addExpressionField(f"y(transform($geometry, '{crs}', '{dest_crs}'))",
                                               QgsField('latitude', QVariant.Double))
             # TODO: z coord
+        elif layer_type in (LayerType.Polygon, LayerType.Line):
+            LOGGER.debug('Polygon or line layer')
+            expression = ('geom_to_wkt($geometry)' if not do_transform
+                          else f"geom_to_wkt(transform($geometry, '{crs}', '{dest_crs}'))")
+
+            self.layer.addExpressionField(expression, QgsField(self.GEOM_FIELD, QVariant.String))
         else:
-            raise QgsPluginNotImplementedException()
+            raise QgsPluginNotImplementedException(tr('Unsupported layer wkb type: {}', self.layer.wkbType()))
 
     def _remove_geom_from_fields(self):
         """ Removes virtual geometry field(s) from the layer """
@@ -113,10 +120,14 @@ class LayerToDatasets(QgsTask):
         LOGGER.info(tr('Removing layer geometry fields'))
 
         layer_type = LayerType.from_layer(self.layer)
+        field_count = len(self.layer.fields().toList())
         if layer_type == LayerType.Point:
-            field_count = len(self.layer.fields().toList())
             self.layer.removeExpressionField(field_count - 1)
             self.layer.removeExpressionField(field_count - 2)
+        elif layer_type in (LayerType.Polygon, LayerType.Line):
+            self.layer.removeExpressionField(field_count - 1)
+        else:
+            raise QgsPluginNotImplementedException(tr('Unsupported layer wkb type: {}', self.layer.wkbType()))
 
     def _extract_fields(self) -> List[Field]:
         """ Extract field information from layer """
@@ -125,6 +136,7 @@ class LayerToDatasets(QgsTask):
         LOGGER.info(tr('Extracting fields'))
 
         for field in self.layer.fields():
+            field_name = field.name()
             field_type = field.type()
             format_ = ''
             if field_type in [QVariant.Int, QVariant.UInt, QVariant.LongLong, QVariant.ULongLong]:
@@ -132,7 +144,10 @@ class LayerToDatasets(QgsTask):
             elif field_type == QVariant.Double:
                 type_, analyzer_type = 'real', 'FLOAT'
             elif field_type == QVariant.String:
-                type_, analyzer_type = 'string', 'STRING'
+                if field_name == self.GEOM_FIELD:
+                    type_, analyzer_type = 'geojson', 'PAIR_GEOMETRY_FROM_STRING'
+                else:
+                    type_, analyzer_type = 'string', 'STRING'
             elif field_type == QVariant.Bool:
                 type_, analyzer_type = ('boolean', 'BOOLEAN')
             # TODO: check date time formats
@@ -150,7 +165,7 @@ class LayerToDatasets(QgsTask):
             else:
                 raise QgsPluginNotImplementedException('Field type not implemented yet')
 
-            fields.append(Field(field.name(), type_, format_, analyzer_type))
+            fields.append(Field(field_name, type_, format_, analyzer_type))
 
         return fields
 
@@ -175,7 +190,7 @@ class LayerToDatasets(QgsTask):
                     # There is a possible bug in QGIS csv export that exports booleans as '1', '0' or ''
                     conversion_functions[i] = lambda x: bool(int(x)) if x else None
                 else:
-                    conversion_functions[i] = lambda x: x
+                    conversion_functions[i] = lambda x: x.rstrip().strip('"')
 
             with tempfile.TemporaryDirectory(dir=resources_path()) as tmpdirname:
                 output_file = self._save_layer_to_file(self.layer, Path(tmpdirname))
@@ -183,7 +198,7 @@ class LayerToDatasets(QgsTask):
                     for line_nro, line in enumerate(f):
                         if line_nro > 0:
                             data = []
-                            for i, value in enumerate(line.split(',')):
+                            for i, value in enumerate(line.split(';')):
                                 data.append(conversion_functions[i](value))
                             all_data.append(data)
             return all_data
@@ -197,7 +212,7 @@ class LayerToDatasets(QgsTask):
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
-        options.layerOptions = ["SEPARATOR=COMMA", "STRING_QUOTING=IF_NEEDED"]
+        options.layerOptions = ["SEPARATOR=SEMICOLON", "STRING_QUOTING=IF_NEEDED"]
 
         # noinspection PyCallByClass
         writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),
