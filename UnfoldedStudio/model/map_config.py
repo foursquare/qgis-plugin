@@ -474,6 +474,10 @@ class Columns:
         return Columns(None, 'latitude', 'longitude', None)
 
     @staticmethod
+    def for_geojson() -> 'Columns':
+        return Columns('geometry', None, None, None)
+
+    @staticmethod
     def from_dict(obj: Any) -> 'Columns':
         assert isinstance(obj, dict)
         geojson = from_union([from_str, from_none], obj.get("geojson"))
@@ -593,11 +597,11 @@ class VisConfig:
     stroke_color: Optional[List[int]]
     color_range: ColorRange
     stroke_color_range: ColorRange
-    radius: int
-    size_range: Optional[List[int]]
+    radius: int = 10
+    size_range: Optional[List[int]] = [0, 10]
     radius_range: List[int] = [0, 50]
-    height_range: Optional[List[int]]
-    elevation_scale: Optional[int]
+    height_range: Optional[List[int]] = [0, 500]
+    elevation_scale: Optional[int] = 5
     stroked: Optional[bool]
     filled: Optional[bool]
     enable3_d: Optional[bool]
@@ -774,9 +778,9 @@ class VisualChannels:
     size_field: Optional[Field]
     size_scale: str
     height_field: Optional[Field]
-    height_scale: Optional[str]
+    height_scale: Optional[str] = 'linear'
     radius_field: Optional[Field]
-    radius_scale: Optional[str]
+    radius_scale: Optional[str] = 'linear'
 
     def __init__(self, color_field: Optional[Field], color_scale: str, stroke_color_field: Optional[Field],
                  stroke_color_scale: str, size_field: Optional[Field], size_scale: str,

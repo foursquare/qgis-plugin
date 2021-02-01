@@ -19,26 +19,33 @@
 import uuid
 
 import pytest
+from qgis._core import QgsVectorLayer
 
 from .conftest import get_map_config
 from ..core.exceptions import InvalidInputException
 from ..core.processing.layer2layer_config import LayerToLayerConfig
 
 
-def test__convert_layer_config(simple_harbour_points):
-    alg = LayerToLayerConfig(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points)
+@pytest.mark.parametrize('layer,config',
+                         [('simple_harbour_points', 'harbours_config_point.json'),
+                          ('lines', 'lines_config.json'),
+                          ('polygons', 'polygons_config.json'),
+                          ])
+def test__extract_layer(layer, config, request):
+    layer: QgsVectorLayer = request.getfixturevalue(layer)
+    alg = LayerToLayerConfig(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), layer)
 
-    map_config = get_map_config('harbours_config_point.json')
-    success = alg.run()
-    assert success, alg.exception
-    assert alg.result_layer_conf.to_dict() == map_config.config.config.vis_state.layers[0].to_dict()
+    map_config = get_map_config(config)
+    layer_conf = alg._extract_layer()
+    assert layer_conf.to_dict() == map_config.config.config.vis_state.layers[0].to_dict()
 
 
-def test__extract_layer_with_invalid_size_units(simple_harbour_points_invalid_size_units):
-    alg = LayerToLayerConfig(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'),
-                             simple_harbour_points_invalid_size_units)
+@pytest.mark.parametrize('layer', ['simple_harbour_points_invalid_size_units', 'lines_invalid_size_units',
+                                   'polygons_invalid_size_units'])
+def test__extract_layer_with_invalid_size_units(layer, request):
+    layer: QgsVectorLayer = request.getfixturevalue(layer)
+    alg = LayerToLayerConfig(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), layer)
 
-    alg.layer = simple_harbour_points_invalid_size_units
     with pytest.raises(InvalidInputException) as execinfo:
         alg._extract_layer()
     assert "Size unit" in str(execinfo)

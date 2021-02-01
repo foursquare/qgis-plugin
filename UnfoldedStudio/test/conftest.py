@@ -54,7 +54,10 @@ def harbour_points(test_gpkg):
 
 @pytest.fixture
 def lines(test_gpkg):
-    return get_layer('lines', test_gpkg)
+    lines = get_layer('lines', test_gpkg)
+    add_layer(lines)
+    set_styles(lines, 'lines.qml')
+    return lines
 
 
 @pytest.fixture
@@ -64,7 +67,10 @@ def lines_3067(test_gpkg):
 
 @pytest.fixture
 def polygons(test_gpkg):
-    return get_layer('Polygons', test_gpkg)
+    layer = get_layer('Polygons', test_gpkg)
+    add_layer(layer)
+    set_styles(layer, 'polygons.qml')
+    return layer
 
 
 @pytest.fixture
@@ -78,24 +84,36 @@ def harbour_points_3067(test_gpkg):
 
 
 @pytest.fixture
-def simple_harbour_points(new_project, harbour_points):
+def simple_harbour_points(harbour_points):
     add_layer(harbour_points)
     set_styles(harbour_points, 'harbour_simple.qml')
     return harbour_points
 
 
 @pytest.fixture
-def simple_harbour_points_invalid_size_units(new_project, harbour_points):
+def simple_harbour_points_invalid_size_units(harbour_points):
     add_layer(harbour_points)
     set_styles(harbour_points, 'harbour_simple_invalid_size_unit.qml')
     return harbour_points
 
 
 @pytest.fixture
-def simple_harbour_points_3067(new_project, harbour_points_3067):
+def simple_harbour_points_3067(harbour_points_3067):
     add_layer(harbour_points_3067)
     set_styles(harbour_points_3067, 'harbour_simple.qml')
     return harbour_points_3067
+
+
+@pytest.fixture
+def lines_invalid_size_units(lines):
+    set_styles(lines, 'lines_invalid_size_unit.qml')
+    return lines
+
+
+@pytest.fixture
+def polygons_invalid_size_units(polygons):
+    set_styles(polygons, 'polygons_invalid_size_unit.qml')
+    return polygons
 
 
 @pytest.fixture
