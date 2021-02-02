@@ -37,6 +37,7 @@ LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
 class BaseConfigCreatorTask(QgsTask):
+    GEOM_FIELD = 'geometry'
 
     def __init__(self, description: str):
         super().__init__(description, QgsTask.CanCancel)

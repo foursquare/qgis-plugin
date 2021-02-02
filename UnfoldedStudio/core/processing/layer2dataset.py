@@ -43,7 +43,6 @@ LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
 class LayerToDatasets(BaseConfigCreatorTask):
-    GEOM_FIELD = 'geometry'
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, color: Tuple[int, int, int],
                  output_directory: Optional[Path] = None):
