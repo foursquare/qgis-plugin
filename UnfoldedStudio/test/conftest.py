@@ -113,6 +113,12 @@ def quantile_lines(lines):
 
 
 @pytest.fixture
+def quantile_polygons(polygons):
+    set_styles(polygons, 'polygons_quantile.qml')
+    return polygons
+
+
+@pytest.fixture
 def simple_harbour_points_invalid_size_units(harbour_points):
     add_layer(harbour_points)
     set_styles(harbour_points, 'harbour_simple_invalid_size_unit.qml')
