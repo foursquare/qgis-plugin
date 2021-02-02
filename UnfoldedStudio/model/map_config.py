@@ -776,15 +776,15 @@ class Field:
 
 class VisualChannels:
     color_field: Optional[Field]
-    color_scale: str
+    color_scale: str = "quantile"
     stroke_color_field: Optional[Field]
-    stroke_color_scale: str
+    stroke_color_scale: str = "quantile"
     size_field: Optional[Field]
-    size_scale: str
+    size_scale: str = "linear"
     height_field: Optional[Field]
-    height_scale: Optional[str] = 'linear'
+    height_scale: Optional[str] = "linear"
     radius_field: Optional[Field]
-    radius_scale: Optional[str] = 'linear'
+    radius_scale: Optional[str] = "linear"
 
     def __init__(self, color_field: Optional[Field], color_scale: str, stroke_color_field: Optional[Field],
                  stroke_color_scale: str, size_field: Optional[Field], size_scale: str,

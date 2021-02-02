@@ -22,7 +22,7 @@ from typing import Optional, List, Tuple
 
 from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
                        QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer, QgsRendererRange,
-                       QgsSingleSymbolRenderer)
+                       QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer, QgsRendererCategory)
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import InvalidInputException
@@ -53,6 +53,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     """
 
     SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile"}
+    CATEGORIZED_SCALE = "ordinal"
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer):
         super().__init__('LayerToLayerConfig')
@@ -77,7 +78,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         LOGGER.info(tr('Extracting layer configuration for {}', self.layer.name()))
 
         renderer: QgsFeatureRenderer = self.layer.renderer()
-        symbol_type = SymbolType[renderer.type()]
+        try:
+            symbol_type = SymbolType[renderer.type()]
+        except Exception:
+            raise QgsPluginNotImplementedException(tr("Symbol type {} is not supported yet", renderer.type()))
+
         layer_type = LayerType.from_layer(self.layer)
         LOGGER.info(tr('Symbol type: {}', symbol_type))
 
@@ -86,9 +91,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             renderer: QgsSingleSymbolRenderer
             color, vis_config = self._extract_layer_style(renderer.symbol())
             visual_channels = VisualChannels.create_single_color_channels()
-        elif symbol_type == SymbolType.graduatedSymbol:
-            renderer: QgsGraduatedSymbolRenderer
-            color, vis_config, visual_channels = self._extract_graduated_layer_style(renderer, layer_type)
+        elif symbol_type in (SymbolType.graduatedSymbol, SymbolType.categorizedSymbol):
+            color, vis_config, visual_channels = self._extract_advanced_layer_style(renderer, layer_type, symbol_type)
         else:
             raise QgsPluginNotImplementedException()
 
@@ -114,20 +118,31 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_graduated_layer_style(self, renderer, layer_type: LayerType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
-        """ Extract layer style when layer has graduated style """
-        classification_method = renderer.classificationMethod()
-        method_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
+        """ Extract layer style when layer has graduated or categorized style """
+        renderer: QgsGraduatedSymbolRenderer
+        if symbol_type == SymbolType.graduatedSymbol:
+            classification_method = renderer.classificationMethod()
+            scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
 
-        if not method_name:
-            raise InvalidInputException(
-                tr('Unsupported classification method "{}". Use Equal Count (Quantile) or Equal Interval (Quantize)',
-                   classification_method.id()))
-        symbol_range: QgsRendererRange
-        styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
-        if not styles:
-            raise InvalidInputException(tr('Graduated layer should have at least 1 class'))
+            if not scale_name:
+                raise InvalidInputException(
+                    tr(
+                        'Unsupported classification method "{}". Use Equal Count (Quantile) or Equal Interval (Quantize)',
+                        classification_method.id()))
+            symbol_range: QgsRendererRange
+            styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
+            if not styles:
+                raise InvalidInputException(tr('Graduated layer should have at least 1 class'))
+        else:
+            renderer: QgsCategorizedSymbolRenderer
+            category: QgsRendererCategory
+            scale_name = self.CATEGORIZED_SCALE
+            styles = [self._extract_layer_style(category.symbol()) for category in renderer.categories()]
+            if not styles:
+                raise InvalidInputException(tr('Categorized layer should have at least 1 class'))
+
         color = styles[0][0]
         vis_config = styles[0][1]
         fill_colors = [rgb_to_hex(style[0]) for style in styles]
@@ -152,7 +167,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             color_field = categorizing_field
         if len(set(stroke_colors)) > 1:
             stroke_field = categorizing_field
-        visual_channels = VisualChannels.create_graduated_color_channels(method_name, color_field, stroke_field)
+        visual_channels = VisualChannels(color_field, scale_name if color_field else VisualChannels.color_scale,
+                                         stroke_field,
+                                         scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
+                                         VisualChannels.size_scale)
+
         return color, vis_config, visual_channels
 
     def _extract_layer_style(self, symbol: QgsSymbol) -> Tuple[List[int], VisConfig]:

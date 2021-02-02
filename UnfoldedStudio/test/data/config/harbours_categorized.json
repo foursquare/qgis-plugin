@@ -3,8 +3,8 @@
     {
       "version": "v1",
       "data": {
-        "id": "971db40b-857e-4f43-986f-eb48bde349aa",
-        "label": "satamat_with_extra.csv",
+        "id": "7d193484-21a7-47f4-8cbc-497474a39b64",
+        "label": "harbours",
         "color": [
           62,
           172,
@@ -254,59 +254,52 @@
         "filters": [],
         "layers": [
           {
-            "id": "csi3vequ",
+            "id": "7d19348",
             "type": "point",
             "config": {
-              "dataId": "971db40b-857e-4f43-986f-eb48bde349aa",
-              "label": "new layer",
+              "dataId": "7d193484-21a7-47f4-8cbc-497474a39b64",
+              "label": "harbours",
               "color": [
-                255,
-                153,
-                31
+                68,
+                1,
+                84
               ],
               "columns": {
-                "lat": "Y",
-                "lng": "X",
+                "lat": "latitude",
+                "lng": "longitude",
                 "altitude": null
               },
               "isVisible": true,
               "visConfig": {
                 "radius": 10,
                 "fixedRadius": false,
-                "opacity": 0.8,
+                "opacity": 1.0,
                 "outline": false,
                 "thickness": 2,
-                "strokeColor": [
-                  77,
-                  181,
-                  217
-                ],
+                "strokeColor": null,
                 "colorRange": {
-                  "name": "Uber Viz Qualitative 4",
-                  "type": "qualitative",
-                  "category": "Uber",
+                  "category": "Custom",
                   "colors": [
-                    "#12939A",
-                    "#DDB27C",
-                    "#88572C",
-                    "#FF991F",
-                    "#F15C17",
-                    "#223F9A",
-                    "#DA70BF",
-                    "#125C77",
-                    "#4DC19C",
-                    "#776E57",
-                    "#17B8BE",
-                    "#F6D18A",
-                    "#B7885E",
-                    "#FFCB99",
-                    "#F89570",
-                    "#829AE3",
-                    "#E79FD5",
-                    "#1E96BE",
-                    "#89DAC1",
-                    "#B3AD9E"
-                  ]
+                    "#440154",
+                    "#48186a",
+                    "#462c7b",
+                    "#424086",
+                    "#3a528b",
+                    "#33638d",
+                    "#2b728e",
+                    "#26818e",
+                    "#20908d",
+                    "#1ea088",
+                    "#27ae80",
+                    "#3dbc74",
+                    "#5dc962",
+                    "#82d44c",
+                    "#abdc32",
+                    "#d6e21a",
+                    "#fde725"
+                  ],
+                  "name": "Custom palette",
+                  "type": "custom"
                 },
                 "strokeColorRange": {
                   "name": "Global Warming",
@@ -362,7 +355,7 @@
         "interactionConfig": {
           "tooltip": {
             "fieldsToShow": {
-              "971db40b-857e-4f43-986f-eb48bde349aa": [
+              "7d193484-21a7-47f4-8cbc-497474a39b64": [
                 {
                   "name": "X",
                   "format": null
@@ -411,7 +404,7 @@
         "groupBys": [],
         "datasets": {
           "fieldDisplayNames": {
-            "971db40b-857e-4f43-986f-eb48bde349aa": {}
+            "7d193484-21a7-47f4-8cbc-497474a39b64": {}
           }
         },
         "joins": []

@@ -107,6 +107,14 @@ def quantize_points(harbour_points):
 
 
 @pytest.fixture
+def categorized_points(harbour_points):
+    """ Fill color is changed gradually """
+    add_layer(harbour_points)
+    set_styles(harbour_points, 'harbours_categorized.qml')
+    return harbour_points
+
+
+@pytest.fixture
 def quantile_lines(lines):
     set_styles(lines, 'lines_quantile.qml')
     return lines
