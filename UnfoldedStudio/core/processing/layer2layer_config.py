@@ -20,7 +20,8 @@ import logging
 import uuid
 from typing import Optional, List, Tuple
 
-from qgis.core import (QgsTask, QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol)
+from qgis.core import (QgsTask, QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
+                       QgsLineSymbol, QgsFillSymbol)
 
 from ..exceptions import ProcessInterruptedException, InvalidInputException
 from ..utils import extract_color
@@ -55,7 +56,8 @@ class LayerToLayerConfig(QgsTask):
         self.layer = layer
         self.result_layer_conf: Optional[Layer] = None
         self.exception: Optional[Exception] = None
-        self.__supported_size_unit = Settings.supported_size_unit.get()
+        self.__supported_radius_size_unit = Settings.supported_radius_size_unit.get()
+        self.__supported_width_size_unit = Settings.supported_width_size_unit.get()
 
     def run(self) -> bool:
         try:
@@ -88,8 +90,13 @@ class LayerToLayerConfig(QgsTask):
         if layer_type == LayerType.Point:
             layer_type_ = UnfoldedLayerType.Point
             columns = Columns.for_point_2d()
+        elif layer_type in [LayerType.Line, LayerType.Polygon]:
+            layer_type_ = UnfoldedLayerType.Geojson
+            columns = Columns.for_geojson()
+            visual_channels.height_scale = VisualChannels.height_scale
+            visual_channels.radius_scale = VisualChannels.radius_scale
         else:
-            raise QgsPluginNotImplementedException()
+            raise QgsPluginNotImplementedException(tr('Layer type {} is implemented', layer_type))
 
         is_visible = True
         hidden = False
@@ -110,40 +117,70 @@ class LayerToLayerConfig(QgsTask):
         sym_type = SymbolLayerType[symbol_layer.layerType()]
         properties = symbol_layer.properties()
 
-        size_range, height_range, elevation_scale, stroked, enable3_d, wireframe, fixed_radius = [None] * 7
-
-        if isinstance(symbol, QgsMarkerSymbol):
-            fill_rgb, _, aplha = extract_color(properties['color'])
-            opacity = round(symbol_opacity * aplha, 2)
-            stroke_rgb, _, stroke_aplha = extract_color(properties['outline_color'])
-            stroke_opacity = round(symbol_opacity * stroke_aplha, 2)
-            thickness = float(properties['outline_width'])
-            radius = int(properties['size'])
-            size_unit = properties['size_unit']
-            if size_unit != self.__supported_size_unit:
-                raise InvalidInputException(tr('Size unit "{}" is unsupported.', size_unit),
-                                            bar_msg=bar_msg(
-                                                tr('Please use unit {} instead', self.__supported_size_unit)))
-            # Fixed radius seems to always be False with point types
-            fixed_radius = False
-        else:
-            raise QgsPluginNotImplementedException()
-
-        outline = stroke_opacity > 0.0 and properties['outline_style'] != 'no'
-        stroke_opacity = stroke_opacity if outline else None
-        stroke_color = stroke_rgb if outline else None
-        filled = opacity > 0.0
-        thickness = thickness if thickness > 0.0 else VisConfig.thickness
-
+        # Default values
+        radius = VisConfig.radius
         color_range = ColorRange.create_default()
-
         radius_range = VisConfig.radius_range
+
+        if isinstance(symbol, QgsMarkerSymbol) or isinstance(symbol, QgsFillSymbol):
+            fill_rgb, _, alpha = extract_color(properties['color'])
+            opacity = round(symbol_opacity * alpha, 2)
+            stroke_rgb, _, stroke_alpha = extract_color(properties['outline_color'])
+            stroke_opacity = round(symbol_opacity * stroke_alpha, 2)
+            thickness = float(properties['outline_width'])
+            outline = stroke_opacity > 0.0 and properties['outline_style'] != 'no'
+            stroke_opacity = stroke_opacity if outline else None
+            stroke_color = stroke_rgb if outline else None
+            filled = opacity > 0.0
+
+            if isinstance(symbol, QgsMarkerSymbol):
+                size_range, height_range, elevation_scale, stroked, enable3_d, wireframe = [None] * 6
+
+                # Fixed radius seems to always be False with point types
+                fixed_radius = False
+
+                radius = int(properties['size'])
+                self.__check_size_unit(properties['size_unit'], radius=True)
+            else:
+                self.__check_size_unit(properties['outline_width_unit'])
+                size_range = VisConfig.size_range
+                height_range = VisConfig.height_range
+                elevation_scale = VisConfig.elevation_scale
+                stroked = True
+                wireframe, enable3_d = [False] * 2
+                fixed_radius, outline = [None] * 2
+        elif isinstance(symbol, QgsLineSymbol):
+            fill_rgb, _, stroke_alpha = extract_color(properties['line_color'])
+            opacity = round(symbol_opacity * stroke_alpha, 2)
+            stroke_opacity = opacity
+            thickness = float(properties['line_width'])
+            self.__check_size_unit(properties['line_width_unit'])
+
+            size_range = VisConfig.size_range
+            height_range = VisConfig.height_range
+            elevation_scale = VisConfig.elevation_scale
+            stroked = True
+            wireframe, enable3_d, filled = [False] * 3
+            stroke_color, fixed_radius, outline = [None] * 3
+        else:
+            raise QgsPluginNotImplementedException(tr('Symbol type {} is not supported yet', symbol.type()))
+
+        thickness = thickness if thickness > 0.0 else VisConfig.thickness
 
         vis_config = VisConfig(opacity, stroke_opacity, thickness, stroke_color, color_range, color_range, radius,
                                size_range, radius_range, height_range, elevation_scale, stroked, filled, enable3_d,
                                wireframe, fixed_radius, outline)
 
         return fill_rgb, vis_config
+
+    def __check_size_unit(self, size_unit: str, radius: bool = False):
+        """ Check whether size unit is supported"""
+        unit_to_compare = self.__supported_radius_size_unit if radius else self.__supported_width_size_unit
+        unit_name = tr('radius') if radius else tr('width')
+        if size_unit != unit_to_compare:
+            raise InvalidInputException(tr('Size unit "{}" is unsupported for {}.', size_unit, unit_name),
+                                        bar_msg=bar_msg(
+                                            tr('Please use unit {} instead', unit_to_compare)))
 
     def __check_if_canceled(self) -> None:
         if self.isCanceled():

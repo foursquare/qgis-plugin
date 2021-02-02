@@ -46,8 +46,23 @@ def test__add_geom_to_fields_w_points(alg, layer, request):
     assert fields[-2].type() == QVariant.Double
 
 
-@pytest.mark.parametrize('layer', ['simple_harbour_points', 'simple_harbour_points_3067'])
-def test__remove_geom_from_fields_w_points(alg, layer, request):
+@pytest.mark.parametrize('layer', ['lines', 'polygons', 'lines_3067', 'polygons_3067'])
+def test__add_geom_to_fields_w_lines_and_polygons(alg, layer, request):
+    layer = request.getfixturevalue(layer)
+    original_fields = layer.fields().toList()
+    alg.layer = layer
+    alg._add_geom_to_fields()
+    fields = layer.fields().toList()
+
+    assert len(fields) == len(original_fields) + 1
+    assert fields[-1].name() == 'geometry'
+    assert fields[-1].type() == QVariant.String
+
+
+@pytest.mark.parametrize('layer',
+                         ['simple_harbour_points', 'simple_harbour_points_3067', 'lines', 'lines_3067', 'polygons',
+                          'polygons_3067'])
+def test__remove_geom_from_fields(alg, layer, request):
     layer = request.getfixturevalue(layer)
     original_fields = layer.fields().toList()
     alg.layer = layer
@@ -77,11 +92,18 @@ def test__extract_all_data(alg, layer, request):
     assert data == map_config.datasets[0].data.all_data
 
 
-@pytest.mark.parametrize('layer', ['simple_harbour_points', 'simple_harbour_points_3067'])
-def test__convert_to_dataset(layer, alg, request):
+@pytest.mark.parametrize('layer,layer_name,config',
+                         [('simple_harbour_points', 'harbours', 'harbours_config_point.json'),
+                          ('simple_harbour_points_3067', 'harbours', 'harbours_config_point.json'),
+                          ('lines', 'lines', 'lines_config.json'),
+                          ('polygons', 'polygons', 'polygons_config.json'),
+                          ('lines_3067', 'lines', 'lines_config.json'),
+                          ('polygons_3067', 'polygons', 'polygons_config.json'),
+                          ])
+def test__convert_to_dataset(layer, layer_name, config, alg, request):
     layer: QgsVectorLayer = request.getfixturevalue(layer)
-    layer.setName('harbours')
-    map_config = get_map_config('harbours_config_point.json')
+    layer.setName(layer_name)
+    map_config = get_map_config(config)
     alg.layer = layer
     status = alg.run()
     dataset = alg.result_dataset

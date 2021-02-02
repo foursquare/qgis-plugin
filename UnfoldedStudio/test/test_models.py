@@ -49,3 +49,17 @@ def test_map_config_model_polygon_points_3():
         map_config_dict = json.load(f)
     map_config = MapConfig.from_dict(map_config_dict)
     assert map_config.to_dict() == map_config_dict
+
+
+def test_map_config_model_polygon_lines():
+    with open(plugin_test_data_path('config', 'lines_config.json')) as f:
+        map_config_dict = json.load(f)
+    map_config = MapConfig.from_dict(map_config_dict)
+    assert map_config.to_dict() == map_config_dict
+
+
+def test_map_config_model_polygon_polygons():
+    with open(plugin_test_data_path('config', 'lines_config.json')) as f:
+        map_config_dict = json.load(f)
+    map_config = MapConfig.from_dict(map_config_dict)
+    assert map_config.to_dict() == map_config_dict
