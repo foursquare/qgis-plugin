@@ -20,16 +20,18 @@ import logging
 import uuid
 from typing import Optional, List, Tuple
 
-from qgis.core import (QgsTask, QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
-                       QgsLineSymbol, QgsFillSymbol)
+from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
+                       QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer, QgsRendererRange,
+                       QgsSingleSymbolRenderer)
 
-from ..exceptions import ProcessInterruptedException, InvalidInputException
-from ..utils import extract_color
+from .base_config_creator_task import BaseConfigCreatorTask
+from ..exceptions import InvalidInputException
+from ..utils import extract_color, rgb_to_hex
 from ...definitions.settings import Settings
 from ...definitions.types import UnfoldedLayerType, SymbolType, SymbolLayerType
 from ...model.map_config import Layer, LayerConfig, VisualChannels, VisConfig, Columns, TextLabel, ColorRange
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
-from ...qgis_plugin_tools.tools.exceptions import QgsPluginException, QgsPluginNotImplementedException
+from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
 from ...qgis_plugin_tools.tools.layers import LayerType
 from ...qgis_plugin_tools.tools.resources import plugin_name
@@ -49,6 +51,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     https://github.com/cividi/spatial-data-package-export/blob/master/SpatialDataPackageExport/core/styles2attributes.py
     Licensed by GPLv3
     """
+
+    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile"}
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer):
         super().__init__('LayerToLayerConfig')
@@ -76,15 +80,17 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         symbol_type = SymbolType[renderer.type()]
         LOGGER.info(tr('Symbol type: {}', symbol_type))
 
+        self.setProgress(50)
         if symbol_type == SymbolType.singleSymbol:
-            self.setProgress(50)
-            # noinspection PyUnresolvedReferences
+            renderer: QgsSingleSymbolRenderer
             color, vis_config = self._extract_layer_style(renderer.symbol())
             visual_channels = VisualChannels.create_single_color_channels()
+        elif symbol_type == SymbolType.graduatedSymbol:
+            renderer: QgsGraduatedSymbolRenderer
+            color, vis_config, visual_channels = self._extract_graduated_layer_style(renderer)
         else:
             raise QgsPluginNotImplementedException()
 
-        id_ = str(self.layer_uuid).replace("-", "")[:7]
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             layer_type_ = UnfoldedLayerType.Point
@@ -104,8 +110,42 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         layer_config = LayerConfig(self.layer_uuid, self.layer.name(), color, columns, is_visible, vis_config, hidden,
                                    text_label)
 
+        id_ = str(self.layer_uuid).replace("-", "")[:7]
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
+
+    def _extract_graduated_layer_style(self, renderer) -> Tuple[List[int], VisConfig, VisualChannels]:
+        """ Extract layer style when layer has graduated style """
+        classification_method = renderer.classificationMethod()
+        method_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
+
+        if not method_name:
+            raise InvalidInputException(
+                tr('Unsupported classification method "{}". Use Equal Count (Quantile) or Equal Interval (Quantize)',
+                   classification_method.id()))
+        symbol_range: QgsRendererRange
+        styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
+        if not styles:
+            raise InvalidInputException(tr('Graduated layer should have at least 1 class'))
+        color = styles[0][0]
+        vis_config = styles[0][1]
+        fill_colors = [rgb_to_hex(style[0]) for style in styles]
+        stroke_colors = [rgb_to_hex(style[1].stroke_color) for style in styles if style[1].stroke_color]
+        if fill_colors:
+            vis_config.color_range = ColorRange.create_custom(fill_colors)
+        if stroke_colors:
+            vis_config.stroke_color_range = ColorRange.create_custom(stroke_colors)
+        categorizing_field = self._qgis_field_to_unfolded_field(
+            self.layer.fields()[self.layer.fields().indexOf(renderer.classAttribute())])
+        categorizing_field.analyzer_type = None
+        categorizing_field.format = None
+        color_field, stroke_field = [None] * 2
+        if len(set(fill_colors)) > 1:
+            color_field = categorizing_field
+        if len(set(stroke_colors)) > 1:
+            stroke_field = categorizing_field
+        visual_channels = VisualChannels.create_graduated_color_channels(method_name, color_field, stroke_field)
+        return color, vis_config, visual_channels
 
     def _extract_layer_style(self, symbol: QgsSymbol) -> Tuple[List[int], VisConfig]:
         symbol_opacity: float = symbol.opacity()
@@ -122,9 +162,9 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         radius_range = VisConfig.radius_range
 
         if isinstance(symbol, QgsMarkerSymbol) or isinstance(symbol, QgsFillSymbol):
-            fill_rgb, _, alpha = extract_color(properties['color'])
+            fill_rgb, alpha = extract_color(properties['color'])
             opacity = round(symbol_opacity * alpha, 2)
-            stroke_rgb, _, stroke_alpha = extract_color(properties['outline_color'])
+            stroke_rgb, stroke_alpha = extract_color(properties['outline_color'])
             stroke_opacity = round(symbol_opacity * stroke_alpha, 2)
             thickness = float(properties['outline_width'])
             outline = stroke_opacity > 0.0 and properties['outline_style'] != 'no'
@@ -149,7 +189,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                 wireframe, enable3_d = [False] * 2
                 fixed_radius, outline = [None] * 2
         elif isinstance(symbol, QgsLineSymbol):
-            fill_rgb, _, stroke_alpha = extract_color(properties['line_color'])
+            fill_rgb, stroke_alpha = extract_color(properties['line_color'])
             opacity = round(symbol_opacity * stroke_alpha, 2)
             stroke_opacity = opacity
             thickness = float(properties['line_width'])

@@ -18,6 +18,7 @@
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import math
 import random
+from typing import List, Tuple
 
 from PyQt5.QtGui import QColor
 from qgis.core import QgsPointXY, QgsRectangle, QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject
@@ -28,13 +29,17 @@ from ..definitions.settings import Settings
 UNFOLDED_CRS = QgsCoordinateReferenceSystem(Settings.crs.get())
 
 
-def extract_color(color: str):
-    """ Extract rgb, hex and aplha values from color string """
+def extract_color(color: str) -> Tuple[List[int], float]:
+    """ Extract rgb and aplha values from color string """
     _color = list(map(int, color.split(",")))
     rgb_value = _color[:-1]
-    hex_value = '#{:02x}{:02x}{:02x}'.format(*rgb_value)
     alpha = _color[-1] / 255.0
-    return rgb_value, hex_value, alpha
+    return rgb_value, alpha
+
+
+def rgb_to_hex(rgb_color: List[int]) -> str:
+    """ Convert rgb color value to hex """
+    return '#{:02x}{:02x}{:02x}'.format(*rgb_color)
 
 
 def get_canvas_center(canvas: QgsMapCanvas) -> QgsPointXY:

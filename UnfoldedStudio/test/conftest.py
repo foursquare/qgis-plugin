@@ -91,6 +91,22 @@ def simple_harbour_points(harbour_points):
 
 
 @pytest.fixture
+def quantile_points(harbour_points):
+    """ Fill color is changed gradually """
+    add_layer(harbour_points)
+    set_styles(harbour_points, 'harbours_graduated_quantile.qml')
+    return harbour_points
+
+
+@pytest.fixture
+def quantize_points(harbour_points):
+    """ Both fill color and stroke color are changed gradually """
+    add_layer(harbour_points)
+    set_styles(harbour_points, 'harbours_graduated_quantize.qml')
+    return harbour_points
+
+
+@pytest.fixture
 def simple_harbour_points_invalid_size_units(harbour_points):
     add_layer(harbour_points)
     set_styles(harbour_points, 'harbour_simple_invalid_size_unit.qml')
