@@ -78,6 +78,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
 
         renderer: QgsFeatureRenderer = self.layer.renderer()
         symbol_type = SymbolType[renderer.type()]
+        layer_type = LayerType.from_layer(self.layer)
         LOGGER.info(tr('Symbol type: {}', symbol_type))
 
         self.setProgress(50)
@@ -87,11 +88,10 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             visual_channels = VisualChannels.create_single_color_channels()
         elif symbol_type == SymbolType.graduatedSymbol:
             renderer: QgsGraduatedSymbolRenderer
-            color, vis_config, visual_channels = self._extract_graduated_layer_style(renderer)
+            color, vis_config, visual_channels = self._extract_graduated_layer_style(renderer, layer_type)
         else:
             raise QgsPluginNotImplementedException()
 
-        layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             layer_type_ = UnfoldedLayerType.Point
             columns = Columns.for_point_2d()
@@ -114,7 +114,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_graduated_layer_style(self, renderer) -> Tuple[List[int], VisConfig, VisualChannels]:
+    def _extract_graduated_layer_style(self, renderer, layer_type: LayerType) -> Tuple[
+        List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated style """
         classification_method = renderer.classificationMethod()
         method_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
@@ -131,6 +132,13 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         vis_config = styles[0][1]
         fill_colors = [rgb_to_hex(style[0]) for style in styles]
         stroke_colors = [rgb_to_hex(style[1].stroke_color) for style in styles if style[1].stroke_color]
+
+        if layer_type == LayerType.Line:
+            # For lines, swap the color ranges
+            tmp = [] + fill_colors
+            fill_colors = [] + stroke_colors
+            stroke_colors = tmp
+
         if fill_colors:
             vis_config.color_range = ColorRange.create_custom(fill_colors)
         if stroke_colors:
