@@ -6,14 +6,14 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>416</width>
-                <height>223</height>
+                <width>462</width>
+                <height>257</height>
             </rect>
         </property>
         <property name="windowTitle">
             <string>Processing...</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
                 <layout class="QVBoxLayout" name="verticalLayout">
                     <item>
@@ -33,26 +33,7 @@
                         </widget>
                     </item>
                     <item>
-                        <widget class="QScrollArea" name="scrollArea">
-                            <property name="widgetResizable">
-                                <bool>true</bool>
-                            </property>
-                            <widget class="QWidget" name="scrollAreaWidgetContents">
-                                <property name="geometry">
-                                    <rect>
-                                        <x>0</x>
-                                        <y>0</y>
-                                        <width>394</width>
-                                        <height>102</height>
-                                    </rect>
-                                </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_2">
-                                    <item>
-                                        <layout class="QVBoxLayout" name="pb_vlayout"/>
-                                    </item>
-                                </layout>
-                            </widget>
-                        </widget>
+                        <layout class="QVBoxLayout" name="pb_vlayout"/>
                     </item>
                 </layout>
             </item>

@@ -66,6 +66,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
     def __initialize_ui(self):
         for i, pb in enumerate(self.progress_bars):
             pb.setValue(0)
+            pb.setFixedHeight(15)
             self.pb_vlayout.addWidget(pb, i)
         self.btn_abort.clicked.connect(self.__aborted)
 
