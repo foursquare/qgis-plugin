@@ -9,9 +9,15 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>946</width>
-                <height>543</height>
+                <width>941</width>
+                <height>640</height>
             </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>640</width>
+                <height>640</height>
+            </size>
         </property>
         <property name="windowTitle">
             <string>Unfolded Studio</string>
@@ -104,6 +110,12 @@
                 <layout class="QVBoxLayout" name="verticalLayout">
                     <item>
                         <widget class="QScrollArea" name="scrollArea">
+                            <property name="minimumSize">
+                                <size>
+                                    <width>640</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
                             <property name="widgetResizable">
                                 <bool>true</bool>
                             </property>
@@ -112,8 +124,8 @@
                                     <rect>
                                         <x>0</x>
                                         <y>0</y>
-                                        <width>783</width>
-                                        <height>539</height>
+                                        <width>778</width>
+                                        <height>636</height>
                                     </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -126,7 +138,7 @@
                                     <item>
                                         <widget class="QStackedWidget" name="stacked_widget">
                                             <property name="currentIndex">
-                                                <number>0</number>
+                                                <number>2</number>
                                             </property>
                                             <widget class="QWidget" name="exporter">
                                                 <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -206,7 +218,7 @@
                                                             <property name="scrollOnExpand">
                                                                 <bool>true</bool>
                                                             </property>
-                                                            <layout class="QGridLayout" name="gridLayout_9">
+                                                            <layout class="QFormLayout" name="formLayout_2">
                                                                 <item row="0" column="0">
                                                                     <widget class="QLabel" name="label_21">
                                                                         <property name="font">
@@ -304,7 +316,7 @@
                                                             <property name="scrollOnExpand">
                                                                 <bool>true</bool>
                                                             </property>
-                                                            <layout class="QGridLayout" name="gridLayout_11">
+                                                            <layout class="QFormLayout" name="formLayout_3">
                                                                 <item row="0" column="0">
                                                                     <widget class="QLabel" name="label_23">
                                                                         <property name="font">
@@ -364,7 +376,7 @@
                                                 </layout>
                                             </widget>
                                             <widget class="QWidget" name="settings">
-                                                <layout class="QVBoxLayout" name="verticalLayout_13">
+                                                <layout class="QVBoxLayout" name="verticalLayout_15">
                                                     <item>
                                                         <widget class="QgsCollapsibleGroupBox" name="mGroupBox_5">
                                                             <property name="title">
@@ -443,19 +455,7 @@
                                                                     </widget>
                                                                 </item>
                                                                 <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_5">
-                                                                        <item row="1" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_level_console">
-                                                                                <property name="text">
-                                                                                    <string>Console level</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="1" column="1">
-                                                                            <widget class="QComboBox"
-                                                                                    name="combo_box_log_level_console"/>
-                                                                        </item>
+                                                                    <layout class="QFormLayout" name="formLayout_4">
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_level_file">
@@ -467,6 +467,18 @@
                                                                         <item row="0" column="1">
                                                                             <widget class="QComboBox"
                                                                                     name="combo_box_log_level_file"/>
+                                                                        </item>
+                                                                        <item row="1" column="0">
+                                                                            <widget class="QLabel"
+                                                                                    name="label_level_console">
+                                                                                <property name="text">
+                                                                                    <string>Console level</string>
+                                                                                </property>
+                                                                            </widget>
+                                                                        </item>
+                                                                        <item row="1" column="1">
+                                                                            <widget class="QComboBox"
+                                                                                    name="combo_box_log_level_console"/>
                                                                         </item>
                                                                     </layout>
                                                                 </item>
@@ -490,7 +502,7 @@
                                                                             <widget class="QPushButton"
                                                                                     name="btn_open_log">
                                                                                 <property name="text">
-                                                                                    <string>Open most resent log file
+                                                                                    <string>Open most recent log file
                                                                                     </string>
                                                                                 </property>
                                                                             </widget>
@@ -526,7 +538,7 @@
                                                                 <item>
                                                                     <layout class="QGridLayout" name="gridLayout_6">
                                                                         <property name="sizeConstraint">
-                                                                            <enum>QLayout::SetNoConstraint</enum>
+                                                                            <enum>QLayout::SetDefaultConstraint</enum>
                                                                         </property>
                                                                         <item row="0" column="1">
                                                                             <widget class="QLabel" name="label_gispo_2">
@@ -577,6 +589,9 @@
                                                         <widget class="QGroupBox" name="groupBox_3">
                                                             <property name="title">
                                                                 <string>Attributions</string>
+                                                            </property>
+                                                            <property name="flat">
+                                                                <bool>false</bool>
                                                             </property>
                                                             <layout class="QVBoxLayout" name="verticalLayout_6">
                                                                 <item>
