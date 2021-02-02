@@ -81,7 +81,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         try:
             symbol_type = SymbolType[renderer.type()]
         except Exception:
-            raise QgsPluginNotImplementedException(tr("Symbol type {} is not supported yet", renderer.type()))
+            raise QgsPluginNotImplementedException(tr("Symbol type {} is not supported yet", renderer.type()),
+                                                   bar_msg=bar_msg())
 
         layer_type = LayerType.from_layer(self.layer)
         LOGGER.info(tr('Symbol type: {}', symbol_type))
@@ -105,7 +106,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             visual_channels.height_scale = VisualChannels.height_scale
             visual_channels.radius_scale = VisualChannels.radius_scale
         else:
-            raise QgsPluginNotImplementedException(tr('Layer type {} is implemented', layer_type))
+            raise QgsPluginNotImplementedException(tr('Layer type {} is not implemented', layer_type),
+                                                   bar_msg=bar_msg())
 
         is_visible = True
         hidden = False
@@ -127,21 +129,20 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
 
             if not scale_name:
-                raise InvalidInputException(
-                    tr(
-                        'Unsupported classification method "{}". Use Equal Count (Quantile) or Equal Interval (Quantize)',
-                        classification_method.id()))
+                raise InvalidInputException(tr('Unsupported classification method "{}"', classification_method.id()),
+                                            bar_msg=bar_msg(tr(
+                                                'Use Equal Count (Quantile) or Equal Interval (Quantize)')))
             symbol_range: QgsRendererRange
             styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
             if not styles:
-                raise InvalidInputException(tr('Graduated layer should have at least 1 class'))
+                raise InvalidInputException(tr('Graduated layer should have at least 1 class'), bar_msg=bar_msg())
         else:
             renderer: QgsCategorizedSymbolRenderer
             category: QgsRendererCategory
             scale_name = self.CATEGORIZED_SCALE
             styles = [self._extract_layer_style(category.symbol()) for category in renderer.categories()]
             if not styles:
-                raise InvalidInputException(tr('Categorized layer should have at least 1 class'))
+                raise InvalidInputException(tr('Categorized layer should have at least 1 class'), bar_msg=bar_msg())
 
         color = styles[0][0]
         vis_config = styles[0][1]
@@ -229,7 +230,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             wireframe, enable3_d, filled = [False] * 3
             stroke_color, fixed_radius, outline = [None] * 3
         else:
-            raise QgsPluginNotImplementedException(tr('Symbol type {} is not supported yet', symbol.type()))
+            raise QgsPluginNotImplementedException(tr('Symbol type {} is not supported yet', symbol.type()),
+                                                   bar_msg=bar_msg())
 
         thickness = thickness if thickness > 0.0 else VisConfig.thickness
 

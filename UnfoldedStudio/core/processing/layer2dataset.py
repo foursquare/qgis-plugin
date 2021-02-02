@@ -30,6 +30,7 @@ from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import ProcessInterruptedException
 from ...definitions.settings import Settings
 from ...model.map_config import Dataset, Data, Field
+from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
 from ...qgis_plugin_tools.tools.layers import LayerType
@@ -110,7 +111,8 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
             self.layer.addExpressionField(expression, QgsField(self.GEOM_FIELD, QVariant.String))
         else:
-            raise QgsPluginNotImplementedException(tr('Unsupported layer wkb type: {}', self.layer.wkbType()))
+            raise QgsPluginNotImplementedException(
+                bar_msg=bar_msg(tr('Unsupported layer wkb type: {}', self.layer.wkbType())))
 
     def _remove_geom_from_fields(self):
         """ Removes virtual geometry field(s) from the layer """
@@ -125,7 +127,8 @@ class LayerToDatasets(BaseConfigCreatorTask):
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             self.layer.removeExpressionField(field_count - 1)
         else:
-            raise QgsPluginNotImplementedException(tr('Unsupported layer wkb type: {}', self.layer.wkbType()))
+            raise QgsPluginNotImplementedException(
+                bar_msg=bar_msg(tr('Unsupported layer wkb type: {}', self.layer.wkbType())))
 
     def _extract_fields(self) -> List[Field]:
         """ Extract field information from layer """
@@ -187,5 +190,6 @@ class LayerToDatasets(BaseConfigCreatorTask):
                                                                  QgsProject.instance().transformContext(), options)
 
         if msg:
-            raise ProcessInterruptedException(tr('Exception occurred during data extraction: {}', msg))
+            raise ProcessInterruptedException(tr('Process ended'),
+                                              bar_msg=bar_msg(tr('Exception occurred during data extraction: {}', msg)))
         return output_file

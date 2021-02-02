@@ -113,7 +113,8 @@ class BasePanel:
                 raise QgsPluginException(f'Class does not have a method {method}')
             getattr(self, method)()
         except QgsPluginException as e:
-            LOGGER.exception(str(e), extra=e.bar_msg)
+            msg = e.bar_msg if e.bar_msg else bar_msg(e)
+            LOGGER.exception(str(e), extra=msg)
         except Exception as e:
             LOGGER.exception(tr('Unhandled exception occurred'), extra=bar_msg(e))
         finally:
