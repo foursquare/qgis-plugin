@@ -4,6 +4,7 @@
 [![codecov.io](https://codecov.io/github/UnfoldedInc/qgis-plugin/coverage.svg?branch=master)](https://codecov.io/github/UnfoldedInc/qgis-plugin?branch=master)
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Release/badge.svg)
 
+### Installation
 
 ### Development
 
