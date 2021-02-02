@@ -41,7 +41,7 @@ LOGGER = logging.getLogger(f'{plugin_name()}_task')
 LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
-class LayerToLayerConfig(QgsTask):
+class LayerToLayerConfig(BaseConfigCreatorTask):
     """
     Creates VisState.Layer object
 
@@ -51,17 +51,16 @@ class LayerToLayerConfig(QgsTask):
     """
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer):
-        super().__init__('LayerToLayerConfig', QgsTask.CanCancel)
+        super().__init__('LayerToLayerConfig')
         self.layer_uuid = layer_uuid
         self.layer = layer
         self.result_layer_conf: Optional[Layer] = None
-        self.exception: Optional[Exception] = None
         self.__supported_radius_size_unit = Settings.supported_radius_size_unit.get()
         self.__supported_width_size_unit = Settings.supported_width_size_unit.get()
 
     def run(self) -> bool:
         try:
-            self.__check_if_canceled()
+            self._check_if_canceled()
             self.result_layer_conf = self._extract_layer()
             self.setProgress(100)
             return True
@@ -181,30 +180,3 @@ class LayerToLayerConfig(QgsTask):
             raise InvalidInputException(tr('Size unit "{}" is unsupported for {}.', size_unit, unit_name),
                                         bar_msg=bar_msg(
                                             tr('Please use unit {} instead', unit_to_compare)))
-
-    def __check_if_canceled(self) -> None:
-        if self.isCanceled():
-            raise ProcessInterruptedException()
-
-    def finished(self, result: bool) -> None:
-        """
-        This function is automatically called when the task has completed (successfully or not).
-
-        finished is always called from the main thread, so it's safe
-        to do GUI operations and raise Python exceptions here.
-
-        :param result: the return value from self.run
-        """
-        if result:
-            pass
-        else:
-            if self.exception is None:
-                LOGGER_MAIN.warning(tr('Task was not successful'),
-                                    extra=bar_msg(tr('Task was probably cancelled by user')))
-            else:
-                try:
-                    raise self.exception
-                except QgsPluginException as e:
-                    LOGGER.exception(str(e), extra=e.bar_msg)
-                except Exception as e:
-                    LOGGER.exception(tr('Unhandled exception occurred'), extra=bar_msg(e))
