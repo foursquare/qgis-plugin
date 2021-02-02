@@ -124,7 +124,7 @@ class ExportPanel(BasePanel):
 
     def __progress_bar_changed(self, i: int, progress: int):
         if self.progress_dialog:
-            self.progress_dialog.progress_bars[i].setValue(progress)
+            self.progress_dialog.update_progress_bar(i, progress)
 
     def __aborted(self):
         if self.config_creator:

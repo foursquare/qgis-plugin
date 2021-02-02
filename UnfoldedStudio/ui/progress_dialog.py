@@ -36,7 +36,7 @@
 import logging
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QProgressBar, QLabel
+from PyQt5.QtWidgets import QDialog, QProgressBar, QLabel
 from pydev_ipython.qt import QtGui
 
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
@@ -53,22 +53,22 @@ class ProgressDialog(QDialog, FORM_CLASS):
     def __init__(self, number_of_tasks: int, parent=None):
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.progress_bars = [QProgressBar() for _ in range(number_of_tasks)]
-        self.pb_vlayout: QVBoxLayout = self.pb_vlayout
+        self.progress_per_tasks = {i: 0 for i in range(number_of_tasks)}
+        self.progress_bar: QProgressBar = self.progress_bar
         self.status_label: QLabel = self.status_label
-        self.__initialize_ui()
 
     def closeEvent(self, evt: QtGui.QCloseEvent) -> None:
         LOGGER.debug('Closing progress dialog')
         # noinspection PyUnresolvedReferences
         self.aborted.emit()
 
-    def __initialize_ui(self):
-        for i, pb in enumerate(self.progress_bars):
-            pb.setValue(0)
-            pb.setFixedHeight(15)
-            self.pb_vlayout.addWidget(pb, i)
-        self.btn_abort.clicked.connect(self.__aborted)
+    def update_progress_bar(self, task_number: int, progress: int):
+        """ Update progress bar with progress of a task """
+        self.progress_per_tasks[task_number] = progress
+        self._update_progress_bar()
+
+    def _update_progress_bar(self):
+        self.progress_bar.setValue(min(97, sum(self.progress_per_tasks.values()) / len(self.progress_per_tasks)))
 
     def __aborted(self):
         LOGGER.warning(tr("Export aborted"), extra=bar_msg(tr("Export aborted by user")))
