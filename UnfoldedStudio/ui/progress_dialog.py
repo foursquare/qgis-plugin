@@ -53,7 +53,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
     def __init__(self, number_of_tasks: int, parent=None):
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.progress_per_tasks = {i: 0 for i in range(number_of_tasks)}
+        self.progress_per_tasks = [0] * number_of_tasks
         self.progress_bar: QProgressBar = self.progress_bar
         self.status_label: QLabel = self.status_label
 
@@ -68,7 +68,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
         self._update_progress_bar()
 
     def _update_progress_bar(self):
-        self.progress_bar.setValue(min(97, sum(self.progress_per_tasks.values()) / len(self.progress_per_tasks)))
+        self.progress_bar.setValue(min(97, int(sum(self.progress_per_tasks) / len(self.progress_per_tasks))))
 
     def __aborted(self):
         LOGGER.warning(tr("Export aborted"), extra=bar_msg(tr("Export aborted by user")))
