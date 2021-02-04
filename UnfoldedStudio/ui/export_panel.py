@@ -20,6 +20,7 @@
 import logging
 import uuid
 from pathlib import Path
+from typing import Optional
 
 from PyQt5.QtWidgets import QComboBox
 from qgis._core import QgsProject
@@ -27,11 +28,13 @@ from qgis.gui import QgsMapCanvas
 from qgis.utils import iface
 
 from .base_panel import BasePanel
+from .progress_dialog import ProgressDialog
 from ..core.config_creator import ConfigCreator
 from ..core.layer_handler import LayerHandler
 from ..core.utils import generate_zoom_level, random_color, get_canvas_center
 from ..definitions.gui import Panels
 from ..definitions.settings import Settings
+from ..qgis_plugin_tools.tools.i18n import tr
 from ..qgis_plugin_tools.tools.resources import plugin_name
 
 LOGGER = logging.getLogger(plugin_name())
@@ -44,6 +47,8 @@ class ExportPanel(BasePanel):
     def __init__(self, dialog):
         super().__init__(dialog)
         self.panel = Panels.Export
+        self.progress_dialog: Optional[ProgressDialog] = None
+        self.config_creator: Optional[ConfigCreator] = None
 
     def setup_panel(self):
         # Map configuration
@@ -96,14 +101,41 @@ class ExportPanel(BasePanel):
         # Vector layers
         layers = LayerHandler.get_all_visible_vector_layers()
 
-        config_creator = ConfigCreator(title, description, output_dir)
-        config_creator.set_map_style(basemap)
-        config_creator.set_map_state(center, zoom)
-        config_creator.set_animation_config(None, 1)
-        config_creator.set_vis_state_values(layer_blending)
-        config_creator.set_interaction_config_values(tooltip_enabled, brush_enabled, geocoder_enabled,
-                                                     coordinate_enabled)
-        for layer in layers:
-            config_creator.add_layer(uuid.uuid4(), layer, random_color())
+        self.progress_dialog = ProgressDialog(len(layers) * 2, self.dlg)
+        self.progress_dialog.show()
+        self.progress_dialog.aborted.connect(self.__aborted)
 
-        config_creator._start_config_creation()
+        self.config_creator = ConfigCreator(title, description, output_dir)
+        self.config_creator.completed.connect(self.__completed)
+        self.config_creator.canceled.connect(self.__aborted)
+        self.config_creator.tasks_complete.connect(
+            lambda: self.progress_dialog.status_label.setText(tr("Writing config file to the disk...")))
+        self.config_creator.progress_bar_changed.connect(self.__progress_bar_changed)
+        self.config_creator.set_map_style(basemap)
+        self.config_creator.set_map_state(center, zoom)
+        self.config_creator.set_animation_config(None, 1)
+        self.config_creator.set_vis_state_values(layer_blending)
+        self.config_creator.set_interaction_config_values(tooltip_enabled, brush_enabled, geocoder_enabled,
+                                                          coordinate_enabled)
+        for layer in layers:
+            self.config_creator.add_layer(uuid.uuid4(), layer, random_color())
+
+        self.config_creator.start_config_creation()
+
+    def __progress_bar_changed(self, i: int, progress: int):
+        if self.progress_dialog:
+            self.progress_dialog.update_progress_bar(i, progress)
+
+    def __aborted(self):
+        if self.config_creator:
+            self.config_creator.abort()
+        if self.progress_dialog:
+            self.progress_dialog.close()
+        self.progress_dialog = None
+        self.config_creator = None
+
+    def __completed(self):
+        if self.progress_dialog:
+            self.progress_dialog.close()
+        self.progress_dialog = None
+        self.config_creator = None

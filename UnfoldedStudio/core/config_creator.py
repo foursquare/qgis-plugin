@@ -22,12 +22,13 @@
 import json
 import logging
 import uuid
+from functools import partial
 from pathlib import Path
 from typing import Optional, Dict, List
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QColor
-from qgis.core import (QgsTask, QgsVectorLayer, QgsApplication, QgsPointXY)
+from qgis.core import (QgsVectorLayer, QgsApplication, QgsPointXY)
 
 from .exceptions import InvalidInputException
 from .processing.layer2dataset import LayerToDatasets
@@ -35,31 +36,33 @@ from .processing.layer2layer_config import LayerToLayerConfig
 from ..model.map_config import (Dataset, VisState, InteractionConfig, AnimationConfig, Datasets,
                                 FieldDisplayNames, AnyDict, VisibleLayerGroups, Globe, Tooltip, FieldsToShow, Brush,
                                 Coordinate)
-from ..model.map_config import MapConfig, MapState, MapStyle, Layer, \
-    ConfigConfig, Config, Info
+from ..model.map_config import (MapConfig, MapState, MapStyle, Layer,
+                                ConfigConfig, Config, Info)
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
-from ..qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ..qgis_plugin_tools.tools.i18n import tr
 from ..qgis_plugin_tools.tools.resources import plugin_name
 
 LOGGER = logging.getLogger(plugin_name())
 
 
-class ConfigCreator(QgsTask):
+class ConfigCreator(QObject):
     """
     Create Unfolded Studio compatible configuration based on QGIS project
     """
 
-    progress_bar_changed = pyqtSignal(list)
+    progress_bar_changed = pyqtSignal([int, int])
     finished = pyqtSignal(dict)
     canceled = pyqtSignal()
+    completed = pyqtSignal()
+    tasks_complete = pyqtSignal()
 
     def __init__(self, title: str, description: str, output_directory: Path):
         """
         :param title: Title of the configuration
         :param description: Description of the configuration
         """
-        super().__init__('LayersToVisState', QgsTask.CanCancel)
+
+        super().__init__()
         self.title = title
         self.description = description
         self.output_directory = output_directory
@@ -137,26 +140,30 @@ class ConfigCreator(QgsTask):
         """ Start config creation using background processing tasks """
 
         LOGGER.info(tr('Started config creation'))
+        LOGGER.debug(f"Tasks are: {self.tasks}")
 
         for task_id, task_dict in self.tasks.items():
-            task = task_dict['task']
-            task.progressChanged.connect(lambda: self._progress_changed(task_id, task.progress()))
-
             # noinspection PyArgumentList
-            QgsApplication.taskManager().addTask(task)
+            QgsApplication.taskManager().addTask(task_dict['task'])
+            task_dict['task'].progressChanged.connect(partial(self._progress_changed, task_id))
+            task_dict['task'].taskCompleted.connect(partial(self._task_completed, task_id))
+            task_dict['task'].taskTerminated.connect(partial(self._task_terminated, task_id))
 
-            task.taskCompleted.connect(lambda: self._task_completed(task_id))
-            task.taskTerminated.connect(lambda: self._task_terminated(task_id))
+    def abort(self) -> None:
+        """ Aborts config creation manually """
+        for task_id, task_dict in self.tasks.items():
+            if not task_dict['finished'] and not task_dict['task'].isCanceled():
+                LOGGER.warning(tr("Cancelling task {}", task_id))
+                task_dict['task'].cancel()
 
-        raise QgsPluginNotImplementedException()
-
-    def _progress_changed(self, task_id: uuid.UUID, progress: int):
-        """ TODO """
-        pass
+    def _progress_changed(self, task_id: uuid.UUID):
+        """ Increments progress """
+        # noinspection PyUnresolvedReferences
+        self.progress_bar_changed.emit(list(self.tasks.keys()).index(task_id), self.tasks[task_id]['task'].progress())
 
     def _task_completed(self, task_id: uuid.UUID) -> None:
         """ One of the background processing tasks if finished succesfully """
-
+        LOGGER.debug(f"Task {task_id} completed!")
         self.tasks[task_id]['finished'] = True
         self.tasks[task_id]['successful'] = True
         at_least_one_running = False
@@ -165,22 +172,24 @@ class ConfigCreator(QgsTask):
                 at_least_one_running = True
 
         if not at_least_one_running:
+            # noinspection PyUnresolvedReferences
+            self.tasks_complete.emit()
             self._create_map_config()
 
     def _task_terminated(self, task_id: uuid.UUID) -> None:
         """ One of the bacground processing tasks failed """
 
+        LOGGER.warning(tr("Task {} terminated", task_id))
         self.tasks[task_id]['finished'] = True
         at_least_one_running = False
         for id_, task_dict in self.tasks.items():
-            task: QgsTask = task_dict['task']
-            if id_ != task_id and not task.isCanceled() and not task_dict['finished']:
+            if id_ != task_id and not task_dict['finished'] and not task_dict['task'].isCanceled():
                 at_least_one_running = True
-                task.cancel()
+                task_dict['task'].cancel()
 
         if not at_least_one_running:
             # noinspection PyUnresolvedReferences
-            ConfigCreator.canceled.emit({})
+            self.canceled.emit()
 
     def _create_map_config(self):
         """ Generates map configuration file """
@@ -233,6 +242,8 @@ class ConfigCreator(QgsTask):
             LOGGER.info(tr('Configuration created successfully'),
                         extra=bar_msg(tr('The file can be found in {}', str(self.created_configuration_path)),
                                       success=True))
+            # noinspection PyUnresolvedReferences
+            self.completed.emit()
 
         except Exception as e:
             LOGGER.exception('Error occurred')
