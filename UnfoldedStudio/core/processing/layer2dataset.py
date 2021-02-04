@@ -23,14 +23,15 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 
 from PyQt5.QtCore import QVariant
-from qgis.core import (QgsTask, QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem,
+from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem,
                        QgsProject)
 
+from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import ProcessInterruptedException
 from ...definitions.settings import Settings
 from ...model.map_config import Dataset, Data, Field
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
-from ...qgis_plugin_tools.tools.exceptions import QgsPluginException, QgsPluginNotImplementedException
+from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
 from ...qgis_plugin_tools.tools.layers import LayerType
 from ...qgis_plugin_tools.tools.resources import plugin_name, resources_path
@@ -42,22 +43,20 @@ LOGGER = logging.getLogger(f'{plugin_name()}_task')
 LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
-class LayerToDatasets(QgsTask):
-    GEOM_FIELD = 'geometry'
+class LayerToDatasets(BaseConfigCreatorTask):
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, color: Tuple[int, int, int],
                  output_directory: Optional[Path] = None):
-        super().__init__('LayerToDatasets', QgsTask.CanCancel)
+        super().__init__('LayerToDatasets')
         self.layer_uuid = layer_uuid
         self.layer = layer
         self.color = color
         self.output_directory = output_directory
         self.result_dataset: Optional[Dataset] = None
-        self.exception: Optional[Exception] = None
 
     def run(self) -> bool:
         try:
-            self.__check_if_canceled()
+            self._check_if_canceled()
             self.result_dataset = self._convert_to_dataset()
             self.setProgress(100)
             return True
@@ -69,15 +68,15 @@ class LayerToDatasets(QgsTask):
         self._add_geom_to_fields()
         try:
             self.setProgress(20)
-            self.__check_if_canceled()
+            self._check_if_canceled()
 
             all_data = self._extract_all_data()
             self.setProgress(40)
-            self.__check_if_canceled()
+            self._check_if_canceled()
 
             fields = self._extract_fields()
             self.setProgress(60)
-            self.__check_if_canceled()
+            self._check_if_canceled()
 
             data = Data(self.layer_uuid, self.layer.name(), list(self.color), all_data, fields)
             self.setProgress(80)
@@ -112,7 +111,8 @@ class LayerToDatasets(QgsTask):
 
             self.layer.addExpressionField(expression, QgsField(self.GEOM_FIELD, QVariant.String))
         else:
-            raise QgsPluginNotImplementedException(tr('Unsupported layer wkb type: {}', self.layer.wkbType()))
+            raise QgsPluginNotImplementedException(
+                bar_msg=bar_msg(tr('Unsupported layer wkb type: {}', self.layer.wkbType())))
 
     def _remove_geom_from_fields(self):
         """ Removes virtual geometry field(s) from the layer """
@@ -127,7 +127,8 @@ class LayerToDatasets(QgsTask):
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             self.layer.removeExpressionField(field_count - 1)
         else:
-            raise QgsPluginNotImplementedException(tr('Unsupported layer wkb type: {}', self.layer.wkbType()))
+            raise QgsPluginNotImplementedException(
+                bar_msg=bar_msg(tr('Unsupported layer wkb type: {}', self.layer.wkbType())))
 
     def _extract_fields(self) -> List[Field]:
         """ Extract field information from layer """
@@ -136,37 +137,7 @@ class LayerToDatasets(QgsTask):
         LOGGER.info(tr('Extracting fields'))
 
         for field in self.layer.fields():
-            field_name = field.name()
-            field_type = field.type()
-            format_ = ''
-            if field_type in [QVariant.Int, QVariant.UInt, QVariant.LongLong, QVariant.ULongLong]:
-                type_, analyzer_type = 'integer', 'INT'
-            elif field_type == QVariant.Double:
-                type_, analyzer_type = 'real', 'FLOAT'
-            elif field_type == QVariant.String:
-                if field_name == self.GEOM_FIELD:
-                    type_, analyzer_type = 'geojson', 'PAIR_GEOMETRY_FROM_STRING'
-                else:
-                    type_, analyzer_type = 'string', 'STRING'
-            elif field_type == QVariant.Bool:
-                type_, analyzer_type = ('boolean', 'BOOLEAN')
-            # TODO: check date time formats
-            elif field_type == QVariant.Date:
-                type_, analyzer_type = ('date', 'DATE')
-                format_ = 'YYYY/M/D'
-            elif field_type == QVariant.DateTime:
-                type_, analyzer_type = ('timestamp', 'DATETIME')
-                format_ = 'YYYY/M/D H:m:s'
-            elif field_type == QVariant.Time:
-                type_, analyzer_type = ('timestamp', 'INT')
-                format_ = 'H:m:s'
-            # elif field_type == QVariant.ByteArray:
-            #     type, analyzer_type = ('integer', 'INT')
-            else:
-                raise QgsPluginNotImplementedException('Field type not implemented yet')
-
-            fields.append(Field(field_name, type_, format_, analyzer_type))
-
+            fields.append(self._qgis_field_to_unfolded_field(field))
         return fields
 
     def _extract_all_data(self) -> List:
@@ -219,32 +190,6 @@ class LayerToDatasets(QgsTask):
                                                                  QgsProject.instance().transformContext(), options)
 
         if msg:
-            raise ProcessInterruptedException(tr('Exception occurred during data extraction: {}', msg))
+            raise ProcessInterruptedException(tr('Process ended'),
+                                              bar_msg=bar_msg(tr('Exception occurred during data extraction: {}', msg)))
         return output_file
-
-    def __check_if_canceled(self) -> None:
-        if self.isCanceled():
-            raise ProcessInterruptedException()
-
-    def finished(self, result: bool) -> None:
-        """
-        This function is automatically called when the task has completed (successfully or not).
-
-        finished is always called from the main thread, so it's safe
-        to do GUI operations and raise Python exceptions here.
-
-        :param result: the return value from self.run
-        """
-        if result:
-            pass
-        else:
-            if self.exception is None:
-                LOGGER_MAIN.warning(tr('Task was not successful'),
-                                    extra=bar_msg(tr('Task was probably cancelled by user')))
-            else:
-                try:
-                    raise self.exception
-                except QgsPluginException as e:
-                    LOGGER.exception(str(e), extra=e.bar_msg)
-                except Exception as e:
-                    LOGGER.exception(tr('Unhandled exception occurred'), extra=bar_msg(e))

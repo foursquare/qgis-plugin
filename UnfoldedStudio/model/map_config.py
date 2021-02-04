@@ -573,6 +573,10 @@ class ColorRange:
         return ColorRange("Global Warming", "sequential", "Uber", colors)
 
     @staticmethod
+    def create_custom(colors: List[str]) -> 'ColorRange':
+        return ColorRange("Custom palette", "custom", "Custom", colors)
+
+    @staticmethod
     def from_dict(obj: Any) -> 'ColorRange':
         assert isinstance(obj, dict)
         name = from_str(obj.get("name"))
@@ -772,15 +776,15 @@ class Field:
 
 class VisualChannels:
     color_field: Optional[Field]
-    color_scale: str
+    color_scale: str = "quantile"
     stroke_color_field: Optional[Field]
-    stroke_color_scale: str
+    stroke_color_scale: str = "quantile"
     size_field: Optional[Field]
-    size_scale: str
+    size_scale: str = "linear"
     height_field: Optional[Field]
-    height_scale: Optional[str] = 'linear'
+    height_scale: Optional[str] = "linear"
     radius_field: Optional[Field]
-    radius_scale: Optional[str] = 'linear'
+    radius_scale: Optional[str] = "linear"
 
     def __init__(self, color_field: Optional[Field], color_scale: str, stroke_color_field: Optional[Field],
                  stroke_color_scale: str, size_field: Optional[Field], size_scale: str,
@@ -800,6 +804,11 @@ class VisualChannels:
     @staticmethod
     def create_single_color_channels() -> 'VisualChannels':
         return VisualChannels(None, "quantile", None, "quantile", None, "linear")
+
+    @staticmethod
+    def create_graduated_color_channels(scale: str, color_field: Optional[Field],
+                                        stroke_color_field: Optional[Field]) -> 'VisualChannels':
+        return VisualChannels(color_field, scale, stroke_color_field, scale, None, "linear")
 
     @staticmethod
     def from_dict(obj: Any) -> 'VisualChannels':

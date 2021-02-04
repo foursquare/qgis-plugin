@@ -20,16 +20,18 @@ import logging
 import uuid
 from typing import Optional, List, Tuple
 
-from qgis.core import (QgsTask, QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
-                       QgsLineSymbol, QgsFillSymbol)
+from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
+                       QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer, QgsRendererRange,
+                       QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer, QgsRendererCategory)
 
-from ..exceptions import ProcessInterruptedException, InvalidInputException
-from ..utils import extract_color
+from .base_config_creator_task import BaseConfigCreatorTask
+from ..exceptions import InvalidInputException
+from ..utils import extract_color, rgb_to_hex
 from ...definitions.settings import Settings
 from ...definitions.types import UnfoldedLayerType, SymbolType, SymbolLayerType
 from ...model.map_config import Layer, LayerConfig, VisualChannels, VisConfig, Columns, TextLabel, ColorRange
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
-from ...qgis_plugin_tools.tools.exceptions import QgsPluginException, QgsPluginNotImplementedException
+from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
 from ...qgis_plugin_tools.tools.layers import LayerType
 from ...qgis_plugin_tools.tools.resources import plugin_name
@@ -41,7 +43,7 @@ LOGGER = logging.getLogger(f'{plugin_name()}_task')
 LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
-class LayerToLayerConfig(QgsTask):
+class LayerToLayerConfig(BaseConfigCreatorTask):
     """
     Creates VisState.Layer object
 
@@ -50,18 +52,20 @@ class LayerToLayerConfig(QgsTask):
     Licensed by GPLv3
     """
 
+    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile"}
+    CATEGORIZED_SCALE = "ordinal"
+
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer):
-        super().__init__('LayerToLayerConfig', QgsTask.CanCancel)
+        super().__init__('LayerToLayerConfig')
         self.layer_uuid = layer_uuid
         self.layer = layer
         self.result_layer_conf: Optional[Layer] = None
-        self.exception: Optional[Exception] = None
         self.__supported_radius_size_unit = Settings.supported_radius_size_unit.get()
         self.__supported_width_size_unit = Settings.supported_width_size_unit.get()
 
     def run(self) -> bool:
         try:
-            self.__check_if_canceled()
+            self._check_if_canceled()
             self.result_layer_conf = self._extract_layer()
             self.setProgress(100)
             return True
@@ -74,19 +78,25 @@ class LayerToLayerConfig(QgsTask):
         LOGGER.info(tr('Extracting layer configuration for {}', self.layer.name()))
 
         renderer: QgsFeatureRenderer = self.layer.renderer()
-        symbol_type = SymbolType[renderer.type()]
+        try:
+            symbol_type = SymbolType[renderer.type()]
+        except Exception:
+            raise QgsPluginNotImplementedException(tr("Symbol type {} is not supported yet", renderer.type()),
+                                                   bar_msg=bar_msg())
+
+        layer_type = LayerType.from_layer(self.layer)
         LOGGER.info(tr('Symbol type: {}', symbol_type))
 
+        self.setProgress(50)
         if symbol_type == SymbolType.singleSymbol:
-            self.setProgress(50)
-            # noinspection PyUnresolvedReferences
+            renderer: QgsSingleSymbolRenderer
             color, vis_config = self._extract_layer_style(renderer.symbol())
             visual_channels = VisualChannels.create_single_color_channels()
+        elif symbol_type in (SymbolType.graduatedSymbol, SymbolType.categorizedSymbol):
+            color, vis_config, visual_channels = self._extract_advanced_layer_style(renderer, layer_type, symbol_type)
         else:
             raise QgsPluginNotImplementedException()
 
-        id_ = str(self.layer_uuid).replace("-", "")[:7]
-        layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             layer_type_ = UnfoldedLayerType.Point
             columns = Columns.for_point_2d()
@@ -96,7 +106,8 @@ class LayerToLayerConfig(QgsTask):
             visual_channels.height_scale = VisualChannels.height_scale
             visual_channels.radius_scale = VisualChannels.radius_scale
         else:
-            raise QgsPluginNotImplementedException(tr('Layer type {} is implemented', layer_type))
+            raise QgsPluginNotImplementedException(tr('Layer type {} is not implemented', layer_type),
+                                                   bar_msg=bar_msg())
 
         is_visible = True
         hidden = False
@@ -105,8 +116,64 @@ class LayerToLayerConfig(QgsTask):
         layer_config = LayerConfig(self.layer_uuid, self.layer.name(), color, columns, is_visible, vis_config, hidden,
                                    text_label)
 
+        id_ = str(self.layer_uuid).replace("-", "")[:7]
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
+
+    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+        List[int], VisConfig, VisualChannels]:
+        """ Extract layer style when layer has graduated or categorized style """
+        renderer: QgsGraduatedSymbolRenderer
+        if symbol_type == SymbolType.graduatedSymbol:
+            classification_method = renderer.classificationMethod()
+            scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
+
+            if not scale_name:
+                raise InvalidInputException(tr('Unsupported classification method "{}"', classification_method.id()),
+                                            bar_msg=bar_msg(tr(
+                                                'Use Equal Count (Quantile) or Equal Interval (Quantize)')))
+            symbol_range: QgsRendererRange
+            styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
+            if not styles:
+                raise InvalidInputException(tr('Graduated layer should have at least 1 class'), bar_msg=bar_msg())
+        else:
+            renderer: QgsCategorizedSymbolRenderer
+            category: QgsRendererCategory
+            scale_name = self.CATEGORIZED_SCALE
+            styles = [self._extract_layer_style(category.symbol()) for category in renderer.categories()]
+            if not styles:
+                raise InvalidInputException(tr('Categorized layer should have at least 1 class'), bar_msg=bar_msg())
+
+        color = styles[0][0]
+        vis_config = styles[0][1]
+        fill_colors = [rgb_to_hex(style[0]) for style in styles]
+        stroke_colors = [rgb_to_hex(style[1].stroke_color) for style in styles if style[1].stroke_color]
+
+        if layer_type == LayerType.Line:
+            # For lines, swap the color ranges
+            tmp = [] + fill_colors
+            fill_colors = [] + stroke_colors
+            stroke_colors = tmp
+
+        if fill_colors:
+            vis_config.color_range = ColorRange.create_custom(fill_colors)
+        if stroke_colors:
+            vis_config.stroke_color_range = ColorRange.create_custom(stroke_colors)
+        categorizing_field = self._qgis_field_to_unfolded_field(
+            self.layer.fields()[self.layer.fields().indexOf(renderer.classAttribute())])
+        categorizing_field.analyzer_type = None
+        categorizing_field.format = None
+        color_field, stroke_field = [None] * 2
+        if len(set(fill_colors)) > 1:
+            color_field = categorizing_field
+        if len(set(stroke_colors)) > 1:
+            stroke_field = categorizing_field
+        visual_channels = VisualChannels(color_field, scale_name if color_field else VisualChannels.color_scale,
+                                         stroke_field,
+                                         scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
+                                         VisualChannels.size_scale)
+
+        return color, vis_config, visual_channels
 
     def _extract_layer_style(self, symbol: QgsSymbol) -> Tuple[List[int], VisConfig]:
         symbol_opacity: float = symbol.opacity()
@@ -123,9 +190,9 @@ class LayerToLayerConfig(QgsTask):
         radius_range = VisConfig.radius_range
 
         if isinstance(symbol, QgsMarkerSymbol) or isinstance(symbol, QgsFillSymbol):
-            fill_rgb, _, alpha = extract_color(properties['color'])
+            fill_rgb, alpha = extract_color(properties['color'])
             opacity = round(symbol_opacity * alpha, 2)
-            stroke_rgb, _, stroke_alpha = extract_color(properties['outline_color'])
+            stroke_rgb, stroke_alpha = extract_color(properties['outline_color'])
             stroke_opacity = round(symbol_opacity * stroke_alpha, 2)
             thickness = float(properties['outline_width'])
             outline = stroke_opacity > 0.0 and properties['outline_style'] != 'no'
@@ -150,7 +217,7 @@ class LayerToLayerConfig(QgsTask):
                 wireframe, enable3_d = [False] * 2
                 fixed_radius, outline = [None] * 2
         elif isinstance(symbol, QgsLineSymbol):
-            fill_rgb, _, stroke_alpha = extract_color(properties['line_color'])
+            fill_rgb, stroke_alpha = extract_color(properties['line_color'])
             opacity = round(symbol_opacity * stroke_alpha, 2)
             stroke_opacity = opacity
             thickness = float(properties['line_width'])
@@ -163,7 +230,8 @@ class LayerToLayerConfig(QgsTask):
             wireframe, enable3_d, filled = [False] * 3
             stroke_color, fixed_radius, outline = [None] * 3
         else:
-            raise QgsPluginNotImplementedException(tr('Symbol type {} is not supported yet', symbol.type()))
+            raise QgsPluginNotImplementedException(tr('Symbol type {} is not supported yet', symbol.type()),
+                                                   bar_msg=bar_msg())
 
         thickness = thickness if thickness > 0.0 else VisConfig.thickness
 
@@ -181,30 +249,3 @@ class LayerToLayerConfig(QgsTask):
             raise InvalidInputException(tr('Size unit "{}" is unsupported for {}.', size_unit, unit_name),
                                         bar_msg=bar_msg(
                                             tr('Please use unit {} instead', unit_to_compare)))
-
-    def __check_if_canceled(self) -> None:
-        if self.isCanceled():
-            raise ProcessInterruptedException()
-
-    def finished(self, result: bool) -> None:
-        """
-        This function is automatically called when the task has completed (successfully or not).
-
-        finished is always called from the main thread, so it's safe
-        to do GUI operations and raise Python exceptions here.
-
-        :param result: the return value from self.run
-        """
-        if result:
-            pass
-        else:
-            if self.exception is None:
-                LOGGER_MAIN.warning(tr('Task was not successful'),
-                                    extra=bar_msg(tr('Task was probably cancelled by user')))
-            else:
-                try:
-                    raise self.exception
-                except QgsPluginException as e:
-                    LOGGER.exception(str(e), extra=e.bar_msg)
-                except Exception as e:
-                    LOGGER.exception(tr('Unhandled exception occurred'), extra=bar_msg(e))

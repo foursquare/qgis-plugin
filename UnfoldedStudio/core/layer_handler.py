@@ -32,23 +32,25 @@ class LayerHandler:
         """ Add unfolded basemaps to the project """
         raise QgsPluginNotImplementedException()
 
+    # noinspection PyTypeChecker
     @staticmethod
-    def get_all_visible_vector_layers():
+    def get_all_visible_vector_layers() -> List[QgsVectorLayer]:
         """ Get all vector layers in correct order """
         # noinspection PyArgumentList
         root: QgsLayerTree = QgsProject.instance().layerTreeRoot()
-        layers = LayerHandler.get_layers_from_node(root, root)
+        layers = LayerHandler.get_visible_layers_from_node(root, root)
         return list(filter(lambda layer: isinstance(layer, QgsVectorLayer), layers))
 
     @staticmethod
-    def get_layers_from_node(root: QgsLayerTree, node: QgsLayerTreeNode) -> List[QgsMapLayer]:
+    def get_visible_layers_from_node(root: QgsLayerTree, node: QgsLayerTreeNode) -> List[QgsMapLayer]:
         layers = []
+        child: QgsLayerTreeNode
         for child in node.children():
             if root.isGroup(child):
                 # noinspection PyTypeChecker
-                layers += LayerHandler.get_layers_from_node(root, child)
+                layers += LayerHandler.get_visible_layers_from_node(root, child)
             else:
                 layer = child.layer()
-                if layer:
+                if layer and child.itemVisibilityChecked() and node.itemVisibilityChecked():
                     layers.append(layer)
         return layers

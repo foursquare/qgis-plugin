@@ -28,23 +28,32 @@ def test_add_unfolded_basemaps():
     assert False
 
 
-def test_get_all_visible_vector_layers(new_project, harbour_points, harbour_points_3067):
+def test_get_all_visible_vector_layers(new_project, harbour_points, harbour_points_3067, lines):
     root: QgsLayerTree = QGIS_INSTANCE.layerTreeRoot()
     group1 = root.addGroup("test1")
     group1.addLayer(harbour_points)
     group2 = group1.addGroup("test2")
+    group2.addLayer(lines)
+    group2.setItemVisibilityCheckedRecursive(False)
+    group2.setItemVisibilityChecked(True)
     group2.addLayer(harbour_points_3067)
 
     layers = LayerHandler.get_all_visible_vector_layers()
     assert layers == [harbour_points, harbour_points_3067]
 
 
-def test_get_layers_from_node(new_project, harbour_points, harbour_points_3067):
+def test_get_layers_from_node(new_project, harbour_points, harbour_points_3067, lines, polygons):
     root: QgsLayerTree = QGIS_INSTANCE.layerTreeRoot()
     group1 = root.addGroup("test1")
     group1.addLayer(harbour_points)
     group2 = group1.addGroup("test2")
+    group2.addLayer(lines)
+    group2.setItemVisibilityCheckedRecursive(False)
+    group2.setItemVisibilityChecked(True)
     group2.addLayer(harbour_points_3067)
+    group3 = root.addGroup("test3")
+    group3.addLayer(polygons)
+    group3.setItemVisibilityChecked(False)
 
-    layers = LayerHandler.get_layers_from_node(root, root)
+    layers = LayerHandler.get_visible_layers_from_node(root, root)
     assert layers == [harbour_points, harbour_points_3067]

@@ -30,6 +30,11 @@ from ..core.processing.layer2layer_config import LayerToLayerConfig
                          [('simple_harbour_points', 'harbours_config_point.json'),
                           ('lines', 'lines_config.json'),
                           ('polygons', 'polygons_config.json'),
+                          ('quantile_points', 'harbours_graduated_quantile.json'),
+                          ('quantize_points', 'harbours_graduated_quantize.json'),
+                          ('quantile_lines', 'lines_graduated_quantile.json'),
+                          ('quantile_polygons', 'polygons_graduated_quantile.json'),
+                          ('categorized_points', 'harbours_categorized.json')
                           ])
 def test__extract_layer(layer, config, request):
     layer: QgsVectorLayer = request.getfixturevalue(layer)
