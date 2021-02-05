@@ -24,7 +24,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QWidget
 from qgis.gui import QgisInterface
 
-from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_logger
+from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_logger, teardown_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name
 from .ui.dialog import Dialog
@@ -141,6 +141,7 @@ class Plugin:
                 tr(plugin_name()),
                 action)
             self.iface.removeToolBarIcon(action)
+        teardown_logger(plugin_name())
 
     def run(self):
         """Run method that performs all the real work"""
