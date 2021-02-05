@@ -16,7 +16,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+import datetime
 import uuid
+from unittest.mock import MagicMock
 
 import pytest
 from PyQt5.QtGui import QColor
@@ -25,9 +27,19 @@ from qgis._core import QgsPointXY
 from .conftest import get_map_config, get_loaded_map_config
 from ..core.config_creator import ConfigCreator
 
+FAKE_NOW = datetime.datetime(2021, 1, 25, 11, 37, 43)
+
+
+@pytest.fixture()
+def mock_datetime_now(monkeypatch):
+    """ copied from https://stackoverflow.com/a/60629703/10068922 """
+    datetime_mock = MagicMock(wraps=datetime.datetime)
+    datetime_mock.now.return_value = FAKE_NOW
+    monkeypatch.setattr(datetime, "datetime", datetime_mock)
+
 
 @pytest.fixture
-def config_creator(tmpdir_pth) -> ConfigCreator:
+def config_creator(tmpdir_pth, mock_datetime_now) -> ConfigCreator:
     map_config = get_map_config('harbours_config_point.json')
     creator = ConfigCreator("keplergl_nabzfz", "", tmpdir_pth)
     creator.set_map_state(QgsPointXY(23.383588699716316, 60.556795942038995), 6.759672619963176)
@@ -51,3 +63,8 @@ def test_map_config_creation_w_simple_points(config_creator, simple_harbour_poin
     map_config = get_loaded_map_config(config_creator.created_configuration_path)
 
     assert map_config.to_dict() == excpected_map_config.to_dict()
+
+
+def test__create_config_info(config_creator):
+    info = config_creator._create_config_info()
+    assert info.created_at == "Mon Jan 25 2021 11:37:43 EET+0200"

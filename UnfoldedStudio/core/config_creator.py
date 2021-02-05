@@ -17,10 +17,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded Studio QGIS plugin
-#  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
+import datetime
 import json
+import locale
 import logging
+import time
 import uuid
 from functools import partial
 from pathlib import Path
@@ -41,6 +42,8 @@ from ..model.map_config import (MapConfig, MapState, MapStyle, Layer,
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
 from ..qgis_plugin_tools.tools.resources import plugin_name
+
+ENGLISH_LOCALE = 'en_US.utf8'
 
 LOGGER = logging.getLogger(plugin_name())
 
@@ -230,10 +233,7 @@ class ConfigCreator(QObject):
                                  interaction_config=interaction_config, **self._vis_state_values)
 
             config = Config(Config.version, ConfigConfig(vis_state, self._map_state, self._map_style))
-
-            # TODO: proper created at
-            info = Info(Info.app, "Mon Jan 25 2021 11:37:43 GMT+0200 (Eastern European Standard Time)", self.title,
-                        self.description)
+            info = self._create_config_info()
 
             map_config = MapConfig(datasets, config, info)
             with open(self.created_configuration_path, 'w') as f:
@@ -250,6 +250,16 @@ class ConfigCreator(QObject):
             # noinspection PyUnresolvedReferences
             self.canceled.emit()
 
+    def _create_config_info(self):
+        """ Create info for the configuration """
+        locale.setlocale(locale.LC_ALL, ENGLISH_LOCALE)
+
+        timestamp = datetime.datetime.now().strftime('%a %b %d %Y %H:%M:%S ')
+        time_zone = time.strftime('%Z%z')
+        created_at = timestamp + time_zone
+
+        return Info(Info.app, created_at, self.title, self.description)
+
     def _start_config_creation(self) -> None:
         """ This method runs the config creation in one thread. Mainly meant for testing """
 
@@ -263,5 +273,6 @@ class ConfigCreator(QObject):
         self._create_map_config()
 
     def _extract_datasets(self) -> Datasets:
+        """ Exrtact datasets from QGIS layers """
         # TODO: configure fields to display
         return Datasets(FieldDisplayNames(AnyDict({str(uuid_): {} for uuid_ in self.layers})))
