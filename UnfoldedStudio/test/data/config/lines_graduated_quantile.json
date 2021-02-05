@@ -239,7 +239,7 @@
               "visConfig": {
                 "opacity": 0.8,
                 "strokeOpacity": 0.8,
-                "thickness": 0.5,
+                "thickness": 0.6,
                 "strokeColor": null,
                 "colorRange": {
                   "category": "Uber",

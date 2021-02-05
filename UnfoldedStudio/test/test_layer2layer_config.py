@@ -19,7 +19,7 @@
 import uuid
 
 import pytest
-from qgis._core import QgsVectorLayer
+from qgis.core import QgsVectorLayer, QgsSymbolLayerUtils
 
 from .conftest import get_map_config
 from ..core.exceptions import InvalidInputException
@@ -54,3 +54,8 @@ def test__extract_layer_with_invalid_size_units(layer, request):
     with pytest.raises(InvalidInputException) as execinfo:
         alg._extract_layer()
     assert "Size unit" in str(execinfo)
+
+
+def test_12():
+    utils = QgsSymbolLayerUtils()
+    utils.decodeSldUom('')

@@ -275,7 +275,7 @@
                 "fixedRadius": false,
                 "opacity": 1.0,
                 "outline": false,
-                "thickness": 2,
+                "thickness": 1,
                 "strokeColor": null,
                 "colorRange": {
                   "category": "Custom",

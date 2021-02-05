@@ -28,17 +28,23 @@ from ..qgis_plugin_tools.tools.settings import get_setting, set_setting
 @enum.unique
 class Settings(enum.Enum):
     crs = 'EPSG:4326'
-    supported_radius_size_unit = 'Pixel'
-    supported_width_size_unit = 'MM'
     conf_output_dir = resources_path('configurations')
     layer_blending = 'normal'
     basemap = 'dark'
+
+    # size
+    pixel_size_unit = 'Pixel'
+    millimeter_size_unit = 'MM'
+    millimeters_to_pixels = 0.28  # Taken from qgssymbollayerutils.cpp
+    width_pixel_factor = 3.0  # Empirecally determined factor
 
     _options = {'layer_blending': ['normal', 'additive', 'substractive'],
                 'basemap': ['dark', 'light', 'muted', 'muted_night', 'satellite', 'satellite-street', 'streets']}
 
     def get(self, typehint: type = str) -> any:
         """Gets the value of the setting"""
+        if self in (Settings.millimeters_to_pixels, Settings.width_pixel_factor):
+            typehint = float
         return get_setting(self.name, self.value, typehint)
 
     def set(self, value: Union[str, int, float, bool]) -> bool:
