@@ -16,28 +16,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
-#
-#
-#  This file is part of Unfolded Studio QGIS plugin.
-#
-#  Unfolded Studio QGIS plugin is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Unfolded Studio QGIS plugin is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+
 
 import logging
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialog, QProgressBar, QLabel
-from pydev_ipython.qt import QtGui
 
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
@@ -57,7 +41,7 @@ class ProgressDialog(QDialog, FORM_CLASS):
         self.progress_bar: QProgressBar = self.progress_bar
         self.status_label: QLabel = self.status_label
 
-    def closeEvent(self, evt: QtGui.QCloseEvent) -> None:
+    def closeEvent(self, evt) -> None:
         LOGGER.debug('Closing progress dialog')
         # noinspection PyUnresolvedReferences
         self.aborted.emit()
