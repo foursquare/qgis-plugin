@@ -35,7 +35,7 @@ locales = ['fi']
 profile = 'default'
 ui_files = list(glob.glob("**/*.ui", recursive=True))
 resources = list(glob.glob("**/*.qrc", recursive=True))
-extra_dirs = ["resources", "logs"]
+extra_dirs = ["resources"]
 compiled_resources = []
 
 PluginMaker(py_files=py_files, ui_files=ui_files, resources=resources, extra_dirs=extra_dirs,
