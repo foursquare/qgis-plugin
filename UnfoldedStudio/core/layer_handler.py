@@ -17,7 +17,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import logging
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from qgis.core import QgsProject, QgsLayerTree, QgsLayerTreeNode, QgsMapLayer, QgsVectorLayer, QgsRasterLayer, \
     QgsLayerTreeLayer
@@ -85,6 +85,19 @@ class LayerHandler:
                 layer_element.setItemVisibilityChecked(i == 0)
 
         return layers
+
+    @staticmethod
+    def get_current_basemap_name() -> Optional[str]:
+        """ Get the name of the currently active basemap """
+        # noinspection PyArgumentList
+        qgs_project = QgsProject.instance()
+        layer_name = None
+        root: QgsLayerTree = qgs_project.layerTreeRoot()
+        group = root.findGroup(LayerHandler.basemap_group)
+        if group:
+            layers = LayerHandler.get_visible_layers_from_node(root, group)
+            layer_name = layers[0].name() if layers else None
+        return layer_name
 
     # noinspection PyTypeChecker
     @staticmethod
