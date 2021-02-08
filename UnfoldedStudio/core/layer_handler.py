@@ -52,6 +52,9 @@ class LayerHandler:
         group = root.findGroup(LayerHandler.basemap_group)
         if not group:
             group = root.addGroup(LayerHandler.basemap_group)
+            group.setIsMutuallyExclusive(True)
+
+        existing_layers_in_group = [node.layer().name() for node in group.children()]
 
         default_params = {'format': Settings.basemap_wmts_default_format.get(), 'token': token, 'crs': crs}
 
@@ -60,16 +63,17 @@ class LayerHandler:
         wmts_basemap_config: Dict[str, Dict[str, Dict[str, str]]] = Settings.wmts_basemaps.get()
         for username, wmts_layers in wmts_basemap_config.items():
             for name, layer_params in wmts_layers.items():
-                params = {**default_params, **layer_params, 'username': username}
-                url = base_url.format(**params)
-                LOGGER.debug(f"{name}: {url.replace(token, '<mapbox-api-token>')}")
-                layer = QgsRasterLayer(url, name, "wms")
-                if layer.isValid():
-                    layers.append(layer)
-                else:
-                    LOGGER.warning(tr('Layer {} is not valid', name))
+                if name not in existing_layers_in_group:
+                    params = {**default_params, **layer_params, 'username': username}
+                    url = base_url.format(**params)
+                    LOGGER.debug(f"{name}: {url.replace(token, '<mapbox-api-token>')}")
+                    layer = QgsRasterLayer(url, name, "wms")
+                    if layer.isValid():
+                        layers.append(layer)
+                    else:
+                        LOGGER.warning(tr('Layer {} is not valid', name))
 
-        if not layers:
+        if not layers and not existing_layers_in_group:
             raise MapboxTokenMissing(tr('No valid base maps found'),
                                      bar_msg=bar_msg(tr('Please check your Mapbox token')))
 
