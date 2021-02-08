@@ -275,7 +275,7 @@
                 "fixedRadius": false,
                 "opacity": 0.8,
                 "outline": false,
-                "thickness": 2.0,
+                "thickness": 1.0,
                 "strokeColor": null,
                 "strokeOpacity": null,
                 "colorRange": {

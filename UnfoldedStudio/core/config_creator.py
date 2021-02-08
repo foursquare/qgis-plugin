@@ -246,9 +246,9 @@ class ConfigCreator(QObject):
             self.completed.emit()
 
         except Exception as e:
-            LOGGER.exception('Error occurred')
-            raise InvalidInputException(tr('Config creation failed. Check the log for more details'),
-                                        bar_msg=bar_msg(e))
+            LOGGER.exception('Config creation failed. Check the log for more details', extra=bar_msg(e))
+            # noinspection PyUnresolvedReferences
+            self.canceled.emit()
 
     def _start_config_creation(self) -> None:
         """ This method runs the config creation in one thread. Mainly meant for testing """

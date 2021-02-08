@@ -18,7 +18,7 @@
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import logging
 import uuid
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Union
 
 from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
                        QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer, QgsRendererRange,
@@ -60,8 +60,10 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         self.layer_uuid = layer_uuid
         self.layer = layer
         self.result_layer_conf: Optional[Layer] = None
-        self.__supported_radius_size_unit = Settings.supported_radius_size_unit.get()
-        self.__supported_width_size_unit = Settings.supported_width_size_unit.get()
+        self.__pixel_unit = Settings.pixel_size_unit.get()
+        self.__millimeter_unit = Settings.millimeter_size_unit.get()
+        self.__millimeters_to_pixels = Settings.millimeters_to_pixels.get()
+        self.__width_pixel_factor = Settings.width_pixel_factor.get()
 
     def run(self) -> bool:
         try:
@@ -194,7 +196,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             opacity = round(symbol_opacity * alpha, 2)
             stroke_rgb, stroke_alpha = extract_color(properties['outline_color'])
             stroke_opacity = round(symbol_opacity * stroke_alpha, 2)
-            thickness = float(properties['outline_width'])
+            thickness = self._convert_to_pixels(float(properties['outline_width']), properties['outline_width_unit'])
             outline = stroke_opacity > 0.0 and properties['outline_style'] != 'no'
             stroke_opacity = stroke_opacity if outline else None
             stroke_color = stroke_rgb if outline else None
@@ -206,10 +208,9 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                 # Fixed radius seems to always be False with point types
                 fixed_radius = False
 
-                radius = int(properties['size'])
-                self.__check_size_unit(properties['size_unit'], radius=True)
+                radius = self._convert_to_pixels(float(properties['size']), properties['size_unit'], radius=True)
+                thickness = thickness if thickness > 0.0 else 1.0  # Hairline in QGIS
             else:
-                self.__check_size_unit(properties['outline_width_unit'])
                 size_range = VisConfig.size_range
                 height_range = VisConfig.height_range
                 elevation_scale = VisConfig.elevation_scale
@@ -220,8 +221,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             fill_rgb, stroke_alpha = extract_color(properties['line_color'])
             opacity = round(symbol_opacity * stroke_alpha, 2)
             stroke_opacity = opacity
-            thickness = float(properties['line_width'])
-            self.__check_size_unit(properties['line_width_unit'])
+            thickness = self._convert_to_pixels(float(properties['line_width']), properties['line_width_unit'])
 
             size_range = VisConfig.size_range
             height_range = VisConfig.height_range
@@ -241,11 +241,16 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
 
         return fill_rgb, vis_config
 
-    def __check_size_unit(self, size_unit: str, radius: bool = False):
-        """ Check whether size unit is supported"""
-        unit_to_compare = self.__supported_radius_size_unit if radius else self.__supported_width_size_unit
-        unit_name = tr('radius') if radius else tr('width')
-        if size_unit != unit_to_compare:
-            raise InvalidInputException(tr('Size unit "{}" is unsupported for {}.', size_unit, unit_name),
+    def _convert_to_pixels(self, size_value: float, size_unit: str, radius: bool = False) -> Union[int, float]:
+        """ Convert size value to pixels"""
+        value = size_value if radius else size_value / self.__width_pixel_factor
+        if size_unit == self.__millimeter_unit:
+            value = value / self.__millimeters_to_pixels
+
+        if size_unit in (self.__millimeter_unit, self.__pixel_unit):
+            return int(value) if radius else round(value, 1)
+        else:
+            raise InvalidInputException(tr('Size unit "{}" is unsupported.', size_unit),
                                         bar_msg=bar_msg(
-                                            tr('Please use unit {} instead', unit_to_compare)))
+                                            tr('Please use {} instead',
+                                               tr('or').join((self.__millimeter_unit, self.__pixel_unit)))))
