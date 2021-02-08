@@ -25,3 +25,7 @@ class ProcessInterruptedException(QgsPluginException):
 
 class InvalidInputException(QgsPluginException):
     pass
+
+
+class MapboxTokenMissing(QgsPluginException):
+    pass

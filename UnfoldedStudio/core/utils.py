@@ -27,6 +27,7 @@ from qgis.gui import QgsMapCanvas
 from ..definitions.settings import Settings
 
 UNFOLDED_CRS = QgsCoordinateReferenceSystem(Settings.crs.get())
+PROJECT_CRS = QgsCoordinateReferenceSystem(Settings.project_crs.get())
 
 
 def extract_color(color: str) -> Tuple[List[int], float]:
@@ -51,6 +52,12 @@ def get_canvas_center(canvas: QgsMapCanvas) -> QgsPointXY:
     return transformer.transform(center)
 
 
+def set_project_crs() -> None:
+    """ Set project crs """
+    # noinspection PyArgumentList
+    QgsProject.instance().setCrs(PROJECT_CRS)
+
+
 def generate_zoom_level(scale: float, dpi: int) -> float:
     """
     Generates zoom level from scale and dpi
@@ -60,7 +67,8 @@ def generate_zoom_level(scale: float, dpi: int) -> float:
     max_scale_per_pixel = 156543.04
     inches_per_meter = 39.37
     zoomlevel = round(math.log(((dpi * inches_per_meter * max_scale_per_pixel) / scale), 2), 759672619963176)
-    return zoomlevel
+    zoomlevel2 = 29.1402 - math.log2(scale)
+    return zoomlevel2
 
 
 def random_color() -> QColor:

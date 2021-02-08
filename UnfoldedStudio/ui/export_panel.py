@@ -65,7 +65,8 @@ class ExportPanel(BasePanel):
         cb_basemap: QComboBox = self.dlg.cb_basemap
         cb_basemap.clear()
         cb_basemap.addItems(Settings.basemap.get_options())
-        cb_basemap.setCurrentText(Settings.basemap.get())
+        current_basemap = LayerHandler.get_current_basemap_name()
+        cb_basemap.setCurrentText(current_basemap if current_basemap else Settings.basemap.get())
 
         # Map interaction
         self.dlg.cb_tooltip.setChecked(True)
