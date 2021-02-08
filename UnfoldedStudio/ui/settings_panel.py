@@ -20,6 +20,7 @@
 import logging
 import webbrowser
 
+from PyQt5.QtWidgets import QLineEdit
 from qgis.gui import QgsFileWidget
 
 from .base_panel import BasePanel
@@ -37,20 +38,26 @@ LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 # noinspection PyMethodMayBeStatic
 class SettingsPanel(BasePanel):
     """
-    This file is adapted from https://github.com/GispoCoding/qaava-qgis-plugin licensed under GPL version 2
+    This file is originally adapted from https://github.com/GispoCoding/qaava-qgis-plugin licensed under GPL version 2
     """
 
     def __init__(self, dialog):
         super().__init__(dialog)
         self.panel = Panels.Settings
 
+    # noinspection PyUnresolvedReferences
     def setup_panel(self):
+        # Mapbox token
+        line_edit_token: QLineEdit = self.dlg.le_mapbox_token
+        line_edit_token.setText(Settings.mapbox_api_token.get())
+        line_edit_token.textChanged.connect(self._mapbox_token_changed)
+
+        # Configuration output
         f_conf_output: QgsFileWidget = self.dlg.f_conf_output
         f_conf_output.setFilePath(Settings.conf_output_dir.get())
-
-        # noinspection PyUnresolvedReferences
         f_conf_output.fileChanged.connect(self._conf_output_dir_changed)
 
+        # Logging
         self.dlg.combo_box_log_level_file.clear()
         self.dlg.combo_box_log_level_console.clear()
 
@@ -70,3 +77,7 @@ class SettingsPanel(BasePanel):
     def _conf_output_dir_changed(self, new_dir: str):
         if new_dir:
             Settings.conf_output_dir.set(new_dir)
+
+    def _mapbox_token_changed(self, new_token: str):
+        if new_token:
+            Settings.mapbox_api_token.set(new_token)
