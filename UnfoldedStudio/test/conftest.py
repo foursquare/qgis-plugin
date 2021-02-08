@@ -21,11 +21,13 @@
 This class contains fixtures and common helper function to keep the test files shorter
 """
 import json
+import os
 from pathlib import Path
 
 import pytest
 from qgis.core import QgsVectorLayer, QgsProject
 
+from ..definitions.settings import Settings
 from ..model.map_config import MapConfig
 from ..qgis_plugin_tools.testing.utilities import get_qgis_app
 from ..qgis_plugin_tools.tools.resources import plugin_test_data_path
@@ -155,6 +157,13 @@ def polygons_invalid_size_units(polygons):
 @pytest.fixture
 def tmpdir_pth(tmpdir) -> Path:
     return Path(tmpdir)
+
+
+@pytest.fixture
+def initialize_settings() -> bool:
+    Settings.mapbox_api_token.set(os.environ.get('mapbox-api-token', ''))
+    yield True
+    Settings.mapbox_api_token.set('')
 
 
 def get_layer(name: str, gpkg):

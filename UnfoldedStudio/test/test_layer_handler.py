@@ -16,16 +16,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
-import pytest
 from qgis.core import QgsLayerTree
 
 from .conftest import QGIS_INSTANCE
 from ..core.layer_handler import LayerHandler
 
 
-@pytest.mark.skip("Not implemented yet")
-def test_add_unfolded_basemaps():
-    assert False
+def test_add_unfolded_basemaps(initialize_settings):
+    layers = LayerHandler.add_unfolded_basemaps()
+    assert len(layers) == 7
+    assert all([layer.isValid() for layer in layers])
 
 
 def test_get_all_visible_vector_layers(new_project, harbour_points, harbour_points_3067, lines):
