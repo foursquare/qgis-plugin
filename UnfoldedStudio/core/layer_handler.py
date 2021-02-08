@@ -53,12 +53,15 @@ class LayerHandler:
         if not group:
             group = root.addGroup(LayerHandler.basemap_group)
 
+        default_params = {'format': Settings.basemap_wmts_default_format.get(), 'token': token, 'crs': crs}
+
         # Generate WMTS layers
         layers: List[QgsRasterLayer] = []
-        wmts_basemap_config: Dict[str, Dict[str, str]] = Settings.wmts_basemaps.get()
+        wmts_basemap_config: Dict[str, Dict[str, Dict[str, str]]] = Settings.wmts_basemaps.get()
         for username, wmts_layers in wmts_basemap_config.items():
-            for name, style_id in wmts_layers.items():
-                url = base_url.format(username=username, style_id=style_id, token=token, crs=crs)
+            for name, layer_params in wmts_layers.items():
+                params = {**default_params, **layer_params, 'username': username}
+                url = base_url.format(**params)
                 LOGGER.debug(f"{name}: {url.replace(token, '<mapbox-api-token>')}")
                 layer = QgsRasterLayer(url, name, "wms")
                 if layer.isValid():

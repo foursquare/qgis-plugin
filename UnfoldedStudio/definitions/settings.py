@@ -42,20 +42,21 @@ class Settings(enum.Enum):
     # basemaps
     basemap = 'dark'
     mapbox_api_token = ''
-    basemap_wmts_url = 'url=https://api.mapbox.com/styles/v1/{username}/{style_id}/wmts?access_token%3D{token}&contextualWMSLegend=0&crs={crs}&format=image/png&layers={style_id}&styles=default&tileMatrixSet=GoogleMapsCompatible'
+    basemap_wmts_url = 'url=https://api.mapbox.com/styles/v1/{username}/{style_id}/wmts?access_token%3D{token}&contextualWMSLegend=0&crs={crs}&format={format}&layers={style_id}&dpiMode=7&featureCount=10&styles=default&tileMatrixSet=GoogleMapsCompatible'
+    basemap_wmts_default_format = 'image/png'
     wmts_basemaps = {
         'uberdata': {
-            'dark': 'cjoqbbf6l9k302sl96tyvka09',
-            'light': 'cjoqb9j339k1f2sl9t5ic5bn4',
-            'muted': 'cjfyl03kp1tul2smf5v2tbdd4',
-            'muted_night': 'cjfxhlikmaj1b2soyzevnywgs',
+            'dark': {'style_id': 'cjoqbbf6l9k302sl96tyvka09'},
+            'light': {'style_id': 'cjoqb9j339k1f2sl9t5ic5bn4'},
+            'muted': {'style_id': 'cjfyl03kp1tul2smf5v2tbdd4'},
+            'muted_night': {'style_id': 'cjfxhlikmaj1b2soyzevnywgs'},
         },
         'mapbox': {
-            'satellite': 'satellite-v9'
+            'satellite': {'style_id': 'satellite-v9', 'format': 'image/jpeg'}
         },
         'unfoldedinc': {
-            'satellite-streets': 'ckcr4dmep0i511is9m4qj9az5',
-            'streets': 'ckfzpk24r0thc1anudzpwnc9q',
+            'satellite-streets': {'style_id': 'ckcr4dmep0i511is9m4qj9az5', 'format': 'image/jpeg'},
+            'streets': {'style_id': 'ckfzpk24r0thc1anudzpwnc9q'},
         }
     }
 
