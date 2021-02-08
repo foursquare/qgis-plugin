@@ -9,7 +9,7 @@
             <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>733</width>
+                <width>643</width>
                 <height>471</height>
             </rect>
         </property>
@@ -113,20 +113,20 @@
                                         <x>0</x>
                                         <y>0</y>
                                         <width>760</width>
-                                        <height>500</height>
+                                        <height>520</height>
                                     </rect>
                                 </property>
                                 <property name="minimumSize">
                                     <size>
                                         <width>760</width>
-                                        <height>500</height>
+                                        <height>0</height>
                                     </size>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_2">
                                     <item>
                                         <widget class="QStackedWidget" name="stacked_widget">
                                             <property name="currentIndex">
-                                                <number>2</number>
+                                                <number>0</number>
                                             </property>
                                             <widget class="QWidget" name="exporter">
                                                 <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -134,6 +134,12 @@
                                                         <widget class="QgsCollapsibleGroupBox" name="gb_">
                                                             <property name="enabled">
                                                                 <bool>true</bool>
+                                                            </property>
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
                                                             </property>
                                                             <property name="font">
                                                                 <font>
@@ -154,18 +160,18 @@
                                                                 <bool>true</bool>
                                                             </property>
                                                             <layout class="QGridLayout" name="gridLayout_8">
-                                                                <item row="1" column="1">
+                                                                <item row="3" column="2">
                                                                     <widget class="QTextEdit" name="input_description"/>
                                                                 </item>
-                                                                <item row="1" column="0">
-                                                                    <widget class="QLabel" name="label_14">
-                                                                        <property name="text">
-                                                                            <string>Description</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="0" column="0">
+                                                                <item row="2" column="0">
                                                                     <widget class="QLabel" name="label_20">
+                                                                        <property name="sizePolicy">
+                                                                            <sizepolicy hsizetype="Preferred"
+                                                                                        vsizetype="Fixed">
+                                                                                <horstretch>0</horstretch>
+                                                                                <verstretch>0</verstretch>
+                                                                            </sizepolicy>
+                                                                        </property>
                                                                         <property name="font">
                                                                             <font>
                                                                                 <weight>75</weight>
@@ -177,7 +183,27 @@
                                                                         </property>
                                                                     </widget>
                                                                 </item>
-                                                                <item row="0" column="1">
+                                                                <item row="3" column="0">
+                                                                    <widget class="QLabel" name="label_14">
+                                                                        <property name="sizePolicy">
+                                                                            <sizepolicy hsizetype="Preferred"
+                                                                                        vsizetype="Fixed">
+                                                                                <horstretch>0</horstretch>
+                                                                                <verstretch>0</verstretch>
+                                                                            </sizepolicy>
+                                                                        </property>
+                                                                        <property name="font">
+                                                                            <font>
+                                                                                <weight>75</weight>
+                                                                                <bold>true</bold>
+                                                                            </font>
+                                                                        </property>
+                                                                        <property name="text">
+                                                                            <string>Description</string>
+                                                                        </property>
+                                                                    </widget>
+                                                                </item>
+                                                                <item row="2" column="2">
                                                                     <widget class="QLineEdit" name="input_title"/>
                                                                 </item>
                                                             </layout>
@@ -187,6 +213,12 @@
                                                         <widget class="QgsCollapsibleGroupBox" name="gb_1">
                                                             <property name="enabled">
                                                                 <bool>true</bool>
+                                                            </property>
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
                                                             </property>
                                                             <property name="font">
                                                                 <font>
@@ -207,8 +239,18 @@
                                                                 <bool>true</bool>
                                                             </property>
                                                             <layout class="QGridLayout" name="gridLayout_9">
+                                                                <item row="0" column="1">
+                                                                    <widget class="QComboBox" name="cb_basemap"/>
+                                                                </item>
                                                                 <item row="0" column="0">
                                                                     <widget class="QLabel" name="label_21">
+                                                                        <property name="sizePolicy">
+                                                                            <sizepolicy hsizetype="Preferred"
+                                                                                        vsizetype="Fixed">
+                                                                                <horstretch>0</horstretch>
+                                                                                <verstretch>0</verstretch>
+                                                                            </sizepolicy>
+                                                                        </property>
                                                                         <property name="font">
                                                                             <font>
                                                                                 <weight>75</weight>
@@ -220,9 +262,6 @@
                                                                         </property>
                                                                     </widget>
                                                                 </item>
-                                                                <item row="0" column="1">
-                                                                    <widget class="QComboBox" name="cb_basemap"/>
-                                                                </item>
                                                             </layout>
                                                         </widget>
                                                     </item>
@@ -230,6 +269,12 @@
                                                         <widget class="QgsCollapsibleGroupBox" name="gb_2">
                                                             <property name="enabled">
                                                                 <bool>true</bool>
+                                                            </property>
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
                                                             </property>
                                                             <property name="font">
                                                                 <font>
@@ -286,6 +331,12 @@
                                                             <property name="enabled">
                                                                 <bool>true</bool>
                                                             </property>
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="font">
                                                                 <font>
                                                                     <weight>75</weight>
@@ -307,6 +358,13 @@
                                                             <layout class="QGridLayout" name="gridLayout_11">
                                                                 <item row="0" column="0">
                                                                     <widget class="QLabel" name="label_23">
+                                                                        <property name="sizePolicy">
+                                                                            <sizepolicy hsizetype="Preferred"
+                                                                                        vsizetype="Fixed">
+                                                                                <horstretch>0</horstretch>
+                                                                                <verstretch>0</verstretch>
+                                                                            </sizepolicy>
+                                                                        </property>
                                                                         <property name="font">
                                                                             <font>
                                                                                 <weight>75</weight>
@@ -323,19 +381,6 @@
                                                                 </item>
                                                             </layout>
                                                         </widget>
-                                                    </item>
-                                                    <item>
-                                                        <spacer name="verticalSpacer_3">
-                                                            <property name="orientation">
-                                                                <enum>Qt::Vertical</enum>
-                                                            </property>
-                                                            <property name="sizeHint" stdset="0">
-                                                                <size>
-                                                                    <width>20</width>
-                                                                    <height>40</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
                                                     </item>
                                                     <item>
                                                         <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -398,6 +443,12 @@
                                                     </item>
                                                     <item>
                                                         <widget class="QgsCollapsibleGroupBox" name="mGroupBox_4">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Export</string>
                                                             </property>
@@ -407,6 +458,13 @@
                                                                         <item row="0" column="1">
                                                                             <widget class="QgsFileWidget"
                                                                                     name="f_conf_output">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="storageMode">
                                                                                     <enum>QgsFileWidget::GetFile</enum>
                                                                                 </property>
@@ -418,6 +476,13 @@
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_level_file_2">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Configuration output
                                                                                         directory
@@ -432,6 +497,12 @@
                                                     </item>
                                                     <item>
                                                         <widget class="QgsCollapsibleGroupBox" name="mGroupBox_3">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Logging</string>
                                                             </property>
@@ -450,6 +521,13 @@
                                                                         <item row="1" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_level_console">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Console level</string>
                                                                                 </property>
@@ -462,6 +540,13 @@
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_level_file">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>File level</string>
                                                                                 </property>
@@ -503,25 +588,18 @@
                                                             </layout>
                                                         </widget>
                                                     </item>
-                                                    <item>
-                                                        <spacer name="verticalSpacer_2">
-                                                            <property name="orientation">
-                                                                <enum>Qt::Vertical</enum>
-                                                            </property>
-                                                            <property name="sizeHint" stdset="0">
-                                                                <size>
-                                                                    <width>20</width>
-                                                                    <height>40</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
-                                                    </item>
                                                 </layout>
                                             </widget>
                                             <widget class="QWidget" name="about">
                                                 <layout class="QVBoxLayout" name="verticalLayout_3">
                                                     <item>
                                                         <widget class="QGroupBox" name="groupBox_5">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Unfolded Studio</string>
                                                             </property>
@@ -533,6 +611,13 @@
                                                                         </property>
                                                                         <item row="0" column="1">
                                                                             <widget class="QLabel" name="label_gispo_2">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
                                                                                         href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span
@@ -546,6 +631,13 @@
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_development_2">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Studio</string>
                                                                                 </property>
@@ -554,6 +646,13 @@
                                                                         <item row="1" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_development_3">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Documentation</string>
                                                                                 </property>
@@ -561,6 +660,13 @@
                                                                         </item>
                                                                         <item row="1" column="1">
                                                                             <widget class="QLabel" name="label_gispo_3">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
                                                                                         href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span
@@ -578,6 +684,12 @@
                                                     </item>
                                                     <item>
                                                         <widget class="QGroupBox" name="groupBox_3">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Attributions</string>
                                                             </property>
@@ -590,6 +702,13 @@
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_development">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Main plugin development
                                                                                     </string>
@@ -598,6 +717,13 @@
                                                                         </item>
                                                                         <item row="0" column="1">
                                                                             <widget class="QLabel" name="label_gispo">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
                                                                                         href=&quot;https://www.gispo.fi/en/home/&quot;&gt;&lt;span
@@ -615,6 +741,12 @@
                                                     </item>
                                                     <item>
                                                         <widget class="QGroupBox" name="groupBox_2">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Sources</string>
                                                             </property>
@@ -623,6 +755,13 @@
                                                                     <layout class="QGridLayout" name="gridLayout_2">
                                                                         <item row="1" column="1">
                                                                             <widget class="QLabel" name="label_source">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
                                                                                         href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span
@@ -634,6 +773,13 @@
                                                                         </item>
                                                                         <item row="1" column="0">
                                                                             <widget class="QLabel" name="label_gsource">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Unfolded Studio Plugin
                                                                                         repository
@@ -643,6 +789,13 @@
                                                                         </item>
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel" name="label_qsource">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>kepler.gl</string>
                                                                                 </property>
@@ -651,6 +804,13 @@
                                                                         <item row="0" column="1">
                                                                             <widget class="QLabel"
                                                                                     name="label_qgsource">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
                                                                                         href=&quot;https://github.com/keplergl/kepler.gl&quot;&gt;&lt;span
@@ -667,6 +827,12 @@
                                                     </item>
                                                     <item>
                                                         <widget class="QGroupBox" name="groupBox_4">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Versions</string>
                                                             </property>
@@ -675,6 +841,13 @@
                                                                     <layout class="QGridLayout" name="gridLayout_4">
                                                                         <item row="0" column="1">
                                                                             <widget class="QLabel" name="label_version">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;placeholder&gt;</string>
                                                                                 </property>
@@ -683,6 +856,13 @@
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel"
                                                                                     name="label_version_txt">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Preferred">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Unfolded Studio Plugin
                                                                                     </string>
@@ -696,14 +876,27 @@
                                                     </item>
                                                     <item>
                                                         <widget class="QGroupBox" name="groupBox">
+                                                            <property name="sizePolicy">
+                                                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                    <horstretch>0</horstretch>
+                                                                    <verstretch>0</verstretch>
+                                                                </sizepolicy>
+                                                            </property>
                                                             <property name="title">
                                                                 <string>Licenses</string>
                                                             </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_4">
+                                                            <layout class="QHBoxLayout" name="horizontalLayout_11">
                                                                 <item>
                                                                     <layout class="QGridLayout" name="gridLayout">
                                                                         <item row="0" column="0">
                                                                             <widget class="QLabel" name="label_plugin">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>Unfolded Studio Plugin
                                                                                     </string>
@@ -712,6 +905,13 @@
                                                                         </item>
                                                                         <item row="0" column="1">
                                                                             <widget class="QLabel" name="label_gpl2">
+                                                                                <property name="sizePolicy">
+                                                                                    <sizepolicy hsizetype="Preferred"
+                                                                                                vsizetype="Fixed">
+                                                                                        <horstretch>0</horstretch>
+                                                                                        <verstretch>0</verstretch>
+                                                                                    </sizepolicy>
+                                                                                </property>
                                                                                 <property name="text">
                                                                                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
                                                                                         href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html&quot;&gt;&lt;span
@@ -726,19 +926,6 @@
                                                                 </item>
                                                             </layout>
                                                         </widget>
-                                                    </item>
-                                                    <item>
-                                                        <spacer name="verticalSpacer">
-                                                            <property name="orientation">
-                                                                <enum>Qt::Vertical</enum>
-                                                            </property>
-                                                            <property name="sizeHint" stdset="0">
-                                                                <size>
-                                                                    <width>20</width>
-                                                                    <height>40</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
                                                     </item>
                                                 </layout>
                                             </widget>
