@@ -26,7 +26,7 @@ from qgis.gui import QgisInterface
 
 from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_logger, teardown_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation, tr
-from .qgis_plugin_tools.tools.resources import plugin_name
+from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
 
 
@@ -123,11 +123,11 @@ class Plugin:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         self.add_action(
-            "",
+            resources_path('icons', 'icon.svg'),
             text=tr(plugin_name()),
             callback=self.run,
             parent=self.iface.mainWindow(),
-            add_to_toolbar=False
+            add_to_toolbar=True
         )
 
     def onClosePlugin(self):

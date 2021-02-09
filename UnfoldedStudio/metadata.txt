@@ -12,5 +12,6 @@ repository=https://github.com/UnfoldedInc/UnfoldedStudio
 homepage=https://github.com/UnfoldedInc/UnfoldedStudio
 tracker=https://github.com/UnfoldedInc/UnfoldedStudio/issues
 category=Plugins
+icon=resources/icons/icon.svg
 experimental=True
 deprecated=False
