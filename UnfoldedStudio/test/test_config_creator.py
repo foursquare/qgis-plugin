@@ -45,7 +45,7 @@ def test_map_config_creation_w_simple_points(config_creator, simple_harbour_poin
     excpected_map_config = get_map_config('harbours_config_point.json')
 
     config_creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
-                             QColor.fromRgb(0, 92, 255))
+                             QColor.fromRgb(0, 92, 255), True)
     config_creator._start_config_creation()
 
     map_config = get_loaded_map_config(config_creator.created_configuration_path)

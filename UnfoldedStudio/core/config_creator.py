@@ -120,12 +120,12 @@ class ConfigCreator(QObject):
         except Exception as e:
             raise InvalidInputException(tr('Check the map style configuration values'), bar_msg=bar_msg(e))
 
-    def add_layer(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, layer_color: QColor):
+    def add_layer(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, layer_color: QColor, is_visible: bool):
         """ Add layer to the config creation """
         color = (layer_color.red(), layer_color.green(), layer_color.blue())
         self.layers[layer_uuid] = layer
         self.tasks[uuid.uuid4()] = {'task': LayerToDatasets(layer_uuid, layer, color), 'finished': False}
-        self.tasks[uuid.uuid4()] = {'task': LayerToLayerConfig(layer_uuid, layer), 'finished': False}
+        self.tasks[uuid.uuid4()] = {'task': LayerToLayerConfig(layer_uuid, layer, is_visible), 'finished': False}
 
         # Save information about shown fields based
         shown_fields = []
