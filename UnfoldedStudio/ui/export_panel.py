@@ -20,20 +20,22 @@
 import logging
 import uuid
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple, List
 
-from PyQt5.QtWidgets import QComboBox
-from qgis._core import QgsProject
+from PyQt5.QtWidgets import QComboBox, QTableWidget, QTableWidgetItem, QCheckBox
+from qgis._core import QgsProject, QgsVectorLayer
 from qgis.gui import QgsMapCanvas
 from qgis.utils import iface
 
 from .base_panel import BasePanel
 from .progress_dialog import ProgressDialog
 from ..core.config_creator import ConfigCreator
+from ..core.exceptions import ExportException
 from ..core.layer_handler import LayerHandler
 from ..core.utils import generate_zoom_level, random_color, get_canvas_center
 from ..definitions.gui import Panels
 from ..definitions.settings import Settings
+from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
 from ..qgis_plugin_tools.tools.resources import plugin_name
 
@@ -51,6 +53,9 @@ class ExportPanel(BasePanel):
         self.config_creator: Optional[ConfigCreator] = None
 
     def setup_panel(self):
+        # Layers
+        self.__setup_layers_to_export()
+
         # Map configuration
         # noinspection PyArgumentList
         self.dlg.input_title.setText(QgsProject.instance().baseName())
@@ -77,12 +82,61 @@ class ExportPanel(BasePanel):
         # Export button
         self.dlg.btn_export.clicked.connect(self.run)
 
+    def __setup_layers_to_export(self):
+        """ """
+        # Vector layers
+        table: QTableWidget = self.dlg.tw_layers
+        layers_with_visibility = LayerHandler.get_vector_layers_and_visibility()
+        table.setRowCount(len(layers_with_visibility))
+        table.setColumnCount(3)
+        for i, layer_with_visibility in enumerate(layers_with_visibility):
+            layer, visibility = layer_with_visibility
+            cb_export = QCheckBox()
+            cb_export.setChecked(visibility)
+            cb_is_visible = QCheckBox()
+            cb_is_visible.setChecked(True)
+            layer_name = QTableWidgetItem(layer.name())
+            table.setItem(i, 0, layer_name)
+            table.setCellWidget(i, 1, cb_export)
+            table.setCellWidget(i, 2, cb_is_visible)
+
+    def __get_layers_to_export(self) -> List[Tuple[QgsVectorLayer, bool]]:
+        """
+
+        :return: List of Tuples with (layer, is_hidden)
+        """
+        layers_with_visibility = []
+        # noinspection PyArgumentList
+        qgs_project = QgsProject.instance()
+        table: QTableWidget = self.dlg.tw_layers
+        for row in range(table.rowCount()):
+            cb_export = table.cellWidget(row, 1)
+            if cb_export.isChecked():
+                layer_name = table.item(row, 0).text()
+                is_visible = table.cellWidget(row, 2).isChecked()
+                layers = qgs_project.mapLayersByName(layer_name)
+                if len(layers) > 1:
+                    raise ExportException(
+                        tr('Multiple layers found with name {}.', layer_name),
+                        bar_msg=bar_msg(tr('Please use unique layer names.')))
+                if not layers:
+                    raise ExportException(tr('No layers found with name {}!', layer_name),
+                                          bar_msg=bar_msg(tr('Open the dialog again to refresh the layers')))
+                layers_with_visibility.append((layers[0], is_visible))
+        if not layers_with_visibility:
+            raise ExportException(tr('No layers selected'),
+                                  bar_msg=bar_msg(tr('Select at least on layer to continue export')))
+
+        return layers_with_visibility
+
     def _run(self):
         """ Exports map to configuration """
         title = self.dlg.input_title.text()
         description = self.dlg.input_description.toPlainText()
         output_dir = Path(self.dlg.f_conf_output.filePath())
         basemap = self.dlg.cb_basemap.currentText()
+
+        layers_with_visibility = self.__get_layers_to_export()
 
         # Map state
         canvas: QgsMapCanvas = iface.mapCanvas()
@@ -99,10 +153,7 @@ class ExportPanel(BasePanel):
         # Vis state
         layer_blending = self.dlg.cb_layer_blending.currentText()
 
-        # Vector layers
-        layers = LayerHandler.get_all_visible_vector_layers()
-
-        self.progress_dialog = ProgressDialog(len(layers) * 2, self.dlg)
+        self.progress_dialog = ProgressDialog(len(layers_with_visibility) * 2, self.dlg)
         self.progress_dialog.show()
         self.progress_dialog.aborted.connect(self.__aborted)
 
@@ -118,8 +169,10 @@ class ExportPanel(BasePanel):
         self.config_creator.set_vis_state_values(layer_blending)
         self.config_creator.set_interaction_config_values(tooltip_enabled, brush_enabled, geocoder_enabled,
                                                           coordinate_enabled)
-        for layer in layers:
-            self.config_creator.add_layer(uuid.uuid4(), layer, random_color())
+
+        for layer_info in layers_with_visibility:
+            layer, is_visible = layer_info
+            self.config_creator.add_layer(uuid.uuid4(), layer, random_color(), is_visible)
 
         self.config_creator.start_config_creation()
 

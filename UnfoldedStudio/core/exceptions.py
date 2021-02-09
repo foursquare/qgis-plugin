@@ -29,3 +29,7 @@ class InvalidInputException(QgsPluginException):
 
 class MapboxTokenMissing(QgsPluginException):
     pass
+
+
+class ExportException(QgsPluginException):
+    pass

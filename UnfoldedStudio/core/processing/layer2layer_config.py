@@ -55,10 +55,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile"}
     CATEGORIZED_SCALE = "ordinal"
 
-    def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer):
+    def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, is_visible: bool = True):
         super().__init__('LayerToLayerConfig')
         self.layer_uuid = layer_uuid
         self.layer = layer
+        self.is_visible = is_visible
         self.result_layer_conf: Optional[Layer] = None
         self.__pixel_unit = Settings.pixel_size_unit.get()
         self.__millimeter_unit = Settings.millimeter_size_unit.get()
@@ -111,12 +112,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             raise QgsPluginNotImplementedException(tr('Layer type {} is not implemented', layer_type),
                                                    bar_msg=bar_msg())
 
-        is_visible = True
         hidden = False
         text_label = [TextLabel.create_default()]
 
-        layer_config = LayerConfig(self.layer_uuid, self.layer.name(), color, columns, is_visible, vis_config, hidden,
-                                   text_label)
+        layer_config = LayerConfig(self.layer_uuid, self.layer.name(), color, columns, self.is_visible, vis_config,
+                                   hidden, text_label)
 
         id_ = str(self.layer_uuid).replace("-", "")[:7]
         # noinspection PyTypeChecker

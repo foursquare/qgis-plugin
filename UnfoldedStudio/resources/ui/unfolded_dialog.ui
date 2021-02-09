@@ -1,767 +1,985 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>main_dialog</class>
-    <widget class="QDialog" name="main_dialog">
-        <property name="windowModality">
-            <enum>Qt::WindowModal</enum>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>946</width>
-                <height>543</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>Unfolded Studio</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-            <property name="leftMargin">
-                <number>0</number>
-            </property>
-            <property name="topMargin">
-                <number>0</number>
-            </property>
-            <property name="rightMargin">
-                <number>0</number>
-            </property>
-            <property name="bottomMargin">
-                <number>0</number>
-            </property>
-            <item>
-                <widget class="QListWidget" name="menu_widget">
-                    <property name="sizePolicy">
-                        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>200</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>153</width>
-                            <height>16777215</height>
-                        </size>
-                    </property>
-                    <property name="styleSheet">
-                        <string notr="true">QListWidget{
-                            background-color: rgb(69, 69, 69, 220);
-                            outline: 0;
-                            }
-                            QListWidget::item {
-                            color: white;
-                            padding: 3px;
-                            }
-                            QListWidget::item::selected {
-                            color: black;
-                            background-color:palette(Window);
-                            padding-right: 0px;
-                            }
-                        </string>
-                    </property>
-                    <property name="frameShape">
-                        <enum>QFrame::Box</enum>
-                    </property>
-                    <property name="lineWidth">
-                        <number>0</number>
-                    </property>
-                    <property name="iconSize">
-                        <size>
-                            <width>32</width>
-                            <height>32</height>
-                        </size>
-                    </property>
-                    <property name="uniformItemSizes">
-                        <bool>true</bool>
-                    </property>
-                    <property name="currentRow">
-                        <number>-1</number>
-                    </property>
-                    <item>
-                        <property name="text">
-                            <string>Export</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Settings</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>About</string>
-                        </property>
-                    </item>
-                </widget>
-            </item>
-            <item>
-                <layout class="QVBoxLayout" name="verticalLayout">
-                    <item>
-                        <widget class="QScrollArea" name="scrollArea">
-                            <property name="widgetResizable">
-                                <bool>true</bool>
-                            </property>
-                            <widget class="QWidget" name="area_contents">
-                                <property name="geometry">
-                                    <rect>
-                                        <x>0</x>
-                                        <y>0</y>
-                                        <width>783</width>
-                                        <height>539</height>
-                                    </rect>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>760</width>
-                                        <height>500</height>
-                                    </size>
-                                </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_2">
-                                    <item>
-                                        <widget class="QStackedWidget" name="stacked_widget">
-                                            <property name="currentIndex">
-                                                <number>0</number>
-                                            </property>
-                                            <widget class="QWidget" name="exporter">
-                                                <layout class="QVBoxLayout" name="verticalLayout_11">
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="gb_">
-                                                            <property name="enabled">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <weight>75</weight>
-                                                                    <bold>true</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="title">
-                                                                <string>Map configuration values</string>
-                                                            </property>
-                                                            <property name="flat">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="collapsed">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="scrollOnExpand">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <layout class="QGridLayout" name="gridLayout_8">
-                                                                <item row="1" column="1">
-                                                                    <widget class="QTextEdit" name="input_description"/>
-                                                                </item>
-                                                                <item row="1" column="0">
-                                                                    <widget class="QLabel" name="label_14">
-                                                                        <property name="text">
-                                                                            <string>Description</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="0" column="0">
-                                                                    <widget class="QLabel" name="label_20">
-                                                                        <property name="font">
-                                                                            <font>
-                                                                                <weight>75</weight>
-                                                                                <bold>true</bold>
-                                                                            </font>
-                                                                        </property>
-                                                                        <property name="text">
-                                                                            <string>Title</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="0" column="1">
-                                                                    <widget class="QLineEdit" name="input_title"/>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="gb_1">
-                                                            <property name="enabled">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <weight>75</weight>
-                                                                    <bold>true</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="title">
-                                                                <string>Map style values</string>
-                                                            </property>
-                                                            <property name="flat">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="collapsed">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="scrollOnExpand">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <layout class="QGridLayout" name="gridLayout_9">
-                                                                <item row="0" column="0">
-                                                                    <widget class="QLabel" name="label_21">
-                                                                        <property name="font">
-                                                                            <font>
-                                                                                <weight>75</weight>
-                                                                                <bold>true</bold>
-                                                                            </font>
-                                                                        </property>
-                                                                        <property name="text">
-                                                                            <string>Base map</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="0" column="1">
-                                                                    <widget class="QComboBox" name="cb_basemap"/>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="gb_2">
-                                                            <property name="enabled">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <weight>75</weight>
-                                                                    <bold>true</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="title">
-                                                                <string>Map interaction</string>
-                                                            </property>
-                                                            <property name="flat">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="collapsed">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="scrollOnExpand">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <layout class="QFormLayout" name="formLayout">
-                                                                <item row="0" column="0">
-                                                                    <widget class="QCheckBox" name="cb_tooltip">
-                                                                        <property name="text">
-                                                                            <string>Tooltip</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="2" column="0">
-                                                                    <widget class="QCheckBox" name="cb_geocoder">
-                                                                        <property name="text">
-                                                                            <string>Geocoder</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="0" column="1">
-                                                                    <widget class="QCheckBox" name="cb_brush">
-                                                                        <property name="text">
-                                                                            <string>Brush</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="2" column="1">
-                                                                    <widget class="QCheckBox" name="cb_coordinate">
-                                                                        <property name="text">
-                                                                            <string>Coordinate</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="gb_3">
-                                                            <property name="enabled">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <weight>75</weight>
-                                                                    <bold>true</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="title">
-                                                                <string>Visualization state</string>
-                                                            </property>
-                                                            <property name="flat">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="collapsed">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                            <property name="scrollOnExpand">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <layout class="QGridLayout" name="gridLayout_11">
-                                                                <item row="0" column="0">
-                                                                    <widget class="QLabel" name="label_23">
-                                                                        <property name="font">
-                                                                            <font>
-                                                                                <weight>75</weight>
-                                                                                <bold>true</bold>
-                                                                            </font>
-                                                                        </property>
-                                                                        <property name="text">
-                                                                            <string>Layer blending</string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item row="0" column="1">
-                                                                    <widget class="QComboBox" name="cb_layer_blending"/>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <spacer name="verticalSpacer_3">
-                                                            <property name="orientation">
-                                                                <enum>Qt::Vertical</enum>
-                                                            </property>
-                                                            <property name="sizeHint" stdset="0">
-                                                                <size>
-                                                                    <width>20</width>
-                                                                    <height>40</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
-                                                    </item>
-                                                    <item>
-                                                        <layout class="QHBoxLayout" name="horizontalLayout_3">
-                                                            <item>
-                                                                <spacer name="horizontalSpacer_2">
-                                                                    <property name="orientation">
-                                                                        <enum>Qt::Horizontal</enum>
-                                                                    </property>
-                                                                    <property name="sizeHint" stdset="0">
-                                                                        <size>
-                                                                            <width>40</width>
-                                                                            <height>20</height>
-                                                                        </size>
-                                                                    </property>
-                                                                </spacer>
-                                                            </item>
-                                                            <item>
-                                                                <widget class="QPushButton" name="btn_export">
-                                                                    <property name="text">
-                                                                        <string>Export</string>
-                                                                    </property>
-                                                                </widget>
-                                                            </item>
-                                                        </layout>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                            <widget class="QWidget" name="settings">
-                                                <layout class="QVBoxLayout" name="verticalLayout_13">
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="mGroupBox_5">
-                                                            <property name="title">
-                                                                <string>General</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_12">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_10">
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_level_file_3">
-                                                                                <property name="minimumSize">
-                                                                                    <size>
-                                                                                        <width>250</width>
-                                                                                        <height>0</height>
-                                                                                    </size>
-                                                                                </property>
-                                                                                <property name="text">
-                                                                                    <string>Mapbox API Token</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QLineEdit"
-                                                                                    name="le_mapbox_token"/>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="mGroupBox_4">
-                                                            <property name="title">
-                                                                <string>Export</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_10">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_7">
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QgsFileWidget"
-                                                                                    name="f_conf_output">
-                                                                                <property name="storageMode">
-                                                                                    <enum>QgsFileWidget::GetFile</enum>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_level_file_2">
-                                                                                <property name="text">
-                                                                                    <string>Configuration output
-                                                                                        directory
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QgsCollapsibleGroupBox" name="mGroupBox_3">
-                                                            <property name="title">
-                                                                <string>Logging</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_8">
-                                                                <item>
-                                                                    <widget class="QLabel" name="label">
-                                                                        <property name="text">
-                                                                            <string>QGIS must be restarted in order to
-                                                                                apply changes in log levels
-                                                                            </string>
-                                                                        </property>
-                                                                    </widget>
-                                                                </item>
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_5">
-                                                                        <item row="1" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_level_console">
-                                                                                <property name="text">
-                                                                                    <string>Console level</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="1" column="1">
-                                                                            <widget class="QComboBox"
-                                                                                    name="combo_box_log_level_console"/>
-                                                                        </item>
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_level_file">
-                                                                                <property name="text">
-                                                                                    <string>File level</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QComboBox"
-                                                                                    name="combo_box_log_level_file"/>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                                <item>
-                                                                    <layout class="QHBoxLayout"
-                                                                            name="horizontalLayout_2">
-                                                                        <item>
-                                                                            <spacer name="horizontalSpacer">
-                                                                                <property name="orientation">
-                                                                                    <enum>Qt::Horizontal</enum>
-                                                                                </property>
-                                                                                <property name="sizeHint" stdset="0">
-                                                                                    <size>
-                                                                                        <width>40</width>
-                                                                                        <height>20</height>
-                                                                                    </size>
-                                                                                </property>
-                                                                            </spacer>
-                                                                        </item>
-                                                                        <item>
-                                                                            <widget class="QPushButton"
-                                                                                    name="btn_open_log">
-                                                                                <property name="text">
-                                                                                    <string>Open most resent log file
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <spacer name="verticalSpacer_2">
-                                                            <property name="orientation">
-                                                                <enum>Qt::Vertical</enum>
-                                                            </property>
-                                                            <property name="sizeHint" stdset="0">
-                                                                <size>
-                                                                    <width>20</width>
-                                                                    <height>40</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                            <widget class="QWidget" name="about">
-                                                <layout class="QVBoxLayout" name="verticalLayout_3">
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBox_5">
-                                                            <property name="title">
-                                                                <string>Unfolded Studio</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_9">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_6">
-                                                                        <property name="sizeConstraint">
-                                                                            <enum>QLayout::SetNoConstraint</enum>
-                                                                        </property>
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QLabel" name="label_gispo_2">
-                                                                                <property name="text">
-                                                                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                                                                                        href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span
-                                                                                        style=&quot; text-decoration:
-                                                                                        underline; color:#0000ff;&quot;&gt;Unfolded
-                                                                                        Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_development_2">
-                                                                                <property name="text">
-                                                                                    <string>Studio</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="1" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_development_3">
-                                                                                <property name="text">
-                                                                                    <string>Documentation</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="1" column="1">
-                                                                            <widget class="QLabel" name="label_gispo_3">
-                                                                                <property name="text">
-                                                                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                                                                                        href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span
-                                                                                        style=&quot; text-decoration:
-                                                                                        underline; color:#0000ff;&quot;&gt;Unfolded
-                                                                                        Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBox_3">
-                                                            <property name="title">
-                                                                <string>Attributions</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_6">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_3">
-                                                                        <property name="sizeConstraint">
-                                                                            <enum>QLayout::SetNoConstraint</enum>
-                                                                        </property>
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_development">
-                                                                                <property name="text">
-                                                                                    <string>Main plugin development
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QLabel" name="label_gispo">
-                                                                                <property name="text">
-                                                                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                                                                                        href=&quot;https://www.gispo.fi/en/home/&quot;&gt;&lt;span
-                                                                                        style=&quot; text-decoration:
-                                                                                        underline; color:#0000ff;&quot;&gt;Gispo
-                                                                                        Ltd.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBox_2">
-                                                            <property name="title">
-                                                                <string>Sources</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_5">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_2">
-                                                                        <item row="1" column="1">
-                                                                            <widget class="QLabel" name="label_source">
-                                                                                <property name="text">
-                                                                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                                                                                        href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span
-                                                                                        style=&quot; text-decoration:
-                                                                                        underline; color:#0000ff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="1" column="0">
-                                                                            <widget class="QLabel" name="label_gsource">
-                                                                                <property name="text">
-                                                                                    <string>Unfolded Studio Plugin
-                                                                                        repository
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel" name="label_qsource">
-                                                                                <property name="text">
-                                                                                    <string>kepler.gl</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_qgsource">
-                                                                                <property name="text">
-                                                                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                                                                                        href=&quot;https://github.com/keplergl/kepler.gl&quot;&gt;&lt;span
-                                                                                        style=&quot; text-decoration:
-                                                                                        underline; color:#0000ff;&quot;&gt;https://github.com/keplergl/kepler.gl&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBox_4">
-                                                            <property name="title">
-                                                                <string>Versions</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_7">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout_4">
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QLabel" name="label_version">
-                                                                                <property name="text">
-                                                                                    <string>&lt;placeholder&gt;</string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel"
-                                                                                    name="label_version_txt">
-                                                                                <property name="text">
-                                                                                    <string>Unfolded Studio Plugin
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="groupBox">
-                                                            <property name="title">
-                                                                <string>Licenses</string>
-                                                            </property>
-                                                            <layout class="QVBoxLayout" name="verticalLayout_4">
-                                                                <item>
-                                                                    <layout class="QGridLayout" name="gridLayout">
-                                                                        <item row="0" column="0">
-                                                                            <widget class="QLabel" name="label_plugin">
-                                                                                <property name="text">
-                                                                                    <string>Unfolded Studio Plugin
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                        <item row="0" column="1">
-                                                                            <widget class="QLabel" name="label_gpl2">
-                                                                                <property name="text">
-                                                                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                                                                                        href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html&quot;&gt;&lt;span
-                                                                                        style=&quot; text-decoration:
-                                                                                        underline; color:#0000ff;&quot;&gt;Licence
-                                                                                        GPL Version 2&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                                                                                    </string>
-                                                                                </property>
-                                                                            </widget>
-                                                                        </item>
-                                                                    </layout>
-                                                                </item>
-                                                            </layout>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <spacer name="verticalSpacer">
-                                                            <property name="orientation">
-                                                                <enum>Qt::Vertical</enum>
-                                                            </property>
-                                                            <property name="sizeHint" stdset="0">
-                                                                <size>
-                                                                    <width>20</width>
-                                                                    <height>40</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                        </widget>
-                                    </item>
-                                </layout>
-                            </widget>
-                        </widget>
-                    </item>
-                </layout>
-            </item>
-        </layout>
+ <class>main_dialog</class>
+ <widget class="QDialog" name="main_dialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>944</width>
+    <height>730</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Unfolded Studio</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QListWidget" name="menu_widget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>200</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>153</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QListWidget{
+       background-color: rgb(69, 69, 69, 220);
+       outline: 0;
+       }
+       QListWidget::item {
+       color: white;
+       padding: 3px;
+       }
+       QListWidget::item::selected {
+       color: black;
+       background-color:palette(Window);
+       padding-right: 0px;
+       }
+      </string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="uniformItemSizes">
+      <bool>true</bool>
+     </property>
+     <property name="currentRow">
+      <number>-1</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Export</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Settings</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>About</string>
+      </property>
+     </item>
     </widget>
-    <customwidgets>
-        <customwidget>
-            <class>QgsCollapsibleGroupBox</class>
-            <extends>QGroupBox</extends>
-            <header>qgscollapsiblegroupbox.h</header>
-            <container>1</container>
-        </customwidget>
-        <customwidget>
-            <class>QgsFileWidget</class>
-            <extends>QWidget</extends>
-            <header>qgsfilewidget.h</header>
-        </customwidget>
-    </customwidgets>
-    <resources/>
-    <connections/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="area_contents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>767</width>
+          <height>744</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>760</width>
+          <height>0</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QStackedWidget" name="stacked_widget">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="exporter">
+            <layout class="QVBoxLayout" name="verticalLayout_11">
+             <item>
+              <widget class="QGroupBox" name="groupBox_6">
+               <property name="title">
+                <string>Layers to export</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QTableWidget" name="tw_layers">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>100</height>
+                   </size>
+                  </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::NoEditTriggers</set>
+                  </property>
+                  <property name="selectionMode">
+                   <enum>QAbstractItemView::NoSelection</enum>
+                  </property>
+                  <attribute name="horizontalHeaderCascadingSectionResizes">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="horizontalHeaderMinimumSectionSize">
+                   <number>100</number>
+                  </attribute>
+                  <attribute name="horizontalHeaderDefaultSectionSize">
+                   <number>150</number>
+                  </attribute>
+                  <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderDefaultSectionSize">
+                   <number>30</number>
+                  </attribute>
+                  <column>
+                   <property name="text">
+                    <string>Layer</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Export</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Visible</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="gb_">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="title">
+                <string>Map configuration values</string>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+               <property name="collapsed">
+                <bool>false</bool>
+               </property>
+               <property name="scrollOnExpand">
+                <bool>true</bool>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_8">
+                <item row="3" column="2">
+                 <widget class="QTextEdit" name="input_description"/>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_20">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Title</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_14">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QLineEdit" name="input_title"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="gb_1">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="title">
+                <string>Map style values</string>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+               <property name="collapsed">
+                <bool>false</bool>
+               </property>
+               <property name="scrollOnExpand">
+                <bool>true</bool>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cb_basemap"/>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_21">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Base map</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="gb_2">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="title">
+                <string>Map interaction</string>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+               <property name="collapsed">
+                <bool>false</bool>
+               </property>
+               <property name="scrollOnExpand">
+                <bool>true</bool>
+               </property>
+               <layout class="QFormLayout" name="formLayout">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="cb_tooltip">
+                  <property name="text">
+                   <string>Tooltip</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="cb_geocoder">
+                  <property name="text">
+                   <string>Geocoder</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QCheckBox" name="cb_brush">
+                  <property name="text">
+                   <string>Brush</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QCheckBox" name="cb_coordinate">
+                  <property name="text">
+                   <string>Coordinate</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="gb_3">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="title">
+                <string>Visualization state</string>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+               <property name="collapsed">
+                <bool>false</bool>
+               </property>
+               <property name="scrollOnExpand">
+                <bool>true</bool>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_11">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_23">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Layer blending</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="cb_layer_blending"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btn_export">
+                 <property name="text">
+                  <string>Export</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="settings">
+            <layout class="QVBoxLayout" name="verticalLayout_15">
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="mGroupBox_5">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>General</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_12">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_10">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_level_file_3">
+                    <property name="minimumSize">
+                     <size>
+                      <width>250</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>Mapbox API Token</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="le_mapbox_token"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="mGroupBox_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Export</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_10">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_7">
+                  <item row="0" column="1">
+                   <widget class="QgsFileWidget" name="f_conf_output">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="storageMode">
+                     <enum>QgsFileWidget::GetFile</enum>
+                    </property>
+                    <property name="options">
+                     <set>QFileDialog::ShowDirsOnly</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_level_file_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Configuration output
+                      directory
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="mGroupBox_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Logging</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_8">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>QGIS must be restarted in order to
+                    apply changes in log levels
+                   </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_5">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_level_console">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Console level</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="combo_box_log_level_console"/>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_level_file">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>File level</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="combo_box_log_level_file"/>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="btn_open_log">
+                    <property name="text">
+                     <string>Open most recent log file
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="about">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Unfolded Studio</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_9">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_6">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_gispo_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;Unfolded
+                      Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_development_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Studio</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_development_3">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Documentation</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="label_gispo_3">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;Unfolded
+                      Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Attributions</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_3">
+                  <property name="sizeConstraint">
+                   <enum>QLayout::SetNoConstraint</enum>
+                  </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_development">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Main plugin development
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_gispo">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://www.gispo.fi/en/home/&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;Gispo
+                      Ltd.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Sources</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_2">
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="label_source">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_gsource">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Unfolded Studio Plugin
+                      repository
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_qsource">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>kepler.gl</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_qgsource">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://github.com/keplergl/kepler.gl&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;https://github.com/keplergl/kepler.gl&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Versions</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_7">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_version">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;placeholder&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_version_txt">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Unfolded Studio Plugin
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Licenses</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_plugin">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Unfolded Studio Plugin
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_gpl2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;Licence
+                      GPL Version 2&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsCollapsibleGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>qgscollapsiblegroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QgsFileWidget</class>
+   <extends>QWidget</extends>
+   <header>qgsfilewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>

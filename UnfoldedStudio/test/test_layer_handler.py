@@ -55,8 +55,9 @@ def test_get_all_visible_vector_layers(new_project, harbour_points, harbour_poin
     group2.setItemVisibilityChecked(True)
     group2.addLayer(harbour_points_3067)
 
-    layers = LayerHandler.get_all_visible_vector_layers()
-    assert layers == [harbour_points, harbour_points_3067]
+    layers = LayerHandler.get_vector_layers_and_visibility()
+    visible_layers = [layer[0] for layer in layers if layer[1]]
+    assert visible_layers == [harbour_points, harbour_points_3067]
 
 
 def test_get_layers_from_node(new_project, harbour_points, harbour_points_3067, lines, polygons):
@@ -72,5 +73,6 @@ def test_get_layers_from_node(new_project, harbour_points, harbour_points_3067, 
     group3.addLayer(polygons)
     group3.setItemVisibilityChecked(False)
 
-    layers = LayerHandler.get_visible_layers_from_node(root, root)
-    assert layers == [harbour_points, harbour_points_3067]
+    layers = LayerHandler.get_layers_and_visibility_from_node(root, root)
+    visible_layers = [layer[0] for layer in layers if layer[1]]
+    assert visible_layers == [harbour_points, harbour_points_3067]
