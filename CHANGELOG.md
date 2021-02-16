@@ -7,7 +7,6 @@
 * Support for single symbol styles
 * Size unit support: pixels for radius, millimeters for width
 
-
 ### 0.0.2 - 09/02/2021
 
 * Support for graduated and categorized styles
@@ -18,5 +17,14 @@
 * UI improvements (scalability, typos, exported layers)
 * <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.1...0.0.2">Full Changelog</a>
 
+### 0.0.3 - 16/02/2021
+
+* Added refresh button
+* Added basemap loading button
+* Support for csv reader to make large dataset export more efficient
+* Handle no brush and no pen properly
+* Accept directories in configuration directory selector
+* Fixed bug with semicolon separator
+* <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.2...0.0.3">Full Changelog</a>
 
 ###
