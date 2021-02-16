@@ -16,6 +16,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+import csv
+import ctypes
 import math
 import random
 from typing import List, Tuple
@@ -75,3 +77,11 @@ def random_color() -> QColor:
     """ Generate random color. Adapted from https://stackoverflow.com/a/28999469/10068922 """
     color = [random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)]
     return QColor(*color)
+
+
+def set_csv_field_size_limit() -> None:
+    """ Sets csv field size limit """
+    limit = int(ctypes.c_ulong(-1).value // 2)
+    old_limit = csv.field_size_limit()
+    if old_limit < limit:
+        csv.field_size_limit(limit)
