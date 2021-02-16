@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Optional, Tuple, List
 
 from PyQt5.QtWidgets import QComboBox, QTableWidget, QTableWidgetItem, QCheckBox
-from qgis._core import QgsProject, QgsVectorLayer
+from qgis._core import QgsProject, QgsVectorLayer, QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgis.utils import iface
 
@@ -52,12 +52,9 @@ class ExportPanel(BasePanel):
         self.progress_dialog: Optional[ProgressDialog] = None
         self.config_creator: Optional[ConfigCreator] = None
 
+    # noinspection PyArgumentList
     def setup_panel(self):
-        # Layers
-        self.__setup_layers_to_export()
-
         # Map configuration
-        # noinspection PyArgumentList
         self.dlg.input_title.setText(QgsProject.instance().baseName())
 
         # Visualization state
@@ -70,8 +67,6 @@ class ExportPanel(BasePanel):
         cb_basemap: QComboBox = self.dlg.cb_basemap
         cb_basemap.clear()
         cb_basemap.addItems(Settings.basemap.get_options())
-        current_basemap = LayerHandler.get_current_basemap_name()
-        cb_basemap.setCurrentText(current_basemap if current_basemap else Settings.basemap.get())
 
         # Map interaction
         self.dlg.cb_tooltip.setChecked(True)
@@ -82,13 +77,27 @@ class ExportPanel(BasePanel):
         # Export button
         self.dlg.btn_export.clicked.connect(self.run)
 
+        # Refresh
+        self.dlg.btn_refresh.setIcon(QgsApplication.getThemeIcon('/mActionRefresh.svg'))
+        self.dlg.btn_refresh.clicked.connect(self.__refreshed)
+
+        # Setup dynamic contents
+        self.__refreshed()
+
+    def __refreshed(self):
+        """ Set up dynamic contents """
+        self.__setup_layers_to_export()
+        current_basemap = LayerHandler.get_current_basemap_name()
+        self.dlg.cb_basemap.setCurrentText(current_basemap if current_basemap else Settings.basemap.get())
+
     def __setup_layers_to_export(self):
         """ """
         # Vector layers
         table: QTableWidget = self.dlg.tw_layers
+        table.setColumnCount(3)
+        table.setRowCount(0)
         layers_with_visibility = LayerHandler.get_vector_layers_and_visibility()
         table.setRowCount(len(layers_with_visibility))
-        table.setColumnCount(3)
         for i, layer_with_visibility in enumerate(layers_with_visibility):
             layer, visibility = layer_with_visibility
             cb_export = QCheckBox()

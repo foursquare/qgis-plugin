@@ -95,7 +95,7 @@ class LayerHandler:
         root: QgsLayerTree = qgs_project.layerTreeRoot()
         group = root.findGroup(LayerHandler.basemap_group)
         if group:
-            layers = LayerHandler.get_layers_and_visibility_from_node(root, group)
+            layers = list(filter(lambda l: l[1], LayerHandler.get_layers_and_visibility_from_node(root, group)))
             layer_name = layers[0][0].name() if layers else None
         return layer_name
 
