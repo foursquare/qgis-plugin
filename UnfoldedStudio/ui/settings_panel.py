@@ -24,6 +24,8 @@ from PyQt5.QtWidgets import QLineEdit
 from qgis.gui import QgsFileWidget
 
 from .base_panel import BasePanel
+from ..core.exceptions import MapboxTokenMissing
+from ..core.layer_handler import LayerHandler
 from ..definitions.gui import Panels
 from ..definitions.settings import Settings
 from ..qgis_plugin_tools.tools.custom_logging import get_log_level_key, LogTarget, get_log_level_name
@@ -50,12 +52,13 @@ class SettingsPanel(BasePanel):
         # Mapbox token
         line_edit_token: QLineEdit = self.dlg.le_mapbox_token
         line_edit_token.setText(Settings.mapbox_api_token.get())
-        line_edit_token.textChanged.connect(self._mapbox_token_changed)
+        line_edit_token.textChanged.connect(self.__mapbox_token_changed)
+        self.dlg.btn_add_basemaps.clicked.connect(self.__add_basemaps_to_the_project)
 
         # Configuration output
         f_conf_output: QgsFileWidget = self.dlg.f_conf_output
         f_conf_output.setFilePath(Settings.conf_output_dir.get())
-        f_conf_output.fileChanged.connect(self._conf_output_dir_changed)
+        f_conf_output.fileChanged.connect(self.__conf_output_dir_changed)
 
         # Logging
         self.dlg.combo_box_log_level_file.clear()
@@ -74,10 +77,16 @@ class SettingsPanel(BasePanel):
 
         self.dlg.btn_open_log.clicked.connect(lambda _: webbrowser.open(plugin_path("logs", f"{plugin_name()}.log")))
 
-    def _conf_output_dir_changed(self, new_dir: str):
+    def __add_basemaps_to_the_project(self):
+        try:
+            LayerHandler.add_unfolded_basemaps()
+        except MapboxTokenMissing as e:
+            LOGGER.warning(e, extra=e.bar_msg)
+
+    def __conf_output_dir_changed(self, new_dir: str):
         if new_dir:
             Settings.conf_output_dir.set(new_dir)
 
-    def _mapbox_token_changed(self, new_token: str):
+    def __mapbox_token_changed(self, new_token: str):
         if new_token:
             Settings.mapbox_api_token.set(new_token)
