@@ -55,7 +55,7 @@ class Settings(enum.Enum):
             'satellite': {'style_id': 'satellite-v9', 'format': 'image/jpeg'}
         },
         'unfoldedinc': {
-            'satellite-streets': {'style_id': 'ckcr4dmep0i511is9m4qj9az5', 'format': 'image/jpeg'},
+            'satellite-street': {'style_id': 'ckcr4dmep0i511is9m4qj9az5', 'format': 'image/jpeg'},
             'streets': {'style_id': 'ckfzpk24r0thc1anudzpwnc9q'},
         }
     }
