@@ -81,6 +81,11 @@ def polygons_3067(test_gpkg):
 
 
 @pytest.fixture
+def countries(test_gpkg) -> QgsVectorLayer:
+    return get_layer('naturalearth_countries', test_gpkg)
+
+
+@pytest.fixture
 def harbour_points_3067(test_gpkg):
     return get_layer('harbours_3067', test_gpkg)
 

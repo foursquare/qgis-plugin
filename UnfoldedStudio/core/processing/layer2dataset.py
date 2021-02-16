@@ -70,11 +70,12 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self.setProgress(20)
             self._check_if_canceled()
 
-            all_data = self._extract_all_data()
+            fields = self._extract_fields()
+
             self.setProgress(40)
             self._check_if_canceled()
 
-            fields = self._extract_fields()
+            all_data = self._extract_all_data()
             self.setProgress(60)
             self._check_if_canceled()
 
@@ -169,7 +170,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
                     for line_nro, line in enumerate(f):
                         if line_nro > 0:
                             data = []
-                            for i, value in enumerate(line.split(';')):
+                            for i, value in enumerate(line.split('\t')):
                                 data.append(conversion_functions[i](value))
                             all_data.append(data)
             return all_data
@@ -183,7 +184,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
-        options.layerOptions = ["SEPARATOR=SEMICOLON", "STRING_QUOTING=IF_NEEDED"]
+        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=IF_NEEDED"]
 
         # noinspection PyCallByClass
         writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),
