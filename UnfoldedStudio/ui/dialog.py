@@ -25,8 +25,6 @@ from PyQt5.QtWidgets import QDialog, QMessageBox, QDesktopWidget
 from .about_panel import AboutPanel
 from .export_panel import ExportPanel
 from .settings_panel import SettingsPanel
-from ..core.exceptions import MapboxTokenMissing
-from ..core.layer_handler import LayerHandler
 from ..core.utils import set_project_crs
 from ..definitions.gui import Panels
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
@@ -81,12 +79,8 @@ class Dialog(QDialog, FORM_CLASS):
         # The first panel is shown initially
         self.menu_widget.setCurrentRow(0)
 
-        # Change crs if needed and add basemaps
+        # Change crs if needed
         set_project_crs()
-        try:
-            LayerHandler.add_unfolded_basemaps()
-        except MapboxTokenMissing as e:
-            LOGGER.warning(e, extra=e.bar_msg)
 
     def _set_window_location(self):
         ag = QDesktopWidget().availableGeometry()
