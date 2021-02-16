@@ -81,6 +81,11 @@ def polygons_3067(test_gpkg):
 
 
 @pytest.fixture
+def countries(test_gpkg) -> QgsVectorLayer:
+    return get_layer('naturalearth_countries', test_gpkg)
+
+
+@pytest.fixture
 def harbour_points_3067(test_gpkg):
     return get_layer('harbours_3067', test_gpkg)
 
@@ -151,6 +156,18 @@ def lines_invalid_size_units(lines):
 @pytest.fixture
 def polygons_invalid_size_units(polygons):
     set_styles(polygons, 'polygons_invalid_size_unit.qml')
+    return polygons
+
+
+@pytest.fixture
+def polygons_no_brush(polygons):
+    set_styles(polygons, 'polygons_no_brush.qml')
+    return polygons
+
+
+@pytest.fixture
+def polygons_no_pen(polygons):
+    set_styles(polygons, 'polygons_no_pen.qml')
     return polygons
 
 

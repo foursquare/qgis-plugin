@@ -200,7 +200,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             outline = stroke_opacity > 0.0 and properties['outline_style'] != 'no'
             stroke_opacity = stroke_opacity if outline else None
             stroke_color = stroke_rgb if outline else None
-            filled = opacity > 0.0
+            filled = opacity > 0.0 and properties.get('style', 'solid') != 'no'
 
             if isinstance(symbol, QgsMarkerSymbol):
                 size_range, height_range, elevation_scale, stroked, enable3_d, wireframe = [None] * 6
@@ -214,7 +214,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                 size_range = VisConfig.size_range
                 height_range = VisConfig.height_range
                 elevation_scale = VisConfig.elevation_scale
-                stroked = True
+                if outline:
+                    stroked = True
+                else:
+                    stroked = False
+                    stroke_color = None
                 wireframe, enable3_d = [False] * 2
                 fixed_radius, outline = [None] * 2
         elif isinstance(symbol, QgsLineSymbol):

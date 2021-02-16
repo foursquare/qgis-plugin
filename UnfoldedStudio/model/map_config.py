@@ -881,15 +881,17 @@ class VisState:
     layer_blending: str
     split_maps: List[Any]
     animation_config: AnimationConfig
-    metrics: List[Any]
-    geo_keys: List[Any]
-    group_bys: List[Any]
-    datasets: Datasets
-    joins: List[Any]
+    metrics: Optional[List[Any]]
+    geo_keys: Optional[List[Any]]
+    group_bys: Optional[List[Any]]
+    datasets: Optional[Datasets]
+    joins: Optional[List[Any]]
 
     def __init__(self, filters: List[Any], layers: List[Layer], interaction_config: InteractionConfig,
-                 layer_blending: str, split_maps: List[Any], animation_config: AnimationConfig, metrics: List[Any],
-                 geo_keys: List[Any], group_bys: List[Any], datasets: Datasets, joins: List[Any]) -> None:
+                 layer_blending: str, split_maps: List[Any], animation_config: AnimationConfig,
+                 metrics: Optional[List[Any]],
+                 geo_keys: Optional[List[Any]], group_bys: Optional[List[Any]], datasets: Optional[Datasets],
+                 joins: Optional[List[Any]]) -> None:
         self.filters = filters
         self.layers = layers
         self.interaction_config = interaction_config
@@ -911,11 +913,11 @@ class VisState:
         layer_blending = from_str(obj.get("layerBlending"))
         split_maps = from_list(lambda x: x, obj.get("splitMaps"))
         animation_config = AnimationConfig.from_dict(obj.get("animationConfig"))
-        metrics = from_list(lambda x: x, obj.get("metrics"))
-        geo_keys = from_list(lambda x: x, obj.get("geoKeys"))
-        group_bys = from_list(lambda x: x, obj.get("groupBys"))
-        datasets = Datasets.from_dict(obj.get("datasets"))
-        joins = from_list(lambda x: x, obj.get("joins"))
+        metrics = from_union([lambda x: from_list(from_int, x), from_none], obj.get("metrics"))
+        geo_keys = from_union([lambda x: from_list(from_int, x), from_none], obj.get("geoKeys"))
+        group_bys = from_union([lambda x: from_list(from_int, x), from_none], obj.get("groupBys"))
+        datasets = from_union([lambda x: Datasets.from_dict(x), from_none], obj.get("datasets"))
+        joins = from_union([lambda x: from_list(from_int, x), from_none], obj.get("joins"))
         return VisState(filters, layers, interaction_config, layer_blending, split_maps, animation_config, metrics,
                         geo_keys, group_bys, datasets, joins)
 
@@ -927,11 +929,11 @@ class VisState:
         result["layerBlending"] = from_str(self.layer_blending)
         result["splitMaps"] = from_list(lambda x: x, self.split_maps)
         result["animationConfig"] = to_class(AnimationConfig, self.animation_config)
-        result["metrics"] = from_list(lambda x: x, self.metrics)
-        result["geoKeys"] = from_list(lambda x: x, self.geo_keys)
-        result["groupBys"] = from_list(lambda x: x, self.group_bys)
-        result["datasets"] = to_class(Datasets, self.datasets)
-        result["joins"] = from_list(lambda x: x, self.joins)
+        result["metrics"] = from_union([lambda x: from_list(from_int, x), from_none], self.metrics)
+        result["geoKeys"] = from_union([lambda x: from_list(from_int, x), from_none], self.geo_keys)
+        result["groupBys"] = from_union([lambda x: from_list(from_int, x), from_none], self.group_bys)
+        result["datasets"] = from_union([lambda x: to_class(Datasets, x), from_none], self.datasets)
+        result["joins"] = from_union([lambda x: from_list(from_int, x), from_none], self.joins)
         return result
 
 

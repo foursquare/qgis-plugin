@@ -99,6 +99,7 @@ def test__extract_all_data(alg, layer, request):
                           ('polygons', 'polygons', 'polygons_config.json'),
                           ('lines_3067', 'lines', 'lines_config.json'),
                           ('polygons_3067', 'polygons', 'polygons_config.json'),
+                          ('countries', 'countries', 'countries_config.json')
                           ])
 def test__convert_to_dataset(layer, layer_name, config, alg, request):
     layer: QgsVectorLayer = request.getfixturevalue(layer)

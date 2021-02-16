@@ -16,6 +16,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded Studio QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+import csv
 import logging
 import tempfile
 import uuid
@@ -28,6 +29,7 @@ from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordin
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import ProcessInterruptedException
+from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
 from ...model.map_config import Dataset, Data, Field
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
@@ -70,11 +72,12 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self.setProgress(20)
             self._check_if_canceled()
 
-            all_data = self._extract_all_data()
+            fields = self._extract_fields()
+
             self.setProgress(40)
             self._check_if_canceled()
 
-            fields = self._extract_fields()
+            all_data = self._extract_all_data()
             self.setProgress(60)
             self._check_if_canceled()
 
@@ -165,13 +168,16 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
             with tempfile.TemporaryDirectory(dir=resources_path()) as tmpdirname:
                 output_file = self._save_layer_to_file(self.layer, Path(tmpdirname))
-                with open(output_file) as f:
-                    for line_nro, line in enumerate(f):
-                        if line_nro > 0:
-                            data = []
-                            for i, value in enumerate(line.split(';')):
-                                data.append(conversion_functions[i](value))
-                            all_data.append(data)
+                with open(output_file, newline='') as f:
+                    set_csv_field_size_limit()
+                    data_reader = csv.reader(f, delimiter='\t')
+                    # Skipping header
+                    next(data_reader)
+                    for row in data_reader:
+                        data = []
+                        for i, value in enumerate(row):
+                            data.append(conversion_functions[i](value))
+                        all_data.append(data)
             return all_data
 
     # noinspection PyArgumentList
@@ -183,7 +189,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
-        options.layerOptions = ["SEPARATOR=SEMICOLON", "STRING_QUOTING=IF_NEEDED"]
+        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=IF NEEDED"]
 
         # noinspection PyCallByClass
         writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),
