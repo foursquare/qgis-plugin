@@ -160,6 +160,18 @@ def polygons_invalid_size_units(polygons):
 
 
 @pytest.fixture
+def polygons_no_brush(polygons):
+    set_styles(polygons, 'polygons_no_brush.qml')
+    return polygons
+
+
+@pytest.fixture
+def polygons_no_pen(polygons):
+    set_styles(polygons, 'polygons_no_pen.qml')
+    return polygons
+
+
+@pytest.fixture
 def tmpdir_pth(tmpdir) -> Path:
     return Path(tmpdir)
 
