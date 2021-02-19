@@ -112,7 +112,7 @@ class Plugin:
             self.iface.addToolBarIcon(action)
 
         if add_to_menu:
-            self.iface.addPluginToMenu(
+            self.iface.addPluginToWebMenu(
                 self.menu,
                 action)
 
@@ -124,7 +124,7 @@ class Plugin:
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         self.add_action(
             resources_path('icons', 'icon.svg'),
-            text=tr(plugin_name()),
+            text=tr('Export project'),
             callback=self.run,
             parent=self.iface.mainWindow(),
             add_to_toolbar=True
