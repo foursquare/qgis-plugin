@@ -66,11 +66,8 @@ def generate_zoom_level(scale: float, dpi: int) -> float:
 
     Adapted from https://gis.stackexchange.com/a/268894/123927
     """
-    max_scale_per_pixel = 156543.04
-    inches_per_meter = 39.37
-    zoomlevel = round(math.log(((dpi * inches_per_meter * max_scale_per_pixel) / scale), 2), 759672619963176)
-    zoomlevel2 = 29.1402 - math.log2(scale)
-    return zoomlevel2
+    zoomlevel = (29.1402 - math.log2(scale)) / 1.2
+    return zoomlevel
 
 
 def random_color() -> QColor:
