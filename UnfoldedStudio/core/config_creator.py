@@ -257,8 +257,9 @@ class ConfigCreator(QObject):
         timestamp = datetime.datetime.now().strftime('%a %b %d %Y %H:%M:%S ')
         time_zone = time.strftime('%Z%z')
         created_at = timestamp + time_zone
+        source = Info.source
 
-        return Info(Info.app, created_at, self.title, self.description)
+        return Info(Info.app, created_at, self.title, self.description, source)
 
     def _start_config_creation(self) -> None:
         """ This method runs the config creation in one thread. Mainly meant for testing """
