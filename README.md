@@ -6,7 +6,7 @@
 [![codecov.io](https://codecov.io/github/UnfoldedInc/qgis-plugin/coverage.svg?branch=master)](https://codecov.io/github/UnfoldedInc/qgis-plugin?branch=master)
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Release/badge.svg)
 
-![Unfolded logo](docs/imgs/uf_qgis_logo.svg?s=640)
+<img src="docs/imgs/uf_qgis_logo.svg" width="200" height="200">
 
 This plugin exports a [QGIS](http://qgis.org/) map into a format that can be imported into  [Unfolded Studio](https://studio.unfolded.ai/)  for further analysis or one-click publishing to the web after signing up for a free  [Unfolded](https://unfolded.ai/)  account.
 
