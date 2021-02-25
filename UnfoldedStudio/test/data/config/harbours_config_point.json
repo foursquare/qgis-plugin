@@ -451,8 +451,9 @@
   },
   "info": {
     "app": "kepler.gl",
-    "created_at": "Mon Jan 25 2021 11:37:43 GMT+0200 (Eastern European Standard Time)",
+    "created_at": "Mon Jan 25 2021 11:37:43 EET+0200",
     "title": "keplergl_nabzfz",
-    "description": ""
+    "description": "",
+    "source": "QGIS"
   }
 }

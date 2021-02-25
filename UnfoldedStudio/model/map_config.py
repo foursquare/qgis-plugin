@@ -1046,12 +1046,14 @@ class Info:
     created_at: str
     title: str
     description: str
+    source: Optional[str] = 'QGIS'
 
-    def __init__(self, app: str, created_at: str, title: str, description: str) -> None:
+    def __init__(self, app: str, created_at: str, title: str, description: str, source: Optional[str] = None) -> None:
         self.app = app
         self.created_at = created_at
         self.title = title
         self.description = description
+        self.source = source
 
     @staticmethod
     def from_dict(obj: Any) -> 'Info':
@@ -1060,7 +1062,8 @@ class Info:
         created_at = from_str(obj.get("created_at"))
         title = from_str(obj.get("title"))
         description = from_str(obj.get("description"))
-        return Info(app, created_at, title, description)
+        source = from_union([from_str, from_none], obj.get("source"))
+        return Info(app, created_at, title, description, source)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1068,6 +1071,9 @@ class Info:
         result["created_at"] = from_str(self.created_at)
         result["title"] = from_str(self.title)
         result["description"] = from_str(self.description)
+        source = from_union([from_str, from_none], self.source)
+        if source:
+            result["source"] = source
         return result
 
 
