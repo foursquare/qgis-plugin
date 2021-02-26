@@ -126,3 +126,13 @@ def test_csv_export_with_output_dir(simple_harbour_points, alg, tmp_path, harbou
     with open(converted_csv) as f:
         converted_data = f.readlines()
     assert converted_data == expected_data
+
+
+def test_unfolded_dataset_format(simple_harbour_points, alg, tmp_path):
+    map_config = get_map_config('harbours_config_with_unfolded_datasets.json')
+    alg.layer = simple_harbour_points
+    alg.output_directory = tmp_path
+    status = alg.run()
+    dataset = alg.result_dataset
+    assert status, alg.exception
+    assert dataset.to_dict() == map_config.datasets[0].to_dict()

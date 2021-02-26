@@ -32,7 +32,7 @@ from .csv_field_value_converter import CsvFieldValueConverter
 from ..exceptions import ProcessInterruptedException
 from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
-from ...model.map_config import KeplerDataset, Data, Field
+from ...model.map_config import KeplerDataset, Data, Field, UnfoldedDataset
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
@@ -82,9 +82,16 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self.setProgress(60)
             self._check_if_canceled()
 
-            data = Data(self.layer_uuid, self.layer.name(), list(self.color), all_data, fields)
+            if self.output_directory:
+                # Unfolded format
+                dataset = UnfoldedDataset(self.layer_uuid, self.layer.name(), list(self.color), source, fields)
+            else:
+                # Kepler format
+                data = Data(self.layer_uuid, self.layer.name(), list(self.color), all_data, fields)
+                dataset = KeplerDataset(data)
+
             self.setProgress(80)
-            return KeplerDataset(data)
+            return dataset
         finally:
             self._remove_geom_from_fields()
 
