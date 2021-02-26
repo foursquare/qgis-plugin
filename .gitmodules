@@ -1,3 +1,3 @@
-[submodule "UnfoldedStudio/qgis_plugin_tools"]
-	path = UnfoldedStudio/qgis_plugin_tools
+[submodule "UnfoldedMapExporter/qgis_plugin_tools"]
+	path = UnfoldedMapExporter/qgis_plugin_tools
 	url = https://github.com/GispoCoding/qgis_plugin_tools

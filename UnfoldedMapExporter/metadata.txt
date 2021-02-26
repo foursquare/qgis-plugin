@@ -1,0 +1,23 @@
+[general]
+name=Unfolded Map Exporter
+description=Export QGIS Maps to Unfolded Studio and publish them on the web. Also support exporting maps to kepler.gl.
+about=This plugin exports a QGIS map into a format that can be
+    imported into <a href="https://studio.unfolded.ai">Unfolded Studio</a>
+    for further analysis or one-click publishing to the web after
+    signing up for a free <a href="https://unfolded.ai">Unfolded</a> account.
+
+    The plugin can also export maps that can be imported into <a href="https://kepler.gl">kepler.gl</a>.
+
+version=0.0.1
+qgisMinimumVersion=3.10
+author=Gispo Ltd.
+email=joona@gispo.fi
+changelog=
+tags=Unfolded Studio,Unfolded,Unfolded Map SDK,Unfolded Data SDK,kepler,kepler.gl,web,webmap,export
+repository=https://github.com/UnfoldedInc/qgis-plugin
+homepage=https://github.com/UnfoldedInc/qgis-plugin
+tracker=https://github.com/UnfoldedInc/qgis-plugin/issues
+category=Web
+icon=resources/icons/icon.svg
+experimental=False
+deprecated=False
