@@ -37,7 +37,7 @@ from qgis.core import (QgsVectorLayer, QgsApplication, QgsPointXY)
 from .exceptions import InvalidInputException
 from .processing.layer2dataset import LayerToDatasets
 from .processing.layer2layer_config import LayerToLayerConfig
-from ..model.map_config import (Dataset, VisState, InteractionConfig, AnimationConfig, Datasets,
+from ..model.map_config import (KeplerDataset, VisState, InteractionConfig, AnimationConfig, Datasets,
                                 FieldDisplayNames, AnyDict, VisibleLayerGroups, Globe, Tooltip, FieldsToShow, Brush,
                                 Coordinate)
 from ..model.map_config import (MapConfig, MapState, MapStyle, Layer,
@@ -203,7 +203,7 @@ class ConfigCreator(QObject):
         LOGGER.info(tr('Creating map config'))
 
         # noinspection PyTypeChecker
-        datasets: List[Dataset] = [None] * len(self.layers)
+        datasets: List[KeplerDataset] = [None] * len(self.layers)
         # noinspection PyTypeChecker
         layers: List[Layer] = [None] * len(self.layers)
 

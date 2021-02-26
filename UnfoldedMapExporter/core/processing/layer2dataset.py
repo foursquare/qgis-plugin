@@ -32,7 +32,7 @@ from .csv_field_value_converter import CsvFieldValueConverter
 from ..exceptions import ProcessInterruptedException
 from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
-from ...model.map_config import Dataset, Data, Field
+from ...model.map_config import KeplerDataset, Data, Field
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
@@ -55,7 +55,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         self.layer = layer
         self.color = color
         self.output_directory = output_directory
-        self.result_dataset: Optional[Dataset] = None
+        self.result_dataset: Optional[KeplerDataset] = None
 
     def run(self) -> bool:
         try:
@@ -67,7 +67,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self.exception = e
             return False
 
-    def _convert_to_dataset(self) -> Dataset:
+    def _convert_to_dataset(self) -> KeplerDataset:
         self._add_geom_to_fields()
         try:
             self.setProgress(20)
@@ -84,7 +84,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
             data = Data(self.layer_uuid, self.layer.name(), list(self.color), all_data, fields)
             self.setProgress(80)
-            return Dataset(data)
+            return KeplerDataset(data)
         finally:
             self._remove_geom_from_fields()
 

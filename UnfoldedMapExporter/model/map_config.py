@@ -1019,20 +1019,20 @@ class Data:
         return result
 
 
-class Dataset:
+class KeplerDataset:
     data: Data
     version: str = 'v1'
 
     def __init__(self, data: Data, version: Optional[str] = None) -> None:
         self.data = data
-        self.version = version if version is not None else Dataset.version
+        self.version = version if version is not None else KeplerDataset.version
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Dataset':
+    def from_dict(obj: Any) -> 'KeplerDataset':
         assert isinstance(obj, dict)
         version = from_str(obj.get("version"))
         data = Data.from_dict(obj.get("data"))
-        return Dataset(data, version)
+        return KeplerDataset(data, version)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1078,11 +1078,11 @@ class Info:
 
 
 class MapConfig:
-    datasets: List[Dataset]
+    datasets: List[KeplerDataset]
     config: Config
     info: Info
 
-    def __init__(self, datasets: List[Dataset], config: Config, info: Info) -> None:
+    def __init__(self, datasets: List[KeplerDataset], config: Config, info: Info) -> None:
         self.datasets = datasets
         self.config = config
         self.info = info
@@ -1090,14 +1090,14 @@ class MapConfig:
     @staticmethod
     def from_dict(obj: Any) -> 'MapConfig':
         assert isinstance(obj, dict)
-        datasets = from_list(Dataset.from_dict, obj.get("datasets"))
+        datasets = from_list(KeplerDataset.from_dict, obj.get("datasets"))
         config = Config.from_dict(obj.get("config"))
         info = Info.from_dict(obj.get("info"))
         return MapConfig(datasets, config, info)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["datasets"] = from_list(lambda x: to_class(Dataset, x), self.datasets)
+        result["datasets"] = from_list(lambda x: to_class(KeplerDataset, x), self.datasets)
         result["config"] = to_class(Config, self.config)
         result["info"] = to_class(Info, self.info)
         return result
