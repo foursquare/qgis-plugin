@@ -21,14 +21,19 @@
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 
 import datetime
+import errno
 import json
 import locale
 import logging
+import shutil
+import tempfile
 import time
 import uuid
+import zipfile
 from functools import partial
 from pathlib import Path
 from typing import Optional, Dict, List
+from zipfile import ZipFile
 
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QColor
@@ -37,14 +42,15 @@ from qgis.core import (QgsVectorLayer, QgsApplication, QgsPointXY)
 from .exceptions import InvalidInputException
 from .processing.layer2dataset import LayerToDatasets
 from .processing.layer2layer_config import LayerToLayerConfig
-from ..model.map_config import (KeplerDataset, VisState, InteractionConfig, AnimationConfig, Datasets,
-                                FieldDisplayNames, AnyDict, VisibleLayerGroups, Globe, Tooltip, FieldsToShow, Brush,
-                                Coordinate)
+from ..definitions.settings import OutputFormat
 from ..model.map_config import (MapConfig, MapState, MapStyle, Layer,
                                 ConfigConfig, Config, Info)
+from ..model.map_config import (VisState, InteractionConfig, AnimationConfig, Datasets,
+                                FieldDisplayNames, AnyDict, VisibleLayerGroups, Globe, Tooltip, FieldsToShow, Brush,
+                                Coordinate, Dataset)
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
-from ..qgis_plugin_tools.tools.resources import plugin_name
+from ..qgis_plugin_tools.tools.resources import plugin_name, resources_path
 
 ENGLISH_LOCALE = 'en_US.utf8'
 
@@ -55,6 +61,8 @@ class ConfigCreator(QObject):
     """
     Create Unfolded Studio compatible configuration based on QGIS project
     """
+
+    UNFOLDED_CONFIG_FILE_NAME = 'config.json'
 
     progress_bar_changed = pyqtSignal([int, int])
     finished = pyqtSignal(dict)
@@ -72,16 +80,24 @@ class ConfigCreator(QObject):
         self.title = title
         self.description = description
         self.output_directory = output_directory
+        self.output_format: Optional[OutputFormat] = None
 
         self.tasks = {}
         self.layers: Dict[uuid.UUID, QgsVectorLayer] = {}
-        self.created_configuration_path = output_directory / f"{title.replace(' ', '_')}.json"
+
+        self.created_configuration_path: Path = Path()
 
         self._shown_fields: Dict[uuid.UUID, List[str]] = {}
         self._vis_state_values = {}
         self._interaction_config_values = {}
         self._map_state: Optional[MapState] = None
         self._map_style: Optional[MapStyle] = None
+        self._temp_dir = Path(tempfile.mkdtemp(dir=resources_path()))
+
+    def set_output_format(self, output_format: OutputFormat):
+        self.output_format = output_format
+        self.created_configuration_path: Path = (
+            self.output_directory / f"{self.title.replace(' ', '_')}.{'zip' if output_format == OutputFormat.ZIP else 'json'}")
 
     def set_animation_config(self, current_time: any = None, speed: int = AnimationConfig.speed):
         """ Set animation configuration with current time and speed """
@@ -129,8 +145,9 @@ class ConfigCreator(QObject):
     def add_layer(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, layer_color: QColor, is_visible: bool):
         """ Add layer to the config creation """
         color = (layer_color.red(), layer_color.green(), layer_color.blue())
+        output_dir = self._temp_dir if self.output_format == OutputFormat.ZIP else None
         self.layers[layer_uuid] = layer
-        self.tasks[uuid.uuid4()] = {'task': LayerToDatasets(layer_uuid, layer, color), 'finished': False}
+        self.tasks[uuid.uuid4()] = {'task': LayerToDatasets(layer_uuid, layer, color, output_dir), 'finished': False}
         self.tasks[uuid.uuid4()] = {'task': LayerToLayerConfig(layer_uuid, layer, is_visible), 'finished': False}
 
         # Save information about shown fields based
@@ -203,7 +220,7 @@ class ConfigCreator(QObject):
         LOGGER.info(tr('Creating map config'))
 
         # noinspection PyTypeChecker
-        datasets: List[KeplerDataset] = [None] * len(self.layers)
+        datasets: List[Dataset] = [None] * len(self.layers)
         # noinspection PyTypeChecker
         layers: List[Layer] = [None] * len(self.layers)
 
@@ -239,12 +256,15 @@ class ConfigCreator(QObject):
             info = self._create_config_info()
 
             map_config = MapConfig(datasets, config, info)
-            with open(self.created_configuration_path, 'w') as f:
-                json.dump(map_config.to_dict(), f)
+
+            self._write_output(map_config)
+
+            self._remove_tmp_dir()
 
             LOGGER.info(tr('Configuration created successfully'),
                         extra=bar_msg(tr('The file can be found in {}', str(self.created_configuration_path)),
                                       success=True))
+
             # noinspection PyUnresolvedReferences
             self.completed.emit()
 
@@ -252,6 +272,35 @@ class ConfigCreator(QObject):
             LOGGER.exception('Config creation failed. Check the log for more details', extra=bar_msg(e))
             # noinspection PyUnresolvedReferences
             self.canceled.emit()
+
+    def _write_output(self, map_config):
+        """ Write the configuration as JSON or ZIP file"""
+        if self.output_format == OutputFormat.JSON:
+            # kepler.gl format
+            with open(self.created_configuration_path, 'w') as f:
+                json.dump(map_config.to_dict(), f)
+        else:
+            # Unfolded Studio format
+            config_file = self._temp_dir / self.UNFOLDED_CONFIG_FILE_NAME
+            with open(config_file, 'w') as f:
+                json.dump(map_config.to_dict(), f)
+
+            # Create a zip for the configuration and datasets
+            with ZipFile(self.created_configuration_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                zip_file.write(config_file, config_file.name)
+                # Add multiple files to the zip
+                for dataset in map_config.datasets:
+                    zip_file.write(self._temp_dir / dataset.source, dataset.source)
+
+    def _remove_tmp_dir(self):
+        """ Taken from https://stackoverflow.com/a/22726782/10068922 """
+        try:
+            shutil.rmtree(self._temp_dir)
+        except OSError as e:
+            # Reraise unless ENOENT: No such file or directory
+            # (ok if directory has already been deleted)
+            if e.errno != errno.ENOENT:
+                raise
 
     def _create_config_info(self):
         """ Create info for the configuration """

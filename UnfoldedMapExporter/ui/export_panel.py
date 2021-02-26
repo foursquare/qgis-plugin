@@ -167,6 +167,7 @@ class ExportPanel(BasePanel):
         self.progress_dialog.aborted.connect(self.__aborted)
 
         self.config_creator = ConfigCreator(title, description, output_dir)
+        self.config_creator.set_output_format(Settings.output_format.get())
         self.config_creator.completed.connect(self.__completed)
         self.config_creator.canceled.connect(self.__aborted)
         self.config_creator.tasks_complete.connect(

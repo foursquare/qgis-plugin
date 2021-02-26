@@ -20,6 +20,7 @@ import datetime
 import time
 import uuid
 from unittest.mock import MagicMock
+from zipfile import ZipFile
 
 import pytest
 from PyQt5.QtGui import QColor
@@ -27,6 +28,7 @@ from qgis._core import QgsPointXY
 
 from .conftest import get_map_config, get_loaded_map_config
 from ..core.config_creator import ConfigCreator
+from ..definitions.settings import OutputFormat
 
 FAKE_NOW = datetime.datetime(2021, 1, 25, 11, 37, 43)
 
@@ -43,6 +45,7 @@ def mock_datetime_now(monkeypatch):
 def config_creator(tmpdir_pth, mock_datetime_now) -> ConfigCreator:
     map_config = get_map_config('harbours_config_point.json')
     creator = ConfigCreator("keplergl_nabzfz", "", tmpdir_pth)
+    creator.set_output_format(OutputFormat.JSON)
     creator.set_map_state(QgsPointXY(23.383588699716316, 60.556795942038995), 6.759672619963176)
     creator.set_map_style("dark")
     creator.set_animation_config(None, 1)
@@ -66,6 +69,18 @@ def test_map_config_creation_w_simple_points(config_creator, simple_harbour_poin
     map_config = get_loaded_map_config(config_creator.created_configuration_path)
 
     assert map_config.to_dict() == excpected_map_config.to_dict()
+
+
+def test_map_config_creation_with_unfolded_format(config_creator, simple_harbour_points):
+    config_creator.set_output_format(OutputFormat.ZIP)
+    config_creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                             QColor.fromRgb(0, 92, 255), True)
+    config_creator._start_config_creation()
+
+    assert config_creator.created_configuration_path.exists()
+    assert config_creator.created_configuration_path.name == 'keplergl_nabzfz.zip'
+    with ZipFile(config_creator.created_configuration_path, 'r') as zip_file:
+        assert [n for n in zip_file.namelist()] == ['config.json', 'harbours.csv']
 
 
 def test__create_config_info(config_creator):
