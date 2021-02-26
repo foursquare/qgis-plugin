@@ -20,6 +20,7 @@
 import logging
 
 from PyQt5 import QtGui
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog, QMessageBox, QDesktopWidget
 
 from .about_panel import AboutPanel
@@ -29,7 +30,7 @@ from ..core.utils import set_project_crs
 from ..definitions.gui import Panels
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
-from ..qgis_plugin_tools.tools.resources import load_ui, plugin_name
+from ..qgis_plugin_tools.tools.resources import load_ui, plugin_name, resources_path
 
 FORM_CLASS = load_ui('unfolded_dialog.ui')
 LOGGER = logging.getLogger(plugin_name())
@@ -45,6 +46,7 @@ class Dialog(QDialog, FORM_CLASS):
         """Constructor."""
         QDialog.__init__(self, parent)
         self.setupUi(self)
+        self.setWindowIcon(QIcon(resources_path('icons', 'icon.svg')))
         self.is_running = False
 
         self._set_window_location()
