@@ -21,7 +21,7 @@
 Initial version generated using https://app.quicktype.io/ from json file
 """
 
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 from uuid import UUID
 
 from .conversion_utils import (from_int, from_bool, from_float, to_float, from_str, from_list,
@@ -1019,13 +1019,63 @@ class Data:
         return result
 
 
-class KeplerDataset:
-    data: Data
+class Dataset:
+    """ Common superclass for UnfoldedDataset and KeplerDataset"""
     version: str = 'v1'
+    data: Data
+    source: str
+
+
+class UnfoldedDataset(Dataset):
+    id: UUID
+    label: str
+    color: List[int]
+    all_data: List[Any]
+    source: str
+    fields: List[Field]
+
+    def __init__(self, id: UUID, label: str, color: List[int], source: str, fields: List[Field],
+                 version: Optional[str] = None) -> None:
+        self.id = id
+        self.label = label
+        self.color = color
+        self.source = source
+        self.fields = fields
+        self.version = version if version is not None else Dataset.version
+
+    @property
+    def data(self):
+        return self
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'UnfoldedDataset':
+        assert isinstance(obj, dict)
+        id = UUID(obj.get("id"))
+        label = from_str(obj.get("label"))
+        color = from_list(from_int, obj.get("color"))
+        source = from_str(obj.get("source"))
+        fields = from_list(Field.from_dict, obj.get("fields"))
+        version = from_str(obj.get("version"))
+        return UnfoldedDataset(id, label, color, source, fields, version)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["id"] = str(self.id)
+        result["label"] = from_str(self.label)
+        result["color"] = from_list(from_int, self.color)
+        result["source"] = from_str(self.source)
+        result["fields"] = from_list(lambda x: to_class(Field, x), self.fields)
+        result["version"] = from_str(self.version)
+        return result
+
+
+class KeplerDataset(Dataset):
+    data: Data
+    source = None
 
     def __init__(self, data: Data, version: Optional[str] = None) -> None:
         self.data = data
-        self.version = version if version is not None else KeplerDataset.version
+        self.version = version if version is not None else Dataset.version
 
     @staticmethod
     def from_dict(obj: Any) -> 'KeplerDataset':
@@ -1078,11 +1128,12 @@ class Info:
 
 
 class MapConfig:
-    datasets: List[KeplerDataset]
+    datasets: List[Union[UnfoldedDataset, KeplerDataset]]
     config: Config
     info: Info
 
-    def __init__(self, datasets: List[KeplerDataset], config: Config, info: Info) -> None:
+    def __init__(self, datasets: List[Union[Dataset, UnfoldedDataset, KeplerDataset]], config: Config,
+                 info: Info) -> None:
         self.datasets = datasets
         self.config = config
         self.info = info
@@ -1090,14 +1141,21 @@ class MapConfig:
     @staticmethod
     def from_dict(obj: Any) -> 'MapConfig':
         assert isinstance(obj, dict)
-        datasets = from_list(KeplerDataset.from_dict, obj.get("datasets"))
+        datasets = obj.get("datasets", [])
+        if datasets and datasets[0].get("data"):
+            datasets = from_list(KeplerDataset.from_dict, obj.get("datasets"))
+        else:
+            datasets = from_list(UnfoldedDataset.from_dict, obj.get("datasets"))
         config = Config.from_dict(obj.get("config"))
         info = Info.from_dict(obj.get("info"))
         return MapConfig(datasets, config, info)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["datasets"] = from_list(lambda x: to_class(KeplerDataset, x), self.datasets)
+        if self.datasets and isinstance(self.datasets[0], UnfoldedDataset):
+            result["datasets"] = from_list(lambda x: to_class(UnfoldedDataset, x), self.datasets)
+        else:
+            result["datasets"] = from_list(lambda x: to_class(KeplerDataset, x), self.datasets)
         result["config"] = to_class(Config, self.config)
         result["info"] = to_class(Info, self.info)
         return result
