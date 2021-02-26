@@ -28,6 +28,7 @@ from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordin
                        QgsProject)
 
 from .base_config_creator_task import BaseConfigCreatorTask
+from .csv_field_value_converter import CsvFieldValueConverter
 from ..exceptions import ProcessInterruptedException
 from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
@@ -77,7 +78,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self.setProgress(40)
             self._check_if_canceled()
 
-            all_data = self._extract_all_data()
+            source, all_data = self._extract_all_data()
             self.setProgress(60)
             self._check_if_canceled()
 
@@ -143,13 +144,17 @@ class LayerToDatasets(BaseConfigCreatorTask):
             fields.append(self._qgis_field_to_unfolded_field(field))
         return fields
 
-    def _extract_all_data(self) -> List:
-        """ Extract data either as csv, json or as file """
+    def _extract_all_data(self) -> Tuple[Optional[str], Optional[List]]:
+        """ Extract data either as csv file or list representing csv
+        :returns csv file source if exists, data list if output directory for the file is not set
+        """
 
         LOGGER.info(tr('Extracting layer data'))
 
+        all_data, source = [None] * 2
         if self.output_directory:
-            raise QgsPluginNotImplementedException()
+            output_file = self._save_layer_to_file(self.layer, self.output_directory)
+            source = output_file.name
         else:
             all_data = []
             field_types = [field.type() for field in self.layer.fields()]
@@ -161,8 +166,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
                 elif field_types[i] == QVariant.Double:
                     conversion_functions[i] = lambda x: float(x) if x else None
                 elif field_types[i] == QVariant.Bool:
-                    # There is a possible bug in QGIS csv export that exports booleans as '1', '0' or ''
-                    conversion_functions[i] = lambda x: bool(int(x)) if x else None
+                    conversion_functions[i] = lambda x: None if x == "" else x == "true"
                 else:
                     conversion_functions[i] = lambda x: x.rstrip().strip('"')
 
@@ -178,18 +182,23 @@ class LayerToDatasets(BaseConfigCreatorTask):
                         for i, value in enumerate(row):
                             data.append(conversion_functions[i](value))
                         all_data.append(data)
-            return all_data
+
+        return source, all_data
 
     # noinspection PyArgumentList
     @staticmethod
     def _save_layer_to_file(layer: QgsVectorLayer, output_path: Path) -> Path:
         """ Save layer to file"""
-        output_file = output_path / f'{layer.name()}.csv'
+        output_file = output_path / f'{layer.name().replace(" ", "")}.csv'
+        LOGGER.debug(f'Saving layer to a file {output_file.name}')
+
+        converter = CsvFieldValueConverter(layer)
 
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
-        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=IF NEEDED"]
+        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=IF_NEEDED"]
+        options.fieldValueConverter = converter
 
         # noinspection PyCallByClass
         writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),

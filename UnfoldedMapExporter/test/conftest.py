@@ -49,6 +49,11 @@ def test_gpkg():
     return plugin_test_data_path('test_data.gpkg')
 
 
+@pytest.fixture(scope='session')
+def harbour_csv():
+    return plugin_test_data_path('harbours.csv')
+
+
 @pytest.fixture
 def harbour_points(test_gpkg):
     return get_layer('harbours', test_gpkg)
