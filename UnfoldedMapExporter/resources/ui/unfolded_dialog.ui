@@ -583,6 +583,19 @@
                <layout class="QVBoxLayout" name="verticalLayout_10">
                 <item>
                  <layout class="QGridLayout" name="gridLayout_7">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_level_file_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Configuration output directory</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="1">
                    <widget class="QgsFileWidget" name="f_conf_output">
                     <property name="sizePolicy">
@@ -593,19 +606,6 @@
                     </property>
                     <property name="storageMode">
                      <enum>QgsFileWidget::GetDirectory</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_level_file_2">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Configuration output directory                 </string>
                     </property>
                    </widget>
                   </item>
@@ -717,7 +717,38 @@
                   <property name="sizeConstraint">
                    <enum>QLayout::SetNoConstraint</enum>
                   </property>
-                  <item row="0" column="1">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_development_3">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Documentation</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="label_gispo_3">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;Unfolded
+                      Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
                    <widget class="QLabel" name="label_gispo_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -735,7 +766,7 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="0">
+                  <item row="1" column="0">
                    <widget class="QLabel" name="label_development_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -748,33 +779,18 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_development_3">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_3">
                     <property name="text">
-                     <string>Documentation</string>
+                     <string>Plugin documentation</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QLabel" name="label_gispo_3">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_4">
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                      href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;Unfolded
-                      Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span
+                      style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
                     </property>
                    </widget>
