@@ -58,33 +58,38 @@ def config_creator(tmpdir_pth, mock_datetime_now) -> ConfigCreator:
 
 
 def test_map_config_creation_w_simple_points(config_creator, simple_harbour_points):
-    time_zone = time.strftime('%Z%z')
-    excpected_map_config = get_map_config('harbours_config_point.json')
-    excpected_map_config.info.created_at = excpected_map_config.info.created_at.replace("EET+0200", time_zone)
+    with config_creator as cf:
+        time_zone = time.strftime('%Z%z')
+        excpected_map_config = get_map_config('harbours_config_point.json')
+        excpected_map_config.info.created_at = excpected_map_config.info.created_at.replace("EET+0200", time_zone)
+        cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                     QColor.fromRgb(0, 92, 255), True)
+        cf._start_config_creation()
 
-    config_creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
-                             QColor.fromRgb(0, 92, 255), True)
-    config_creator._start_config_creation()
+        map_config = get_loaded_map_config(cf.created_configuration_path)
 
-    map_config = get_loaded_map_config(config_creator.created_configuration_path)
-
-    assert map_config.to_dict() == excpected_map_config.to_dict()
+        assert map_config.to_dict() == excpected_map_config.to_dict()
+    assert not cf._temp_dir.exists()
 
 
 def test_map_config_creation_with_unfolded_format(config_creator, simple_harbour_points):
-    config_creator.set_output_format(OutputFormat.ZIP)
-    config_creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
-                             QColor.fromRgb(0, 92, 255), True)
-    config_creator._start_config_creation()
+    with config_creator as cf:
+        cf.set_output_format(OutputFormat.ZIP)
+        cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                     QColor.fromRgb(0, 92, 255), True)
+        cf._start_config_creation()
 
-    assert config_creator.created_configuration_path.exists()
-    assert config_creator.created_configuration_path.name == 'keplergl_nabzfz.zip'
-    with ZipFile(config_creator.created_configuration_path, 'r') as zip_file:
-        assert [n for n in zip_file.namelist()] == ['config.json', 'harbours.csv']
+        assert cf.created_configuration_path.exists()
+        assert cf.created_configuration_path.name == 'keplergl_nabzfz.zip'
+        with ZipFile(cf.created_configuration_path, 'r') as zip_file:
+            assert [n for n in zip_file.namelist()] == ['config.json', 'harbours.csv']
+    assert not cf._temp_dir.exists()
 
 
 def test__create_config_info(config_creator):
-    time_zone = time.strftime('%Z%z')
-    info = config_creator._create_config_info()
+    with config_creator as cf:
+        time_zone = time.strftime('%Z%z')
+        info = config_creator._create_config_info()
+    assert not cf._temp_dir.exists()
     assert info.created_at == "Mon Jan 25 2021 11:37:43 " + time_zone
     assert info.source == "QGIS"

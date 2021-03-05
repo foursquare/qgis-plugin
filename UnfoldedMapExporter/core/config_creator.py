@@ -19,13 +19,10 @@
 
 #  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded Map Exporter
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
-
 import datetime
-import errno
 import json
 import locale
 import logging
-import shutil
 import tempfile
 import time
 import uuid
@@ -59,7 +56,8 @@ LOGGER = logging.getLogger(plugin_name())
 
 class ConfigCreator(QObject):
     """
-    Create Unfolded Studio compatible configuration based on QGIS project
+    Create Unfolded Studio compatible configuration based on QGIS project. This class can be used in context manager in
+    single threaded environments (such as tests).
     """
 
     UNFOLDED_CONFIG_FILE_NAME = 'config.json'
@@ -92,7 +90,19 @@ class ConfigCreator(QObject):
         self._interaction_config_values = {}
         self._map_state: Optional[MapState] = None
         self._map_style: Optional[MapStyle] = None
-        self._temp_dir = Path(tempfile.mkdtemp(dir=resources_path()))
+        self._temp_dir_obj = tempfile.TemporaryDirectory(dir=resources_path())
+        self._temp_dir = Path(self._temp_dir_obj.name)
+
+    def __enter__(self, *args):
+        return self
+
+    def __exit__(self, *args):
+        self.__cleanup()
+
+    def __cleanup(self):
+        """ Remove temporary directory """
+        LOGGER.debug("Cleaning up")
+        self._temp_dir_obj.cleanup()
 
     def set_output_format(self, output_format: OutputFormat):
         self.output_format = output_format
@@ -178,6 +188,7 @@ class ConfigCreator(QObject):
             if not task_dict['finished'] and not task_dict['task'].isCanceled():
                 LOGGER.warning(tr("Cancelling task {}", task_id))
                 task_dict['task'].cancel()
+        self.__cleanup()
 
     def _progress_changed(self, task_id: uuid.UUID):
         """ Increments progress """
@@ -219,21 +230,21 @@ class ConfigCreator(QObject):
 
         LOGGER.info(tr('Creating map config'))
 
-        # noinspection PyTypeChecker
-        datasets: List[Dataset] = [None] * len(self.layers)
-        # noinspection PyTypeChecker
-        layers: List[Layer] = [None] * len(self.layers)
-
-        layer_uuids = list(self.layers.keys())
-
-        for id_, task_dict in self.tasks.items():
-            task = task_dict['task']
-            if isinstance(task, LayerToDatasets):
-                datasets[layer_uuids.index(task.layer_uuid)] = task.result_dataset
-            elif isinstance(task, LayerToLayerConfig):
-                layers[layer_uuids.index(task.layer_uuid)] = task.result_layer_conf
-
         try:
+            # noinspection PyTypeChecker
+            datasets: List[Dataset] = [None] * len(self.layers)
+            # noinspection PyTypeChecker
+            layers: List[Layer] = [None] * len(self.layers)
+
+            layer_uuids = list(self.layers.keys())
+
+            for id_, task_dict in self.tasks.items():
+                task = task_dict['task']
+                if isinstance(task, LayerToDatasets):
+                    datasets[layer_uuids.index(task.layer_uuid)] = task.result_dataset
+                elif isinstance(task, LayerToLayerConfig):
+                    layers[layer_uuids.index(task.layer_uuid)] = task.result_layer_conf
+
             field_formats = {
                 str(dataset.data.id): {field.name: field.format if field.format else None for field in
                                        dataset.data.fields}
@@ -259,8 +270,6 @@ class ConfigCreator(QObject):
 
             self._write_output(map_config)
 
-            self._remove_tmp_dir()
-
             LOGGER.info(tr('Configuration created successfully'),
                         extra=bar_msg(tr('The file can be found in {}', str(self.created_configuration_path)),
                                       success=True))
@@ -272,6 +281,8 @@ class ConfigCreator(QObject):
             LOGGER.exception('Config creation failed. Check the log for more details', extra=bar_msg(e))
             # noinspection PyUnresolvedReferences
             self.canceled.emit()
+        finally:
+            self.__cleanup()
 
     def _write_output(self, map_config):
         """ Write the configuration as JSON or ZIP file"""
@@ -291,16 +302,6 @@ class ConfigCreator(QObject):
                 # Add multiple files to the zip
                 for dataset in map_config.datasets:
                     zip_file.write(self._temp_dir / dataset.source, dataset.source)
-
-    def _remove_tmp_dir(self):
-        """ Taken from https://stackoverflow.com/a/22726782/10068922 """
-        try:
-            shutil.rmtree(self._temp_dir)
-        except OSError as e:
-            # Reraise unless ENOENT: No such file or directory
-            # (ok if directory has already been deleted)
-            if e.errno != errno.ENOENT:
-                raise
 
     def _create_config_info(self):
         """ Create info for the configuration """
