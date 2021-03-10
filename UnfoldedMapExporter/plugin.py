@@ -137,8 +137,8 @@ class Plugin:
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
-            self.iface.removePluginMenu(
-                tr(plugin_name()),
+            self.iface.removePluginWebMenu(
+                self.menu,
                 action)
             self.iface.removeToolBarIcon(action)
         teardown_logger(plugin_name())
