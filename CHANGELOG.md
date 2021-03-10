@@ -27,11 +27,11 @@
 * Fixed bug with semicolon separator
 * <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.2...0.0.3">Full Changelog</a>
 
-### 1.0.0-rc1 - 10/03/2021
+### 1.0.0 - 10/03/2021
 
 * Support for ZIP output format
 * Renamed the plugin to Unfolded Map Exporter
 * Added icons, documentation and metadata
-* <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.3...1.0.0-rc1">Full Changelog</a>
+* <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.3...1.0.0">Full Changelog</a>
 
 ###
