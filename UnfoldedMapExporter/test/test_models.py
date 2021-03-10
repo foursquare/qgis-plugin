@@ -63,3 +63,10 @@ def test_map_config_model_polygon_polygons():
         map_config_dict = json.load(f)
     map_config = MapConfig.from_dict(map_config_dict)
     assert map_config.to_dict() == map_config_dict
+
+
+def test_unfolded_config_format():
+    with open(plugin_test_data_path('config', 'harbours_config_with_unfolded_datasets.json')) as f:
+        map_config_dict = json.load(f)
+    map_config = MapConfig.from_dict(map_config_dict)
+    assert map_config.to_dict() == map_config_dict

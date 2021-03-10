@@ -88,7 +88,7 @@ def test__extract_all_data(alg, layer, request):
     map_config = get_map_config('harbours_config_point.json')
     alg.layer = layer
     alg._add_geom_to_fields()
-    data = alg._extract_all_data()
+    _, data = alg._extract_all_data()
     assert data == map_config.datasets[0].data.all_data
 
 
@@ -106,6 +106,32 @@ def test__convert_to_dataset(layer, layer_name, config, alg, request):
     layer.setName(layer_name)
     map_config = get_map_config(config)
     alg.layer = layer
+    status = alg.run()
+    dataset = alg.result_dataset
+    assert status, alg.exception
+    assert dataset.to_dict() == map_config.datasets[0].to_dict()
+
+
+def test_csv_export_with_output_dir(simple_harbour_points, alg, tmp_path, harbour_csv):
+    alg.output_directory = tmp_path
+    alg.layer = simple_harbour_points
+    alg._add_geom_to_fields()
+    converted_csv_name, _ = alg._extract_all_data()
+
+    assert converted_csv_name == 'harbours.csv'
+    converted_csv = (tmp_path / 'harbours.csv')
+    assert converted_csv.exists()
+    with open(harbour_csv) as f:
+        expected_data = f.readlines()
+    with open(converted_csv) as f:
+        converted_data = f.readlines()
+    assert converted_data == expected_data
+
+
+def test_unfolded_dataset_format(simple_harbour_points, alg, tmp_path):
+    map_config = get_map_config('harbours_config_with_unfolded_datasets.json')
+    alg.layer = simple_harbour_points
+    alg.output_directory = tmp_path
     status = alg.run()
     dataset = alg.result_dataset
     assert status, alg.exception

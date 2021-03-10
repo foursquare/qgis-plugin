@@ -26,12 +26,18 @@ from ..qgis_plugin_tools.tools.resources import resources_path
 from ..qgis_plugin_tools.tools.settings import get_setting, set_setting
 
 
+class OutputFormat(enum.Enum):
+    ZIP = 'zip'
+    JSON = 'json'
+
+
 @enum.unique
 class Settings(enum.Enum):
     crs = 'EPSG:4326'
     project_crs = 'EPSG:3857'
     conf_output_dir = resources_path('configurations')
     layer_blending = 'normal'
+    output_format = OutputFormat.ZIP.value
 
     # size
     pixel_size_unit = 'Pixel'
@@ -69,15 +75,22 @@ class Settings(enum.Enum):
             typehint = float
         elif self in (Settings.wmts_basemaps,):
             return json.loads(get_setting(self.name, json.dumps(self.value), str))
-        return get_setting(self.name, self.value, typehint)
+        value = get_setting(self.name, self.value, typehint)
 
-    def set(self, value: Union[str, int, float, bool]) -> bool:
+        if self == Settings.output_format:
+            return OutputFormat(value)
+
+        return value
+
+    def set(self, value: Union[str, int, float, bool, OutputFormat]) -> bool:
         """Sets the value of the setting"""
         options = self.get_options()
         if options and value not in options:
             raise QgsPluginException(tr('Invalid option. Choose something from values {}', options))
         if self in (Settings.wmts_basemaps,):
             value = json.dumps(value)
+        elif self == Settings.output_format:
+            value = value.value
         return set_setting(self.name, value)
 
     def get_options(self) -> List[any]:
