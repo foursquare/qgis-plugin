@@ -126,7 +126,7 @@
          <item>
           <widget class="QStackedWidget" name="stacked_widget">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="exporter">
             <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -596,50 +596,50 @@
                     </property>
                    </widget>
                   </item>
-                     <item row="0" column="1">
-                         <widget class="QgsFileWidget" name="f_conf_output">
-                             <property name="sizePolicy">
-                                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                                     <horstretch>0</horstretch>
-                                     <verstretch>0</verstretch>
-                                 </sizepolicy>
-                             </property>
-                             <property name="storageMode">
-                                 <enum>QgsFileWidget::GetDirectory</enum>
-                             </property>
-                         </widget>
-                     </item>
-                     <item row="1" column="1">
-                         <layout class="QVBoxLayout" name="verticalLayout_2">
-                             <item>
-                                 <widget class="QRadioButton" name="rb_format_zip">
-                                     <property name="toolTip">
-                                         <string>Compatible with Unfolded Studio</string>
-                                     </property>
-                                     <property name="text">
-                                         <string>ZIP</string>
-                                     </property>
-                                 </widget>
-                             </item>
-                             <item>
-                                 <widget class="QRadioButton" name="rb_format_json">
-                                     <property name="toolTip">
-                                         <string>Combatible with Unfolded Studio and kepler.gl</string>
-                                     </property>
-                                     <property name="text">
-                                         <string>JSON</string>
-                                     </property>
-                                 </widget>
-                             </item>
-                         </layout>
-                     </item>
-                     <item row="1" column="0">
-                         <widget class="QLabel" name="label_2">
-                             <property name="text">
-                                 <string>Output file format</string>
-                             </property>
-                         </widget>
-                     </item>
+                  <item row="0" column="1">
+                   <widget class="QgsFileWidget" name="f_conf_output">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="storageMode">
+                     <enum>QgsFileWidget::GetDirectory</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <layout class="QVBoxLayout" name="verticalLayout_2">
+                    <item>
+                     <widget class="QRadioButton" name="rb_format_zip">
+                      <property name="toolTip">
+                       <string>Compatible with Unfolded Studio</string>
+                      </property>
+                      <property name="text">
+                       <string>ZIP</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="rb_format_json">
+                      <property name="toolTip">
+                       <string>Combatible with Unfolded Studio and kepler.gl</string>
+                      </property>
+                      <property name="text">
+                       <string>JSON</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>Output file format</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                </layout>
@@ -777,6 +777,9 @@
                       Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
                     </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
                    </widget>
                   </item>
                   <item row="1" column="1">
@@ -794,6 +797,9 @@
                       underline; color:#0000ff;&quot;&gt;Unfolded
                       Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
@@ -823,6 +829,9 @@
                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span
                       style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
@@ -877,6 +886,9 @@
                       Ltd.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
                     </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -912,6 +924,9 @@
                       style=&quot; text-decoration:
                       underline; color:#0000ff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
@@ -955,6 +970,9 @@
                       style=&quot; text-decoration:
                       underline; color:#0000ff;&quot;&gt;https://github.com/keplergl/kepler.gl&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
@@ -1050,6 +1068,9 @@
                       underline; color:#0000ff;&quot;&gt;Licence
                       GPL Version 2&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                      </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
