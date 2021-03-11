@@ -34,4 +34,12 @@
 * Added icons, documentation and metadata
 * <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.3...1.0.0">Full Changelog</a>
 
+### 1.0.1 - 11/03/2021
+
+* Made links clickable
+* Added a button to open Unfolded Studio
+* Prevented locale error from stopping the export
+* Renamed the plugin to Unfolded
+* <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/1.0.0...1.0.1">Full Changelog</a>
+
 ###
