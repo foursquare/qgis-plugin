@@ -494,6 +494,13 @@
                 </spacer>
                </item>
                <item>
+                <widget class="QPushButton" name="btn_open_studio">
+                 <property name="text">
+                  <string>Open Unfolded Studio</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QPushButton" name="btn_export">
                  <property name="text">
                   <string>Export</string>

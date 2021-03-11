@@ -19,6 +19,7 @@
 
 import logging
 import uuid
+import webbrowser
 from pathlib import Path
 from typing import Optional, Tuple, List
 
@@ -76,6 +77,9 @@ class ExportPanel(BasePanel):
 
         # Export button
         self.dlg.btn_export.clicked.connect(self.run)
+
+        # Studio button
+        self.dlg.btn_open_studio.clicked.connect(lambda _: webbrowser.open(Settings.studio_url.get()))
 
         # Refresh
         self.dlg.btn_refresh.setIcon(QgsApplication.getThemeIcon('/mActionRefresh.svg'))

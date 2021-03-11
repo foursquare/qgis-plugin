@@ -38,6 +38,7 @@ class Settings(enum.Enum):
     conf_output_dir = resources_path('configurations')
     layer_blending = 'normal'
     output_format = OutputFormat.ZIP.value
+    studio_url = 'https://studio.unfolded.ai/home/maps/user'
 
     # size
     pixel_size_unit = 'Pixel'
