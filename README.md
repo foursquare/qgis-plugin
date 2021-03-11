@@ -2,7 +2,7 @@
 
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Tests/badge.svg)
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/TestsLTR/badge.svg)
-[![codecov.io](https://codecov.io/github/UnfoldedInc/qgis-plugin/coverage.svg?branch=master)](https://codecov.io/github/UnfoldedInc/qgis-plugin?branch=master)
+[![codecov.io](https://codecov.io/github/UnfoldedInc/qgis-plugin/coverage.svg?branch=main)](https://codecov.io/github/UnfoldedInc/qgis-plugin?branch=main)
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Release/badge.svg)
 
 <img src="docs/imgs/uf_qgis_logo.svg" width="200" height="200">
