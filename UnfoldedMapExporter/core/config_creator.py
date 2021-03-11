@@ -305,8 +305,10 @@ class ConfigCreator(QObject):
 
     def _create_config_info(self):
         """ Create info for the configuration """
-        locale.setlocale(locale.LC_ALL, ENGLISH_LOCALE)
-
+        try:
+            locale.setlocale(locale.LC_ALL, ENGLISH_LOCALE)
+        except locale.Error:
+            LOGGER.warning(tr("Unsupported locale {}. Using system default.", ENGLISH_LOCALE))
         timestamp = datetime.datetime.now().strftime('%a %b %d %Y %H:%M:%S ')
         time_zone = time.strftime('%Z%z')
         created_at = timestamp + time_zone
