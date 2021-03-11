@@ -1,4 +1,4 @@
-plugin_path: UnfoldedMapExporter
+plugin_path: Unfolded
 github_organization_slug: UnfoldedInc
 project_slug: qgis-plugin
 transifex_coordinator: replace-me

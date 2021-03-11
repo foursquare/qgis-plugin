@@ -30,7 +30,7 @@
 ### 1.0.0 - 10/03/2021
 
 * Support for ZIP output format
-* Renamed the plugin to Unfolded Map Exporter
+* Renamed the plugin to Unfolded
 * Added icons, documentation and metadata
 * <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/0.0.3...1.0.0">Full Changelog</a>
 

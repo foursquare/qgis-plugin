@@ -1,4 +1,4 @@
-# Unfolded Map Exporter QGIS plugin
+# Unfolded QGIS plugin
 
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Tests/badge.svg)
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/TestsLTR/badge.svg)
@@ -27,13 +27,19 @@ A user can also install the plugin from a zip package that you can download from
 
 ## Using the plugin
 
-User can export any vector data format that is [supported in QGIS](https://docs.qgis.org/3.16/en/docs/user_manual/working_with_vector/index.html) and the data can be in any known coordinate reference system as it is automatically reprojected (to EPSG:4326) during export. 
+User can export any vector data format that
+is [supported in QGIS](https://docs.qgis.org/3.16/en/docs/user_manual/working_with_vector/index.html) and the data can
+be in any known coordinate reference system as it is automatically reprojected (to EPSG:4326) during export.
 
-Layer geometries and styles are exported in to a single JSON configuration file, which can then be imported to Unfolded Studio or kepler.gl. 
+Layer geometries and styles are exported in to a single JSON configuration file, which can then be imported to Unfolded
+Studio or kepler.gl.
 
-Before opening the plugin, users add their datasets to QGIS in the normal way (see e.g. [QGIS tutorials](https://www.qgistutorials.com/en/)), perform some data processing tasks if necessary and add cartographic styling for the vector layers. 
+Before opening the plugin, users add their datasets to QGIS in the normal way (see
+e.g. [QGIS tutorials](https://www.qgistutorials.com/en/)), perform some data processing tasks if necessary and add
+cartographic styling for the vector layers.
 
-After the user is satisfied with their result and the plugin has been installed, the `Unfolded Map Export` plugin can now be opened under the *Plugins* tab in QGIS. It opens a new window, which lets the user control the map export process. 
+After the user is satisfied with their result and the plugin has been installed, the `Unfolded` plugin can now be opened
+under the *Web* tab in QGIS. It opens a new window, which lets the user control the map export process.
 
 ![Main plugin dialog](docs/imgs/main_dialog.png)
 
