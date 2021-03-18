@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>944</width>
+    <width>1023</width>
     <height>730</height>
    </rect>
   </property>
@@ -112,7 +112,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>781</width>
+          <width>860</width>
           <height>726</height>
          </rect>
         </property>
@@ -195,11 +195,11 @@
                   <attribute name="horizontalHeaderCascadingSectionResizes">
                    <bool>false</bool>
                   </attribute>
-                  <attribute name="horizontalHeaderMinimumSectionSize">
-                   <number>100</number>
-                  </attribute>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>150</number>
+                  </attribute>
+                  <attribute name="horizontalHeaderMinimumSectionSize">
+                   <number>100</number>
                   </attribute>
                   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                    <bool>false</bool>
@@ -251,10 +251,10 @@
                 <string>Map configuration values</string>
                </property>
                <property name="flat">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="collapsed">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="scrollOnExpand">
                 <bool>true</bool>
@@ -328,10 +328,10 @@
                 <string>Map style values</string>
                </property>
                <property name="flat">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="collapsed">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="scrollOnExpand">
                 <bool>true</bool>
@@ -495,15 +495,38 @@
                </item>
                <item>
                 <widget class="QPushButton" name="btn_open_studio">
+                 <property name="toolTip">
+                  <string>Open Unfolded Studio and export to web</string>
+                 </property>
                  <property name="text">
-                  <string>Open Unfolded Studio</string>
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>Unfolded101/resources/icons/icon.svg</normaloff>Unfolded101/resources/icons/icon.svg</iconset>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="btn_export">
+                 <property name="font">
+                  <font>
+                   <pointsize>8</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
                  <property name="text">
-                  <string>Export</string>
+                  <string>Export map</string>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
                  </property>
                 </widget>
                </item>
@@ -513,6 +536,51 @@
            </widget>
            <widget class="QWidget" name="settings">
             <layout class="QVBoxLayout" name="verticalLayout_15">
+             <item>
+              <widget class="QgsCollapsibleGroupBox" name="mGroupBox_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>Export</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_10">
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_7">
+                  <item row="0" column="1">
+                   <widget class="QgsFileWidget" name="f_conf_output">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="storageMode">
+                     <enum>QgsFileWidget::GetDirectory</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_level_file_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Configuration output directory</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
              <item>
               <widget class="QgsCollapsibleGroupBox" name="mGroupBox_5">
                <property name="sizePolicy">
@@ -548,6 +616,21 @@
                    </layout>
                   </item>
                   <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="font">
+                     <font>
+                      <italic>true</italic>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>The toksn is only used inside QGIS to add the default basemaps from Unfolded Studio and to make cartographic design process easier. The key will not be exported from QGIS.</string>
+                    </property>
+                    <property name="wordWrap">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_6">
                     <item>
                      <spacer name="horizontalSpacer_4">
@@ -577,82 +660,6 @@
               </widget>
              </item>
              <item>
-              <widget class="QgsCollapsibleGroupBox" name="mGroupBox_4">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="title">
-                <string>Export</string>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_10">
-                <item>
-                 <layout class="QGridLayout" name="gridLayout_7">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_level_file_2">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Configuration output directory</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QgsFileWidget" name="f_conf_output">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="storageMode">
-                     <enum>QgsFileWidget::GetDirectory</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <layout class="QVBoxLayout" name="verticalLayout_2">
-                    <item>
-                     <widget class="QRadioButton" name="rb_format_zip">
-                      <property name="toolTip">
-                       <string>Compatible with Unfolded Studio</string>
-                      </property>
-                      <property name="text">
-                       <string>ZIP</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QRadioButton" name="rb_format_json">
-                      <property name="toolTip">
-                       <string>Combatible with Unfolded Studio and kepler.gl</string>
-                      </property>
-                      <property name="text">
-                       <string>JSON</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_2">
-                    <property name="text">
-                     <string>Output file format</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
               <widget class="QgsCollapsibleGroupBox" name="mGroupBox_3">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -664,13 +671,6 @@
                 <string>Logging</string>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_8">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>QGIS must be restarted in order to apply changes in log levels</string>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout_5">
                   <item row="1" column="0">
@@ -706,6 +706,18 @@
                    <widget class="QComboBox" name="combo_box_log_level_file"/>
                   </item>
                  </layout>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="font">
+                   <font>
+                    <italic>true</italic>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>QGIS must be restarted in order to apply changes in log levels</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -751,12 +763,25 @@
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_9">
                 <item>
+                 <widget class="QLabel" name="signup_text">
+                  <property name="text">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt; for a free community account to use Unfolded Studio!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::AutoText</enum>
+                  </property>
+                  <property name="openExternalLinks">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <layout class="QGridLayout" name="gridLayout_6">
                   <property name="sizeConstraint">
                    <enum>QLayout::SetNoConstraint</enum>
                   </property>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_development_3">
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="label_gispo_2">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>0</horstretch>
@@ -764,7 +789,47 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>Documentation</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                      href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span
+                      style=&quot; text-decoration:
+                      underline; color:#0000ff;&quot;&gt;Unfolded
+                      Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string>Plugin documentation</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span
+                      style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_development_2">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Studio</string>
                     </property>
                    </widget>
                   </item>
@@ -789,8 +854,8 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QLabel" name="label_gispo_2">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_development_3">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                       <horstretch>0</horstretch>
@@ -798,47 +863,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                      href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;Unfolded
-                      Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
-                    </property>
-                    <property name="openExternalLinks">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_development_2">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Studio</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_3">
-                    <property name="text">
-                     <string>Plugin documentation</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QLabel" name="label_4">
-                    <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span
-                      style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
-                    </property>
-                    <property name="openExternalLinks">
-                     <bool>true</bool>
+                     <string>Documentation</string>
                     </property>
                    </widget>
                   </item>
