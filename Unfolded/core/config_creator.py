@@ -272,7 +272,7 @@ class ConfigCreator(QObject):
 
             LOGGER.info(tr('Configuration created successfully'),
                         extra=bar_msg(tr('The file can be found in {}', str(self.created_configuration_path)),
-                                      success=True))
+                                      success=True, duration=30))
 
             # noinspection PyUnresolvedReferences
             self.completed.emit()
