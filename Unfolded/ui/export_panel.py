@@ -23,8 +23,9 @@ import webbrowser
 from pathlib import Path
 from typing import Optional, Tuple, List
 
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QComboBox, QTableWidget, QTableWidgetItem, QCheckBox
-from qgis._core import QgsProject, QgsVectorLayer, QgsApplication
+from qgis.core import QgsProject, QgsVectorLayer, QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgis.utils import iface
 
@@ -38,7 +39,7 @@ from ..definitions.gui import Panels
 from ..definitions.settings import Settings
 from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
-from ..qgis_plugin_tools.tools.resources import plugin_name
+from ..qgis_plugin_tools.tools.resources import plugin_name, resources_path
 
 LOGGER = logging.getLogger(plugin_name())
 
@@ -79,6 +80,7 @@ class ExportPanel(BasePanel):
         self.dlg.btn_export.clicked.connect(self.run)
 
         # Studio button
+        self.dlg.btn_open_studio.setIcon(QIcon(resources_path('icons', 'icon.svg')))
         self.dlg.btn_open_studio.clicked.connect(lambda _: webbrowser.open(Settings.studio_url.get()))
 
         # Refresh

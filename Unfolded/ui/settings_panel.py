@@ -27,7 +27,7 @@ from .base_panel import BasePanel
 from ..core.exceptions import MapboxTokenMissing
 from ..core.layer_handler import LayerHandler
 from ..definitions.gui import Panels
-from ..definitions.settings import Settings, OutputFormat
+from ..definitions.settings import Settings
 from ..qgis_plugin_tools.tools.custom_logging import get_log_level_key, LogTarget, get_log_level_name
 from ..qgis_plugin_tools.tools.resources import plugin_name, plugin_path
 from ..qgis_plugin_tools.tools.settings import set_setting
@@ -60,15 +60,6 @@ class SettingsPanel(BasePanel):
         f_conf_output.setFilePath(Settings.conf_output_dir.get())
         f_conf_output.fileChanged.connect(self.__conf_output_dir_changed)
 
-        # Output format
-        output_format = Settings.output_format.get()
-        self.dlg.rb_format_json.toggled.connect(lambda checked: self.__output_format_changed(False, checked))
-        self.dlg.rb_format_zip.toggled.connect(lambda checked: self.__output_format_changed(True, checked))
-        if output_format == OutputFormat.ZIP:
-            self.dlg.rb_format_zip.setChecked(True)
-        else:
-            self.dlg.rb_format_json.setChecked(True)
-
         # Logging
         self.dlg.combo_box_log_level_file.clear()
         self.dlg.combo_box_log_level_console.clear()
@@ -99,10 +90,3 @@ class SettingsPanel(BasePanel):
     def __mapbox_token_changed(self, new_token: str):
         if new_token:
             Settings.mapbox_api_token.set(new_token)
-
-    def __output_format_changed(self, is_zip: bool, is_checked: bool):
-        if is_checked:
-            if is_zip:
-                Settings.output_format.set(OutputFormat.ZIP)
-            else:
-                Settings.output_format.set(OutputFormat.JSON)
