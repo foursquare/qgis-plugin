@@ -7,10 +7,10 @@
   </property>
   <property name="geometry">
    <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>945</width>
-    <height>701</height>
+       <x>0</x>
+       <y>0</y>
+       <width>927</width>
+       <height>676</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,20 +101,30 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="area_contents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>782</width>
-          <height>691</height>
-         </rect>
+       <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+               <widget class="QgsMessageBar" name="message_bar">
+                   <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                   </property>
+               </widget>
+           </item>
+           <item>
+               <widget class="QScrollArea" name="scrollArea">
+                   <property name="widgetResizable">
+                       <bool>true</bool>
+                   </property>
+                   <widget class="QWidget" name="area_contents">
+                       <property name="geometry">
+                           <rect>
+                               <x>0</x>
+                               <y>0</y>
+                               <width>764</width>
+                               <height>666</height>
+                           </rect>
         </property>
         <property name="minimumSize">
          <size>
@@ -137,12 +147,12 @@
                </property>
                <widget class="QWidget" name="scrollAreaWidgetContents">
                 <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>744</width>
-                  <height>620</height>
-                 </rect>
+                    <rect>
+                        <x>0</x>
+                        <y>0</y>
+                        <width>726</width>
+                        <height>595</height>
+                    </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_2">
                  <item>
@@ -525,10 +535,10 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span
-                   style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt; for a
-                   free community account to use Unfolded Studio!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                  </string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span
+                         style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt;
+                         for a free community account to use Unfolded Studio!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                     </string>
                  </property>
                  <property name="textFormat">
                   <enum>Qt::AutoText</enum>
@@ -685,9 +695,9 @@
                      </font>
                     </property>
                     <property name="text">
-                     <string>The token is only used inside QGIS to add the default basemaps from Unfolded Studio and to
-                      make cartographic design process easier. The key will not be exported from QGIS.
-                     </string>
+                        <string>The token is only used inside QGIS to add the default basemaps from Unfolded Studio and
+                            to make cartographic design process easier. The key will not be exported from QGIS.
+                        </string>
                     </property>
                     <property name="wordWrap">
                      <bool>true</bool>
@@ -1175,18 +1185,24 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QgsCollapsibleGroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>qgscollapsiblegroupbox.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QgsFileWidget</class>
-   <extends>QWidget</extends>
-   <header>qgsfilewidget.h</header>
-   <container>1</container>
-  </customwidget>
+     <customwidget>
+         <class>QgsCollapsibleGroupBox</class>
+         <extends>QGroupBox</extends>
+         <header>qgscollapsiblegroupbox.h</header>
+         <container>1</container>
+     </customwidget>
+     <customwidget>
+         <class>QgsFileWidget</class>
+         <extends>QWidget</extends>
+         <header>qgsfilewidget.h</header>
+         <container>1</container>
+     </customwidget>
+     <customwidget>
+         <class>QgsMessageBar</class>
+         <extends>QFrame</extends>
+         <header>qgis.gui</header>
+         <container>1</container>
+     </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

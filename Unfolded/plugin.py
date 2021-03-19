@@ -24,7 +24,8 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QWidget
 from qgis.gui import QgisInterface
 
-from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_logger, teardown_logger
+from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_logger, teardown_logger, \
+    use_custom_msg_bar_in_logger
 from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
@@ -146,4 +147,5 @@ class Plugin:
     def run(self):
         """Run method that performs all the real work"""
         dialog = Dialog()
+        use_custom_msg_bar_in_logger(plugin_name(), dialog.message_bar)
         dialog.exec()
