@@ -19,6 +19,7 @@
 import datetime
 import time
 import uuid
+from pathlib import Path
 from unittest.mock import MagicMock
 from zipfile import ZipFile
 
@@ -28,6 +29,7 @@ from qgis._core import QgsPointXY
 
 from .conftest import get_map_config, get_loaded_map_config
 from ..core.config_creator import ConfigCreator
+from ..core.exceptions import InvalidInputException
 
 FAKE_NOW = datetime.datetime(2021, 1, 25, 11, 37, 43)
 
@@ -90,3 +92,28 @@ def test__create_config_info(config_creator):
     assert not cf._temp_dir.exists()
     assert info.created_at == "Mon Jan 25 2021 11:37:43 " + time_zone
     assert info.source == "QGIS"
+
+
+def test___validate_inputs():
+    with ConfigCreator("", "", Path('nonexisting')) as cf:
+        with pytest.raises(InvalidInputException) as e:
+            cf._validate_inputs()
+    assert str(e.value) == 'No layers selected'
+
+
+def test___validate_inputs2(simple_harbour_points):
+    with ConfigCreator("", "", Path('nonexisting')) as cf:
+        cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                     QColor.fromRgb(0, 92, 255), True)
+        with pytest.raises(InvalidInputException) as e:
+            cf._validate_inputs()
+    assert str(e.value) == 'Output directory "nonexisting" does not exist'
+
+
+def test___validate_inputs3(simple_harbour_points, tmpdir_pth):
+    with ConfigCreator("", "", tmpdir_pth) as cf:
+        cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                     QColor.fromRgb(0, 92, 255), True)
+        with pytest.raises(InvalidInputException) as e:
+            cf._validate_inputs()
+    assert str(e.value) == 'Title not filled'

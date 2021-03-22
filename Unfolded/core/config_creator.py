@@ -103,6 +103,28 @@ class ConfigCreator(QObject):
         LOGGER.debug("Cleaning up")
         self._temp_dir_obj.cleanup()
 
+    def _validate_inputs(self):
+        """ Validate user given input """
+        LOGGER.info('Validating inputs')
+        error_message_title = ''
+        bar_msg_ = None
+        if not self.layers:
+            error_message_title = tr('No layers selected')
+            bar_msg_ = bar_msg(tr('Select at least on layer to continue export'))
+
+        elif not (self.output_directory.name and self.output_directory.exists()):
+            error_message_title = tr('Output directory "{}" does not exist', self.output_directory)
+            bar_msg_ = bar_msg(tr('Set a correct output directory in the Settings'))
+
+        elif not self.title:
+            error_message_title = tr('Title not filled')
+            bar_msg_ = bar_msg(tr('Please add a proper title for the map. This is used in a filename of the output'))
+
+        if error_message_title:
+            # noinspection PyUnresolvedReferences
+            self.canceled.emit()
+            raise InvalidInputException(error_message_title, bar_msg=bar_msg_)
+
     def set_animation_config(self, current_time: any = None, speed: int = AnimationConfig.speed):
         """ Set animation configuration with current time and speed """
         try:
@@ -166,7 +188,8 @@ class ConfigCreator(QObject):
     def start_config_creation(self) -> None:
         """ Start config creation using background processing tasks """
 
-        LOGGER.info(tr('Started config creation'))
+        self._validate_inputs()
+        LOGGER.info('Started config creation')
         LOGGER.debug(f"Tasks are: {self.tasks}")
 
         for task_id, task_dict in self.tasks.items():
@@ -180,7 +203,7 @@ class ConfigCreator(QObject):
         """ Aborts config creation manually """
         for task_id, task_dict in self.tasks.items():
             if not task_dict['finished'] and not task_dict['task'].isCanceled():
-                LOGGER.warning(tr("Cancelling task {}", task_id))
+                LOGGER.warning(f"Cancelling task {task_id}")
                 task_dict['task'].cancel()
         self.__cleanup()
 
@@ -205,7 +228,7 @@ class ConfigCreator(QObject):
             self._create_map_config()
 
     def _task_terminated(self, task_id: uuid.UUID) -> None:
-        """ One of the bacground processing tasks failed """
+        """ One of the background processing tasks failed """
 
         LOGGER.warning(tr("Task {} terminated", task_id))
         self.tasks[task_id]['finished'] = True
