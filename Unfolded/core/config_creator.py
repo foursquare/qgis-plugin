@@ -103,6 +103,23 @@ class ConfigCreator(QObject):
         LOGGER.debug("Cleaning up")
         self._temp_dir_obj.cleanup()
 
+    def _validate_inputs(self):
+        """ Validate user given input """
+        LOGGER.info('Validating inputs')
+        if not self.layers:
+            raise InvalidInputException(tr('No layers selected'),
+                                        bar_msg=bar_msg(tr('Select at least on layer to continue export')))
+
+        if not self.output_directory.exists():
+            raise InvalidInputException(
+                tr('Output directory "{}" does not exist', self.output_directory),
+                bar_msg=bar_msg(tr('Set a correct output directory in the Settings')))
+
+        if not self.title:
+            raise InvalidInputException(
+                tr('Title not filled'),
+                bar_msg=bar_msg(tr('Please add a proper title for the map. This is used in a filename of the output')))
+
     def set_animation_config(self, current_time: any = None, speed: int = AnimationConfig.speed):
         """ Set animation configuration with current time and speed """
         try:
@@ -166,7 +183,8 @@ class ConfigCreator(QObject):
     def start_config_creation(self) -> None:
         """ Start config creation using background processing tasks """
 
-        LOGGER.info(tr('Started config creation'))
+        self._validate_inputs()
+        LOGGER.info('Started config creation')
         LOGGER.debug(f"Tasks are: {self.tasks}")
 
         for task_id, task_dict in self.tasks.items():
@@ -180,7 +198,7 @@ class ConfigCreator(QObject):
         """ Aborts config creation manually """
         for task_id, task_dict in self.tasks.items():
             if not task_dict['finished'] and not task_dict['task'].isCanceled():
-                LOGGER.warning(tr("Cancelling task {}", task_id))
+                LOGGER.warning(f"Cancelling task {task_id}")
                 task_dict['task'].cancel()
         self.__cleanup()
 
