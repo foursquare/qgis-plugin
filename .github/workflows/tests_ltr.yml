@@ -26,9 +26,9 @@ jobs:
         with:
           submodules: true
 
-      - name: Pull qgis 3.10 LTR image
-        run: docker pull qgis/qgis:release-3_10
+      - name: Pull qgis 3.14 LTR image
+        run: docker pull qgis/qgis:release-3_14
 
       # Runs all tests
       - name: Run tests (LTR)
-        run: docker run --rm --net=host --volume `pwd`:/app -w=/app -e QGIS_PLUGIN_IN_CI=1 qgis/qgis:release-3_10 sh -c "pip3 install -q pytest && xvfb-run -s '+extension GLX -screen 0 1024x768x24' pytest -v"
+        run: docker run --rm --net=host --volume `pwd`:/app -w=/app -e QGIS_PLUGIN_IN_CI=1 qgis/qgis:release-3_14 sh -c "pip3 install -q pytest && xvfb-run -s '+extension GLX -screen 0 1024x768x24' pytest -v"
