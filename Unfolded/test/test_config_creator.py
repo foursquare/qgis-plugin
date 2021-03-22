@@ -95,25 +95,25 @@ def test__create_config_info(config_creator):
 
 
 def test___validate_inputs():
-    creator = ConfigCreator("", "", Path('nonexisting'))
-    with pytest.raises(InvalidInputException) as e:
-        creator._validate_inputs()
+    with ConfigCreator("", "", Path('nonexisting')) as cf:
+        with pytest.raises(InvalidInputException) as e:
+            cf._validate_inputs()
     assert str(e.value) == 'No layers selected'
 
 
 def test___validate_inputs2(simple_harbour_points):
-    creator = ConfigCreator("", "", Path('nonexisting'))
-    creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
-                      QColor.fromRgb(0, 92, 255), True)
-    with pytest.raises(InvalidInputException) as e:
-        creator._validate_inputs()
+    with ConfigCreator("", "", Path('nonexisting')) as cf:
+        cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                     QColor.fromRgb(0, 92, 255), True)
+        with pytest.raises(InvalidInputException) as e:
+            cf._validate_inputs()
     assert str(e.value) == 'Output directory "nonexisting" does not exist'
 
 
-def test___validate_inputs3(simple_harbour_points):
-    creator = ConfigCreator("", "", Path())
-    creator.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
-                      QColor.fromRgb(0, 92, 255), True)
-    with pytest.raises(InvalidInputException) as e:
-        creator._validate_inputs()
+def test___validate_inputs3(simple_harbour_points, tmpdir_pth):
+    with ConfigCreator("", "", tmpdir_pth) as cf:
+        cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
+                     QColor.fromRgb(0, 92, 255), True)
+        with pytest.raises(InvalidInputException) as e:
+            cf._validate_inputs()
     assert str(e.value) == 'Title not filled'
