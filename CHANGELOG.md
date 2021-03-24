@@ -15,4 +15,10 @@
 * User input validation
 * <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/1.0.0-rc1...1.0.0-rc2">Full Changelog</a>
 
+### 1.0.0-rc3 - 24/03/2021
+
+* Fixed a bug on CSV format on Windows
+* UI polishing
+* <a href="https://github.com/UnfoldedInc/qgis-plugin/compare/1.0.0-rc1...1.0.0-rc3">Full Changelog</a>
+
 ###
