@@ -202,7 +202,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
-        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=ALWAYS"]
+        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=IF_AMBIGUOUS"]
         options.fieldValueConverter = converter
 
         # noinspection PyCallByClass

@@ -74,6 +74,9 @@ def test_map_config_creation_w_simple_points(config_creator, simple_harbour_poin
 
 def test_map_config_creation_with_unfolded_format(config_creator, simple_harbour_points):
     with config_creator as cf:
+        time_zone = time.strftime('%Z%z')
+        excpected_map_config = get_map_config('harbours_config_with_unfolded_datasets.json')
+        excpected_map_config.info.created_at = excpected_map_config.info.created_at.replace("EET+0200", time_zone)
         cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
                      QColor.fromRgb(0, 92, 255), True)
         cf._start_config_creation()
@@ -82,6 +85,9 @@ def test_map_config_creation_with_unfolded_format(config_creator, simple_harbour
         assert cf.created_configuration_path.name == 'unfolded_nabzfz.zip'
         with ZipFile(cf.created_configuration_path, 'r') as zip_file:
             assert [n for n in zip_file.namelist()] == ['config.json', 'harbours.csv']
+        map_config = get_loaded_map_config(cf.created_configuration_path)
+        assert map_config.to_dict() == excpected_map_config.to_dict()
+
     assert not cf._temp_dir.exists()
 
 

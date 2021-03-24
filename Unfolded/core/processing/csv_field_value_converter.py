@@ -21,7 +21,10 @@ from qgis.core import (QgsVectorFileWriter, QgsVectorLayer, QgsField)
 
 
 class CsvFieldValueConverter(QgsVectorFileWriter.FieldValueConverter):
-    """ Converts boolean fields to string fields containig true, false or empty string """
+    """
+    Converts boolean fields to string fields containing true, false or empty string.
+    Also cast first field values to string to avoid import problems on Unfolded Studio.
+    """
 
     def __init__(self, layer: QgsVectorLayer):
         QgsVectorFileWriter.FieldValueConverter.__init__(self)
@@ -38,6 +41,8 @@ class CsvFieldValueConverter(QgsVectorFileWriter.FieldValueConverter):
 
     def fieldDefinition(self, field):
         idx = self.layer.fields().indexFromName(field.name())
-        if idx in self.bool_field_idxs:
+
+        # Cast the first cell value to string
+        if idx in self.bool_field_idxs or idx == 0:
             return QgsField(field.name(), QVariant.String)
         return self.layer.fields()[idx]
