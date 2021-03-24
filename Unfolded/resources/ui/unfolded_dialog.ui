@@ -83,16 +83,16 @@
      <property name="currentRow">
       <number>-1</number>
      </property>
-     <item>
-      <property name="text">
-       <string>Export</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-        <string>Settings</string>
-      </property>
-     </item>
+      <item>
+        <property name="text">
+          <string>Export</string>
+        </property>
+      </item>
+      <item>
+        <property name="text">
+          <string>Settings</string>
+        </property>
+      </item>
       <item>
         <property name="text">
           <string>About</string>
@@ -114,6 +114,9 @@
         </item>
         <item>
           <widget class="QScrollArea" name="scrollArea">
+            <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
             <property name="widgetResizable">
               <bool>true</bool>
             </property>
@@ -136,7 +139,7 @@
                 <item>
                   <widget class="QStackedWidget" name="stacked_widget">
                     <property name="currentIndex">
-                      <number>2</number>
+                      <number>0</number>
                     </property>
                     <widget class="QWidget" name="exporter">
                       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -151,7 +154,7 @@
                                   <x>0</x>
                                   <y>0</y>
                                   <width>726</width>
-                                  <height>595</height>
+                                  <height>572</height>
                                 </rect>
                               </property>
                               <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -164,16 +167,16 @@
                                         </property>
                                         <property name="sizeHint" stdset="0">
                                           <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="btn_refresh">
-                     <property name="maximumSize">
-                      <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                          </size>
+                                        </property>
+                                      </spacer>
+                                    </item>
+                                    <item>
+                                      <widget class="QPushButton" name="btn_refresh">
+                                        <property name="maximumSize">
+                                          <size>
                        <width>25</width>
                        <height>25</height>
                       </size>
@@ -528,83 +531,89 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QLabel" name="signup_text">
-                 <property name="font">
-                  <font>
-                   <italic>true</italic>
-                  </font>
-                 </property>
-                 <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span
-                     style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt;
-                     for a free community account to use Unfolded Studio!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                   </string>
-                 </property>
-                 <property name="textFormat">
-                  <enum>Qt::AutoText</enum>
-                 </property>
-                 <property name="openExternalLinks">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <spacer name="horizontalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
+                  <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                    <size>
+                      <width>40</width>
+                      <height>20</height>
+                    </size>
+                  </property>
                 </spacer>
                </item>
-               <item>
-                <widget class="QPushButton" name="btn_open_studio">
-                 <property name="maximumSize">
-                  <size>
-                   <width>30</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="toolTip">
+                <item>
+                  <widget class="QPushButton" name="btn_export">
+                    <property name="text">
+                      <string>Export map</string>
+                    </property>
+                    <property name="iconSize">
+                      <size>
+                        <width>16</width>
+                        <height>16</height>
+                      </size>
+                    </property>
+                    <property name="flat">
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="btn_open_studio">
+                    <property name="maximumSize">
+                      <size>
+                        <width>1000</width>
+                        <height>1000</height>
+                      </size>
+                    </property>
+                    <property name="toolTip">
                   <string>Open Unfolded Studio and export to web</string>
                  </property>
                  <property name="text">
-                  <string/>
+                   <string>Import to Undolded Studio</string>
                  </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>20</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                 <property name="checkable">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btn_export">
-                 <property name="text">
-                  <string>Export map</string>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>16</width>
-                   <height>16</height>
-                  </size>
-                 </property>
-                 <property name="flat">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
+                    <property name="iconSize">
+                      <size>
+                        <width>20</width>
+                        <height>20</height>
+                      </size>
+                    </property>
+                    <property name="checkable">
+                      <bool>false</bool>
+                    </property>
+                    <property name="flat">
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
               </layout>
              </item>
-            </layout>
+                        <item>
+                          <widget class="QLabel" name="signup_text">
+                            <property name="font">
+                              <font>
+                                <italic>true</italic>
+                              </font>
+                            </property>
+                            <property name="text">
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span
+                                style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt;
+                                for a free community account to use Unfolded Studio!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                              </string>
+                            </property>
+                            <property name="textFormat">
+                              <enum>Qt::AutoText</enum>
+                            </property>
+                            <property name="alignment">
+                              <set>Qt::AlignCenter</set>
+                            </property>
+                            <property name="openExternalLinks">
+                              <bool>true</bool>
+                            </property>
+                          </widget>
+                        </item>
+                      </layout>
            </widget>
            <widget class="QWidget" name="settings">
             <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -1000,41 +1009,41 @@
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <item>
-                 <layout class="QGridLayout" name="gridLayout_2">
-                   <item row="0" column="1">
-                     <widget class="QLabel" name="label_source">
-                       <property name="sizePolicy">
-                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                         </sizepolicy>
-                       </property>
-                       <property name="text">
-                         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                           href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
-                    </property>
-                    <property name="openExternalLinks">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                   <item row="0" column="0">
-                     <widget class="QLabel" name="label_gsource">
-                       <property name="sizePolicy">
-                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                         </sizepolicy>
-                       </property>
-                       <property name="text">
-                         <string>Unfolded Studio Plugin repository</string>
-                       </property>
-                   </widget>
-                  </item>
-                 </layout>
+                  <layout class="QGridLayout" name="gridLayout_2">
+                    <item row="0" column="1">
+                      <widget class="QLabel" name="label_source">
+                        <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
+                            href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span
+                            style=&quot; text-decoration:
+                            underline; color:#0000ff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                          </string>
+                        </property>
+                        <property name="openExternalLinks">
+                          <bool>true</bool>
+                        </property>
+                      </widget>
+                    </item>
+                    <item row="0" column="0">
+                      <widget class="QLabel" name="label_gsource">
+                        <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text">
+                          <string>Unfolded Studio Plugin repository</string>
+                        </property>
+                      </widget>
+                    </item>
+                  </layout>
                 </item>
                </layout>
               </widget>

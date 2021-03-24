@@ -32,7 +32,7 @@ class Settings(enum.Enum):
     project_crs = 'EPSG:3857'
     conf_output_dir = resources_path('configurations')
     layer_blending = 'normal'
-    studio_url = 'https://studio.unfolded.ai/home/maps/user'
+    studio_url = 'https://studio.unfolded.ai/home/maps/import'
 
     # size
     pixel_size_unit = 'Pixel'
