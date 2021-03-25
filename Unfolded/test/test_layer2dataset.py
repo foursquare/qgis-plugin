@@ -24,6 +24,7 @@ from qgis.core import QgsVectorLayer
 
 from .conftest import get_map_config
 from ..core.processing.layer2dataset import LayerToDatasets
+from ..qgis_plugin_tools.tools.resources import plugin_test_data_path
 
 
 @pytest.fixture
@@ -112,16 +113,19 @@ def test__convert_to_dataset(layer, layer_name, config, alg, request):
     assert dataset.to_dict() == map_config.datasets[0].to_dict()
 
 
-def test_csv_export_with_output_dir(simple_harbour_points, alg, tmp_path, harbour_csv):
+@pytest.mark.parametrize('layer,expected_csv',
+                         [('simple_harbour_points', 'harbours.csv'), ('countries', 'naturalearth_countries.csv')])
+def test_csv_export_with_output_dir(layer, expected_csv, alg, tmp_path, request):
+    layer: QgsVectorLayer = request.getfixturevalue(layer)
     alg.output_directory = tmp_path
-    alg.layer = simple_harbour_points
+    alg.layer = layer
     alg._add_geom_to_fields()
     converted_csv_name, _ = alg._extract_all_data()
 
-    assert converted_csv_name == 'harbours.csv'
-    converted_csv = (tmp_path / 'harbours.csv')
+    assert converted_csv_name == expected_csv
+    converted_csv = (tmp_path / converted_csv_name)
     assert converted_csv.exists()
-    with open(harbour_csv) as f:
+    with open(plugin_test_data_path(expected_csv)) as f:
         expected_data = f.readlines()
     with open(converted_csv) as f:
         converted_data = f.readlines()
