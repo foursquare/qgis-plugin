@@ -179,7 +179,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
                 output_file = self._save_layer_to_file(self.layer, Path(tmpdirname))
                 with open(output_file, newline='') as f:
                     set_csv_field_size_limit()
-                    data_reader = csv.reader(f, delimiter='\t')
+                    data_reader = csv.reader(f, delimiter=',')
                     # Skipping header
                     next(data_reader)
                     for row in data_reader:
@@ -202,7 +202,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
-        options.layerOptions = ["SEPARATOR=TAB", "STRING_QUOTING=IF_AMBIGUOUS"]
+        options.layerOptions = ["SEPARATOR=COMMA"]
         options.fieldValueConverter = converter
 
         # noinspection PyCallByClass

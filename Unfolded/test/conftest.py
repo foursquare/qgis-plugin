@@ -50,19 +50,14 @@ def test_gpkg():
     return plugin_test_data_path('test_data.gpkg')
 
 
-@pytest.fixture(scope='session')
-def harbour_csv():
-    return plugin_test_data_path('harbours.csv')
-
-
 @pytest.fixture
 def harbour_points(test_gpkg):
-    return get_layer('harbours', test_gpkg)
+    return get_gpkg_layer('harbours', test_gpkg)
 
 
 @pytest.fixture
 def lines(test_gpkg):
-    lines = get_layer('lines', test_gpkg)
+    lines = get_gpkg_layer('lines', test_gpkg)
     add_layer(lines)
     set_styles(lines, 'lines.qml')
     return lines
@@ -70,12 +65,12 @@ def lines(test_gpkg):
 
 @pytest.fixture
 def lines_3067(test_gpkg):
-    return get_layer('lines_3067', test_gpkg)
+    return get_gpkg_layer('lines_3067', test_gpkg)
 
 
 @pytest.fixture
 def polygons(test_gpkg):
-    layer = get_layer('Polygons', test_gpkg)
+    layer = get_gpkg_layer('Polygons', test_gpkg)
     add_layer(layer)
     set_styles(layer, 'polygons.qml')
     return layer
@@ -83,17 +78,17 @@ def polygons(test_gpkg):
 
 @pytest.fixture
 def polygons_3067(test_gpkg):
-    return get_layer('polygons_3067', test_gpkg)
+    return get_gpkg_layer('polygons_3067', test_gpkg)
 
 
 @pytest.fixture
 def countries(test_gpkg) -> QgsVectorLayer:
-    return get_layer('naturalearth_countries', test_gpkg)
+    return get_gpkg_layer('naturalearth_countries', test_gpkg)
 
 
 @pytest.fixture
 def harbour_points_3067(test_gpkg):
-    return get_layer('harbours_3067', test_gpkg)
+    return get_gpkg_layer('harbours_3067', test_gpkg)
 
 
 @pytest.fixture
@@ -189,8 +184,14 @@ def initialize_settings() -> bool:
     Settings.mapbox_api_token.set('')
 
 
-def get_layer(name: str, gpkg):
+def get_gpkg_layer(name: str, gpkg: str) -> QgsVectorLayer:
     layer = QgsVectorLayer(f'{gpkg}|layername={name}', name, 'ogr')
+    assert layer.isValid()
+    return layer
+
+
+def get_layer(name: str, source: str) -> QgsVectorLayer:
+    layer = QgsVectorLayer(source, name, 'ogr')
     assert layer.isValid()
     return layer
 
