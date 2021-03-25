@@ -73,16 +73,16 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+        <width>32</width>
+        <height>32</height>
       </size>
      </property>
-     <property name="uniformItemSizes">
-      <bool>true</bool>
-     </property>
-     <property name="currentRow">
-      <number>-1</number>
-     </property>
+      <property name="uniformItemSizes">
+        <bool>true</bool>
+      </property>
+      <property name="currentRow">
+        <number>-1</number>
+      </property>
       <item>
         <property name="text">
           <string>Export</string>
@@ -177,16 +177,16 @@
                                       <widget class="QPushButton" name="btn_refresh">
                                         <property name="maximumSize">
                                           <size>
-                       <width>25</width>
-                       <height>25</height>
-                      </size>
-                     </property>
-                     <property name="toolTip">
-                      <string>Load Snapshot configuration from project...</string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
+                                            <width>25</width>
+                                            <height>25</height>
+                                          </size>
+                                        </property>
+                                        <property name="toolTip">
+                                          <string>Load Snapshot configuration from project...</string>
+                                        </property>
+                                        <property name="text">
+                                          <string/>
+                                        </property>
                      <property name="flat">
                       <bool>true</bool>
                      </property>
@@ -531,17 +531,17 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                    <size>
-                      <width>40</width>
-                      <height>20</height>
-                    </size>
-                  </property>
-                </spacer>
+                 <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                     <size>
+                       <width>40</width>
+                       <height>20</height>
+                     </size>
+                   </property>
+                 </spacer>
                </item>
                 <item>
                   <widget class="QPushButton" name="btn_export">
@@ -568,11 +568,11 @@
                       </size>
                     </property>
                     <property name="toolTip">
-                  <string>Open Unfolded Studio and export to web</string>
-                 </property>
-                 <property name="text">
-                   <string>Import to Undolded Studio</string>
-                 </property>
+                      <string>Open Unfolded Studio and export to web</string>
+                    </property>
+                    <property name="text">
+                      <string>Import to Unfolded Studio</string>
+                    </property>
                     <property name="iconSize">
                       <size>
                         <width>20</width>
@@ -597,10 +597,7 @@
                               </font>
                             </property>
                             <property name="text">
-                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span
-                                style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt;
-                                for a free community account to use Unfolded Studio!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                              </string>
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt; for a free community account to use Unfolded Studio! &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                             </property>
                             <property name="textFormat">
                               <enum>Qt::AutoText</enum>
@@ -857,12 +854,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                      href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;Unfolded
-                      Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Unfolded Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -879,9 +871,7 @@
                   <item row="0" column="1">
                    <widget class="QLabel" name="label_4">
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span
-                      style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -910,12 +900,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                      href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;Unfolded
-                      Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Unfolded Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -979,12 +964,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                      href=&quot;https://www.gispo.fi/en/home/&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;Gispo
-                      Ltd.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.gispo.fi/en/home/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#00b9d3;&quot;&gt;Gispo Ltd.&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#00b9d3;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -1008,43 +988,39 @@
                 <string>Sources</string>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_5">
-                <item>
-                  <layout class="QGridLayout" name="gridLayout_2">
-                    <item row="0" column="1">
-                      <widget class="QLabel" name="label_source">
-                        <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                            href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span
-                            style=&quot; text-decoration:
-                            underline; color:#0000ff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                          </string>
-                        </property>
-                        <property name="openExternalLinks">
-                          <bool>true</bool>
-                        </property>
-                      </widget>
-                    </item>
-                    <item row="0" column="0">
-                      <widget class="QLabel" name="label_gsource">
-                        <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text">
-                          <string>Unfolded Studio Plugin repository</string>
-                        </property>
-                      </widget>
-                    </item>
-                  </layout>
-                </item>
+                 <item>
+                   <layout class="QGridLayout" name="gridLayout_2">
+                     <item row="0" column="1">
+                       <widget class="QLabel" name="label_source">
+                         <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                           </sizepolicy>
+                         </property>
+                         <property name="text">
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#5cbbff;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="openExternalLinks">
+                           <bool>true</bool>
+                         </property>
+                       </widget>
+                     </item>
+                     <item row="0" column="0">
+                       <widget class="QLabel" name="label_gsource">
+                         <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                           </sizepolicy>
+                         </property>
+                         <property name="text">
+                           <string>Unfolded Studio Plugin repository</string>
+                         </property>
+                       </widget>
+                     </item>
+                   </layout>
+                 </item>
                </layout>
               </widget>
              </item>
@@ -1129,12 +1105,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a
-                      href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html&quot;&gt;&lt;span
-                      style=&quot; text-decoration:
-                      underline; color:#0000ff;&quot;&gt;Licence
-                      GPL Version 2&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                     </string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Licence GPL Version 2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#5cbbff;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
