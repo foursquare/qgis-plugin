@@ -186,6 +186,7 @@ def initialize_settings() -> bool:
 
 def get_gpkg_layer(name: str, gpkg: str) -> QgsVectorLayer:
     layer = QgsVectorLayer(f'{gpkg}|layername={name}', name, 'ogr')
+    layer.setProviderEncoding("utf-8")
     assert layer.isValid()
     return layer
 
@@ -210,7 +211,7 @@ def add_layer(layer: QgsVectorLayer) -> None:
 
 def get_map_config(config_name: str):
     """ Get map config from test data directory """
-    with open(plugin_test_data_path('config', config_name)) as f:
+    with open(plugin_test_data_path('config', config_name), encoding="utf-8") as f:
         map_config_dict = json.load(f)
     return MapConfig.from_dict(map_config_dict)
 
