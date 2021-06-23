@@ -1,7 +1,6 @@
 # Unfolded QGIS plugin
 
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Tests/badge.svg)
-![](https://github.com/UnfoldedInc/qgis-plugin/workflows/TestsLTR/badge.svg)
 [![codecov.io](https://codecov.io/github/UnfoldedInc/qgis-plugin/coverage.svg?branch=main)](https://codecov.io/github/UnfoldedInc/qgis-plugin?branch=main)
 ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Release/badge.svg)
 
