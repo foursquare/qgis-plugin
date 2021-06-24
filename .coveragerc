@@ -1,0 +1,2 @@
+[report]
+omit = Unfolded/qgis_plugin_tools/*

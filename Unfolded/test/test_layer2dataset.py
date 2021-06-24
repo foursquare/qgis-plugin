@@ -125,9 +125,9 @@ def test_csv_export_with_output_dir(layer, expected_csv, alg, tmp_path, request)
     assert converted_csv_name == expected_csv
     converted_csv = (tmp_path / converted_csv_name)
     assert converted_csv.exists()
-    with open(plugin_test_data_path(expected_csv)) as f:
+    with open(plugin_test_data_path(expected_csv), encoding="utf-8") as f:
         expected_data = f.readlines()
-    with open(converted_csv) as f:
+    with open(converted_csv, encoding="utf-8") as f:
         converted_data = f.readlines()
     assert converted_data == expected_data
 

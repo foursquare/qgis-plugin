@@ -177,7 +177,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
             with tempfile.TemporaryDirectory(dir=resources_path()) as tmpdirname:
                 output_file = self._save_layer_to_file(self.layer, Path(tmpdirname))
-                with open(output_file, newline='') as f:
+                with open(output_file, newline='', encoding="utf-8") as f:
                     set_csv_field_size_limit()
                     data_reader = csv.reader(f, delimiter=',')
                     # Skipping header
@@ -205,10 +205,14 @@ class LayerToDatasets(BaseConfigCreatorTask):
         options.layerOptions = ["SEPARATOR=COMMA"]
         options.fieldValueConverter = converter
 
-        # noinspection PyCallByClass
-        writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),
-                                                                 QgsProject.instance().transformContext(), options)
-
+        if hasattr(QgsVectorFileWriter, "writeAsVectorFormatV3"):
+            # noinspection PyCallByClass
+            writer_, msg, _, _ = QgsVectorFileWriter.writeAsVectorFormatV3(layer, str(output_file),
+                                                                           QgsProject.instance().transformContext(),
+                                                                           options)
+        else:
+            writer_, msg = QgsVectorFileWriter.writeAsVectorFormatV2(layer, str(output_file),
+                                                                     QgsProject.instance().transformContext(), options)
         if msg:
             raise ProcessInterruptedException(tr('Process ended'),
                                               bar_msg=bar_msg(tr('Exception occurred during data extraction: {}', msg)))
