@@ -47,6 +47,11 @@ jobs:
 
   windows_tests:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        # Remove unsupported versions and add more versions. Use LTR version in the cov_tests job
+        qgis_version: [3.22.16]
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
@@ -56,12 +61,12 @@ jobs:
       - name: Choco install qgis
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: install qgis-ltr -y
+          args: install qgis-ltr --version ${{ matrix.qgis_version }} -y
 
       - name: Run tests
         shell: pwsh
         run: |
-          $env:PATH="C:\Program Files\QGIS 3.16\bin;$env:PATH"
+          $env:PATH="C:\Program Files\QGIS ${{ matrix.qgis_version }}\bin;$env:PATH"
           $env:QGIS_PLUGIN_IN_CI=1
           python-qgis-ltr.bat -m pip install -q pytest
           python-qgis-ltr.bat -m pytest -v

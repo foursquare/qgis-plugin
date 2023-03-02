@@ -30,12 +30,18 @@ class CsvFieldValueConverter(QgsVectorFileWriter.FieldValueConverter):
         self.layer = layer
         field_types = [field.type() for field in self.layer.fields()]
         self.bool_field_idxs = [i for i, field_type in enumerate(field_types) if field_type == QVariant.Bool]
+        self.date_field_idxs = [i for i, field_type in enumerate(field_types) if field_type == QVariant.Date]
+        self.datetime_field_idxs = [i for i, field_type in enumerate(field_types) if field_type == QVariant.DateTime]
 
     def convert(self, field_idx, value):
         if field_idx in self.bool_field_idxs:
             if value is None:
                 return ""
             return "true" if value else "false"
+        elif field_idx in self.date_field_idxs:
+            return value.toPyDate().strftime("%Y/%m/%d")
+        elif field_idx in self.datetime_field_idxs:
+            return value.toPyDateTime().strftime("%Y/%m/%d %H:%M:%S")
         return value
 
     def fieldDefinition(self, field):
