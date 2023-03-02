@@ -17,7 +17,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import csv
-import datetime
 import logging
 import tempfile
 import uuid
