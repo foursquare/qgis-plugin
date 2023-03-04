@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.0.3 - 03/03/2023
+
+* Update Studio map import URL
+
 ### 1.0.2 - 28/06/2021
 
 * Fixed support for QGIS 3.20
