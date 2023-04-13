@@ -999,7 +999,7 @@
                            </sizepolicy>
                          </property>
                          <property name="text">
-                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/UnfoldedInc/qgis-plugin&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;https://github.com/UnfoldedInc/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#5cbbff;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/foursquare/qgis-plugin&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;https://github.com/foursquare/qgis-plugin&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#5cbbff;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="openExternalLinks">
                            <bool>true</bool>

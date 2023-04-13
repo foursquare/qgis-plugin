@@ -7,7 +7,7 @@ Plugin development
 2. We rely on [qgis_plugin_tools](https://github.com/GispoCoding/qgis_plugin_tools), so when cloning the repo, make sure to clone it recursively, with submodules:
 
 ```bash
-git clone --recurse-submodules https://github.com/UnfoldedInc/qgis-plugin.git
+git clone --recurse-submodules https://github.com/foursquare/qgis-plugin.git
 ```
 
 3. Set up tools:
@@ -107,7 +107,7 @@ in [.qgis-plugin-ci](../.qgis-plugin-ci) to use Transifex translation.
 * Go to your Transifex site, add some languages and start translating
 * Copy [push_translations.yml](push_translations.yml) file to [workflows](../.github/workflows) folder to enable
   automatic pushing after commits to master
-* Add this badge ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Translations/badge.svg) to
+* Add this badge ![](https://github.com/foursquare/qgis-plugin/workflows/Translations/badge.svg) to
   the [README](../README.md)
 
 ##### Pulling
