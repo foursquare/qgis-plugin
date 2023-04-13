@@ -32,7 +32,7 @@ from ..qgis_plugin_tools.tools.custom_logging import bar_msg
 from ..qgis_plugin_tools.tools.i18n import tr
 from ..qgis_plugin_tools.tools.resources import load_ui, plugin_name, resources_path
 
-FORM_CLASS = load_ui('unfolded_dialog.ui')
+FORM_CLASS = load_ui('foursquare_dialog.ui')
 LOGGER = logging.getLogger(plugin_name())
 
 

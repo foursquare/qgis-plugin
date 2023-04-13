@@ -79,7 +79,7 @@ class SettingsPanel(BasePanel):
 
     def __add_basemaps_to_the_project(self):
         try:
-            LayerHandler.add_unfolded_basemaps()
+            LayerHandler.add_foursquare_basemaps()
         except MapboxTokenMissing as e:
             LOGGER.warning(e, extra=e.bar_msg)
 

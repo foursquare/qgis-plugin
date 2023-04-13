@@ -32,11 +32,11 @@ LOGGER = logging.getLogger(plugin_name())
 
 
 class LayerHandler:
-    basemap_group = tr('Unfolded Basemaps')
+    basemap_group = tr('Foursquare Basemaps')
 
     @staticmethod
-    def add_unfolded_basemaps() -> List[QgsRasterLayer]:
-        """ Add unfolded basemaps to the project """
+    def add_foursquare_basemaps() -> List[QgsRasterLayer]:
+        """ Add foursquare basemaps to the project """
         # noinspection PyArgumentList
         qgs_project = QgsProject.instance()
 

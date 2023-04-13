@@ -132,8 +132,8 @@ def test_csv_export_with_output_dir(layer, expected_csv, alg, tmp_path, request)
     assert converted_data == expected_data
 
 
-def test_unfolded_dataset_format(simple_harbour_points, alg, tmp_path):
-    map_config = get_map_config('harbours_config_with_unfolded_datasets.json')
+def test_foursquare_dataset_format(simple_harbour_points, alg, tmp_path):
+    map_config = get_map_config('harbours_config_with_foursquare_datasets.json')
     alg.layer = simple_harbour_points
     alg.output_directory = tmp_path
     status = alg.run()

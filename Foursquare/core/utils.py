@@ -28,7 +28,7 @@ from qgis.gui import QgsMapCanvas
 
 from ..definitions.settings import Settings
 
-UNFOLDED_CRS = QgsCoordinateReferenceSystem(Settings.crs.get())
+FOURSQUARE_CRS = QgsCoordinateReferenceSystem(Settings.crs.get())
 PROJECT_CRS = QgsCoordinateReferenceSystem(Settings.project_crs.get())
 
 
@@ -50,7 +50,7 @@ def get_canvas_center(canvas: QgsMapCanvas) -> QgsPointXY:
     extent: QgsRectangle = canvas.extent()
     center = extent.center()
     # noinspection PyArgumentList
-    transformer = QgsCoordinateTransform(canvas.mapSettings().destinationCrs(), UNFOLDED_CRS, QgsProject.instance())
+    transformer = QgsCoordinateTransform(canvas.mapSettings().destinationCrs(), FOURSQUARE_CRS, QgsProject.instance())
     return transformer.transform(center)
 
 

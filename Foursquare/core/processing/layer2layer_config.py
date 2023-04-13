@@ -28,7 +28,7 @@ from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import InvalidInputException
 from ..utils import extract_color, rgb_to_hex
 from ...definitions.settings import Settings
-from ...definitions.types import UnfoldedLayerType, SymbolType, SymbolLayerType
+from ...definitions.types import FoursquareLayerType, SymbolType, SymbolLayerType
 from ...model.map_config import Layer, LayerConfig, VisualChannels, VisConfig, Columns, TextLabel, ColorRange
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
@@ -101,10 +101,10 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             raise QgsPluginNotImplementedException()
 
         if layer_type == LayerType.Point:
-            layer_type_ = UnfoldedLayerType.Point
+            layer_type_ = FoursquareLayerType.Point
             columns = Columns.for_point_2d()
         elif layer_type in [LayerType.Line, LayerType.Polygon]:
-            layer_type_ = UnfoldedLayerType.Geojson
+            layer_type_ = FoursquareLayerType.Geojson
             columns = Columns.for_geojson()
             visual_channels.height_scale = VisualChannels.height_scale
             visual_channels.radius_scale = VisualChannels.radius_scale
@@ -161,7 +161,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             vis_config.color_range = ColorRange.create_custom(fill_colors)
         if stroke_colors:
             vis_config.stroke_color_range = ColorRange.create_custom(stroke_colors)
-        categorizing_field = self._qgis_field_to_unfolded_field(
+        categorizing_field = self._qgis_field_to_foursquare_field(
             self.layer.fields()[self.layer.fields().indexOf(renderer.classAttribute())])
         categorizing_field.analyzer_type = None
         categorizing_field.format = None

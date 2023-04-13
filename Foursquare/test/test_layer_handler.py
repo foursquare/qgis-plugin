@@ -25,17 +25,17 @@ from ..qgis_plugin_tools.testing.utilities import is_running_inside_ci
 
 
 @pytest.mark.skipif(is_running_inside_ci(), reason='In CI')
-def test_add_unfolded_basemaps(new_project, initialize_settings):
-    layers = LayerHandler.add_unfolded_basemaps()
+def test_add_foursquare_basemaps(new_project, initialize_settings):
+    layers = LayerHandler.add_foursquare_basemaps()
     assert len(layers) == 7
     assert all([layer.isValid() for layer in layers])
-    newly_created = LayerHandler.add_unfolded_basemaps()
+    newly_created = LayerHandler.add_foursquare_basemaps()
     assert newly_created == []
 
 
 @pytest.mark.skipif(is_running_inside_ci(), reason='In CI')
 def test_get_current_basemap_name(new_project, initialize_settings):
-    LayerHandler.add_unfolded_basemaps()
+    LayerHandler.add_foursquare_basemaps()
     layer_name = LayerHandler.get_current_basemap_name()
     assert layer_name == 'dark'
 
