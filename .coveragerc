@@ -1,2 +1,2 @@
 [report]
-omit = Unfolded/qgis_plugin_tools/*
+omit = Foursquare/qgis_plugin_tools/*
