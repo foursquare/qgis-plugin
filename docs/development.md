@@ -43,7 +43,7 @@ If you're on Mac, you want to comment out the lines #70 and #71 in `qgis-plugin/
 Now you can run the build script and deploy it to the QGIS' plugins folder:
 
 ```bash
-cd qgis-plugin/Unfolded
+cd qgis-plugin/Foursquare
 python3 build.py deploy
 ```
 
@@ -51,7 +51,7 @@ This should be the end of your setup and if you manage to run `build.py` script 
 
 ## Development workflow
 
-1. make changes to the plugin inside `/Unfolded` folder
+1. make changes to the plugin inside `/Foursquare` folder
 2. run `python3 build.py deploy` to package the plugin and copy it to the QGIS' plugins folder (this does not publish it, just installs it locally!)
 3. restart QGIS app
 
@@ -65,7 +65,7 @@ If you create or edit source files make sure that:
 
     from ..utils.exceptions import TestException # Good
 
-    from Unfolded.utils.exceptions import TestException # Bad
+    from Foursquare.utils.exceptions import TestException # Bad
     ```
 * they will be found by [build.py](../Foursquare/build.py) script (`py_files` and `ui_files` values)
 * you consider adding test files for the new functionality

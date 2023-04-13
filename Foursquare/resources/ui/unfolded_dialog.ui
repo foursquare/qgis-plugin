@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Unfolded</string>
+   <string>Foursquare</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
@@ -568,10 +568,10 @@
                       </size>
                     </property>
                     <property name="toolTip">
-                      <string>Open Unfolded Studio and export to web</string>
+                      <string>Open Foursquare Studio and export to web</string>
                     </property>
                     <property name="text">
-                      <string>Import to Unfolded Studio</string>
+                      <string>Import to Foursquare Studio</string>
                     </property>
                     <property name="iconSize">
                       <size>
@@ -597,7 +597,7 @@
                               </font>
                             </property>
                             <property name="text">
-                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/home&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt; for a free community account to use Unfolded Studio! &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.foursquare.com/home&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Sign up&lt;/span&gt;&lt;/a&gt; for a free community account to use Foursquare Studio! &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                             </property>
                             <property name="textFormat">
                               <enum>Qt::AutoText</enum>
@@ -701,7 +701,7 @@
                      </font>
                     </property>
                     <property name="text">
-                      <string>The token is only used inside QGIS to add the default basemaps from Unfolded Studio and to make cartographic design process easier. The key will not be exported from QGIS.</string>
+                      <string>The token is only used inside QGIS to add the default basemaps from Foursquare Studio and to make cartographic design process easier. The key will not be exported from QGIS.</string>
                     </property>
                     <property name="wordWrap">
                      <bool>true</bool>
@@ -837,7 +837,7 @@
                 </sizepolicy>
                </property>
                <property name="title">
-                <string>Unfolded Studio</string>
+                <string>Foursquare Studio</string>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_9">
                 <item>
@@ -854,7 +854,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.unfolded.ai/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Unfolded Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://studio.foursquare.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Foursquare Studio&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -871,7 +871,7 @@
                   <item row="0" column="1">
                    <widget class="QLabel" name="label_4">
                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/integrations/qgis&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;https://docs.unfolded.ai/integrations/qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://location.foursquare.com/studio/docs/integrations-qgis&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;https://location.foursquare.com/studio/docs/integrations-qgis&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -900,7 +900,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://docs.unfolded.ai/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Unfolded Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://location.foursquare.com/studio/docs&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#5cbbff;&quot;&gt;Foursquare Studio Documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
                      <bool>true</bool>
@@ -1015,7 +1015,7 @@
                            </sizepolicy>
                          </property>
                          <property name="text">
-                           <string>Unfolded Studio Plugin repository</string>
+                           <string>Foursquare Studio Plugin repository</string>
                          </property>
                        </widget>
                      </item>
@@ -1060,7 +1060,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>Unfolded Studio Plugin</string>
+                     <string>Foursquare Studio Plugin</string>
                     </property>
                    </widget>
                   </item>
@@ -1092,7 +1092,7 @@
                      </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>Unfolded Studio Plugin</string>
+                     <string>Foursquare Studio Plugin</string>
                     </property>
                    </widget>
                   </item>

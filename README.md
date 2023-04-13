@@ -1,4 +1,4 @@
-# Unfolded QGIS plugin
+# Foursquare QGIS plugin
 
 ![](https://github.com/foursquare/qgis-plugin/workflows/Tests/badge.svg)
 [![codecov.io](https://codecov.io/github/foursquare/qgis-plugin/coverage.svg?branch=main)](https://codecov.io/github/foursquare/qgis-plugin?branch=main)
@@ -6,11 +6,11 @@
 
 <img src="docs/imgs/uf_qgis_logo.svg" width="200" height="200">
 
-This plugin exports [QGIS](http://qgis.org/) vector layers into a format that can be imported into  [Unfolded Studio](https://studio.unfolded.ai/) for further analysis or one-click publishing to the web, after signing up for a free [Unfolded](https://unfolded.ai/) account.
+This plugin exports [QGIS](http://qgis.org/) vector layers into a format that can be imported into  [Foursquare Studio](https://studio.foursquare.com/) for further analysis or one-click publishing to the web, after signing up for a free [Foursquare](https://studio.foursquare.com/) account.
 
 # Documentation
 
-This readme contains a short overview of basic functionality of the plugin. Full documentation is available at [docs.unfolded.ai](https://docs.unfolded.ai/integrations/qgis).
+This readme contains a short overview of basic functionality of the plugin. Full documentation is available at [location.foursquare.com/studio/docs](https://location.foursquare.com/studio/docs).
 
 ## Requirements
 
@@ -28,25 +28,25 @@ User can export any vector data format that
 is [supported in QGIS](https://docs.qgis.org/3.16/en/docs/user_manual/working_with_vector/index.html) and the data can
 be in any known coordinate reference system as it is automatically reprojected (to EPSG:4326) during export.
 
-Layer geometries and styles are exported in to a single ZIP configuration file, which can then be imported to Unfolded
+Layer geometries and styles are exported in to a single ZIP configuration file, which can then be imported to Foursquare
 Studio.
 
 Before opening the plugin, users add their datasets to QGIS in the normal way (see
 e.g. [QGIS tutorials](https://www.qgistutorials.com/en/)), perform some data processing tasks if necessary and add
 cartographic styling for the vector layers.
 
-After the user is satisfied with their result and the plugin has been installed, the `Unfolded` plugin can now be opened
+After the user is satisfied with their result and the plugin has been installed, the `Foursquare` plugin can now be opened
 under the *Web* tab in QGIS. It opens a new window, which lets the user control the map export process.
 
 ![Main plugin dialog](docs/imgs/main_dialog.png)
 
 - **Layer Selection** - If a project contains multiple layers, user can select which layers should be exported and which
   should be visible by default (note layers are preserved in the exported map and the user can control layer visibility
-  in Unfolded Studio after importing the map).
+  in Foursquare Studio after importing the map).
 
 - **Basemap Selection** - In the main *Export* tab the user can also select which type of basemap they want to use and
-  which Unfolded Studio functionality (e.g. brushing, geocoding) that the exported interactive map should offer. All of
-  these values can be changed after import into Unfolded Studio.
+  which Foursquare Studio functionality (e.g. brushing, geocoding) that the exported interactive map should offer. All of
+  these values can be changed after import into Foursquare Studio.
 
 - **Interactive Features** - In the *Settings* tab user can define where they want the exported configuration file to be
   exported on their local disk. A user can also add their personal MapBox API key if they wish to add MapBox basemaps to
