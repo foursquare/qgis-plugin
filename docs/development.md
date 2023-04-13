@@ -1,15 +1,65 @@
-Development of Unfolded plugin
-===========================
+Plugin development
+==================
 
-This project uses [qgis_plugin_tools](https://github.com/GispoCoding/qgis_plugin_tools) submodule, so when cloning
-use `--recurse-submodules` like so:
-`git clone --recurse-submodules https://github.com/UnfoldedInc/qgis-plugin.git`
+## Setup
 
-The code for the plugin is in the [Unfolded](../Unfolded) folder. Make sure you have required tools, such as Qt with Qt
-Editor and Qt Linquist installed by following this
-[tutorial](https://www.qgistutorials.com/en/docs/3/building_a_python_plugin.html#get-the-tools).
+Instructions are aimed at developers using MacOS, but similar steps should work on different platforms as well.
 
-For building the plugin use platform independent [build.py](../Unfolded/build.py) script.
+Instructions were confirmed to be working well with a combination of: Python 3.9.5, QGIS 3.30+, and PyQT 5.
+
+1. Install QGIS app from https://qgis.org/en/site/forusers/download.html
+2. We rely on [qgis_plugin_tools](https://github.com/GispoCoding/qgis_plugin_tools), so when cloning the repo, make sure to clone it recursively, with submodules:
+
+```bash
+git clone --recurse-submodules https://github.com/UnfoldedInc/qgis-plugin.git
+```
+
+3. Set up tools:
+
+```bash
+python3 --version # make sure that you're using Python 3.9.5
+pip3 install --upgrade pip # upgrade pip to latest
+pip3 install --upgrade setuptools # upgrade setuptools to latest
+```
+
+4. Install Qt and PyQT:
+
+```bash
+brew install qt@5 # our plugin relies on v5, so we make sure it's that version
+export PATH="/opt/homebrew/opt/qt5/bin:$PATH" # makes sure that qmake is in your PATH
+pip3 install pyqt5-sip
+pip3 install pyqt5 --config-settings --confirm-license= --verbose # in some cases, the install script gets stuck on license step and this way we just automatically confirm it
+```
+
+5. Install dependencies:
+
+```bash
+cd qgis-plugin
+pip install -r requirements.txt
+
+export PYTHONPATH=/Applications/Qgis.app/Contents/Resources/python # this makes sure that the version of python with bundled `qgis` module can be found
+```
+
+6. The build script:
+
+If you're on Mac, you want to comment out the lines #70 and #71 in `qgis-plugin/Unfolded/qgis_plugin_tools/infrastructure/plugin_maker.py`. This is because Apple returns `"darwin"` as a OS identifier, so this OS check mistakenly thinks it's a Windows machine, and instead, we just let it fall through to the actual case for Mac.
+
+Now you can run the build script and deploy it to the QGIS' plugins folder:
+
+```bash
+cd qgis-plugin/Unfolded
+python3 build.py deploy
+```
+
+This should be the end of your setup and if you manage to run `build.py` script without any errors, that's a confirmation that everything is set up correctly.
+
+## Development workflow
+
+1. make changes to the plugin inside `/Unfolded` folder
+2. run `python3 build.py deploy` to package the plugin and copy it to the QGIS' plugins folder (this does not publish it, just installs it locally!)
+3. restart QGIS app
+
+And now, a new version of the plugin should be available.
 
 ## Adding or editing  source files
 If you create or edit source files make sure that:
