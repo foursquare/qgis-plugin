@@ -52,7 +52,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     Licensed by GPLv3
     """
 
-    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile"}
+    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile", "Logarithmic": "log"}
     CATEGORIZED_SCALE = "ordinal"
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, is_visible: bool = True):
@@ -133,7 +133,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             if not scale_name:
                 raise InvalidInputException(tr('Unsupported classification method "{}"', classification_method.id()),
                                             bar_msg=bar_msg(tr(
-                                                'Use Equal Count (Quantile) or Equal Interval (Quantize)')))
+                                                'Use Equal Count (Quantile), Equal Interval (Quantize) or Logarithmic')))
             symbol_range: QgsRendererRange
             styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
             if not styles:
