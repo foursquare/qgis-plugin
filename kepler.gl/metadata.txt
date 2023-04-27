@@ -12,6 +12,6 @@ repository=https://github.com/foursquare/qgis-plugin
 homepage=https://github.com/foursquare/qgis-plugin
 tracker=https://github.com/foursquare/qgis-plugin/issues
 category=Web
-icon=resources/icons/icon.svg
+icon=resources/icons/icon.png
 experimental=False
 deprecated=False

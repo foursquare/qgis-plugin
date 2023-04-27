@@ -46,7 +46,7 @@ class Dialog(QDialog, FORM_CLASS):
         """Constructor."""
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.setWindowIcon(QIcon(resources_path('icons', 'icon.svg')))
+        self.setWindowIcon(QIcon(resources_path('icons', 'icon.png')))
         self.is_running = False
 
         self._set_window_location()

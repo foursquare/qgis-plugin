@@ -124,7 +124,7 @@ class Plugin:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
         self.add_action(
-            resources_path('icons', 'icon.svg'),
+            resources_path('icons', 'icon.png'),
             text=tr('Export to Web'),
             callback=self.run,
             parent=self.iface.mainWindow(),

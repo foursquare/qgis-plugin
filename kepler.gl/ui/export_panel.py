@@ -80,7 +80,7 @@ class ExportPanel(BasePanel):
         self.dlg.btn_export.clicked.connect(self.run)
 
         # Studio button
-        self.dlg.btn_open_studio.setIcon(QIcon(resources_path('icons', 'icon.svg')))
+        self.dlg.btn_open_studio.setIcon(QIcon(resources_path('icons', 'icon.png')))
         self.dlg.btn_open_studio.clicked.connect(lambda _: webbrowser.open(Settings.studio_url.get()))
 
         # Refresh
