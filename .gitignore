@@ -2,3 +2,4 @@ kepler.gl/i18n
 /.idea/
 *.gpkg-shm
 *.gpkg-wal
+.DS_Store
