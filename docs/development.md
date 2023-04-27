@@ -38,12 +38,12 @@ export PYTHONPATH=/Applications/Qgis.app/Contents/Resources/python # this makes 
 
 6. The build script:
 
-If you're on Mac, you want to comment out the lines #70 and #71 in `qgis-plugin/Foursquare/qgis_plugin_tools/infrastructure/plugin_maker.py`. This is because Apple returns `"darwin"` as a OS identifier, so this OS check mistakenly thinks it's a Windows machine, and instead, we just let it fall through to the actual case for Mac.
+If you're on Mac, you want to comment out the lines #70 and #71 in `qgis-plugin/kepler.gl/qgis_plugin_tools/infrastructure/plugin_maker.py`. This is because Apple returns `"darwin"` as a OS identifier, so this OS check mistakenly thinks it's a Windows machine, and instead, we just let it fall through to the actual case for Mac.
 
 Now you can run the build script and deploy it to the QGIS' plugins folder:
 
 ```bash
-cd qgis-plugin/Foursquare
+cd qgis-plugin/kepler.gl
 python3 build.py deploy
 ```
 
@@ -51,7 +51,7 @@ This should be the end of your setup and if you manage to run `build.py` script 
 
 ## Development workflow
 
-1. make changes to the plugin inside `/Foursquare` folder
+1. make changes to the plugin inside `/kepler.gl` folder
 2. run `python3 build.py deploy` to package the plugin and copy it to the QGIS' plugins folder (this does not publish it, just installs it locally!)
 3. restart QGIS app
 
@@ -67,12 +67,12 @@ If you create or edit source files make sure that:
 
     from Foursquare.utils.exceptions import TestException # Bad
     ```
-* they will be found by [build.py](../Foursquare/build.py) script (`py_files` and `ui_files` values)
+* they will be found by [build.py](../kepler.gl/build.py) script (`py_files` and `ui_files` values)
 * you consider adding test files for the new functionality
 
 ## Deployment
 
-Edit [build.py](../Foursquare/build.py) to contain working values for *profile*, *lrelease* and *pyrcc*. If you are
+Edit [build.py](../kepler.gl/build.py) to contain working values for *profile*, *lrelease* and *pyrcc*. If you are
 running on Windows, make sure the value *QGIS_INSTALLATION_DIR* points to right folder
 
 Run the deployment with:
@@ -119,7 +119,7 @@ You can however pull manually to test the process.
 
 #### Translating with QT Linguistic (if Transifex not available)
 
-The translation files are in [i18n](../Foursquare/resources/i18n) folder. Translatable content in python files is code
+The translation files are in [i18n](../kepler.gl/resources/i18n) folder. Translatable content in python files is code
 such as `tr(u"Hello World")`.
 
 To update language *.ts* files to contain newest lines to translate, run

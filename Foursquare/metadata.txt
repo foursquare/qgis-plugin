@@ -1,13 +1,13 @@
 [general]
-name=Foursquare
-description=Export QGIS Maps to Foursquare Studio and publish them on the web.
+name=kepler.gl
+description=Export QGIS Maps to kepler.gl and Foursquare Studio and publish them on the web.
 about=This plugin exports a QGIS map into a format that can be imported into <a href="https://studio.foursquare.com/">Foursquare Studio</a> for further analysis or one-click publishing to the web after signing up for a free <a href="https://studio.foursquare.com/">Foursquare Studio</a> account.
 version=0.0.1
 qgisMinimumVersion=3.16
 author=Gispo Ltd.
 email=joona@gispo.fi
 changelog=
-tags=Foursquare Studio,Foursquare,Foursquare Map SDK,Foursquare Data SDK,web,webmap,export
+tags=kepler.gl,Foursquare Studio,Foursquare,Foursquare Map SDK,Foursquare Data SDK,web,webmap,export
 repository=https://github.com/foursquare/qgis-plugin
 homepage=https://github.com/foursquare/qgis-plugin
 tracker=https://github.com/foursquare/qgis-plugin/issues
