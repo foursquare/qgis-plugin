@@ -4,7 +4,7 @@
 [![codecov.io](https://codecov.io/github/foursquare/qgis-plugin/coverage.svg?branch=main)](https://codecov.io/github/foursquare/qgis-plugin?branch=main)
 ![](https://github.com/foursquare/qgis-plugin/workflows/Release/badge.svg)
 
-<img src="docs/imgs/uf_qgis_logo.svg" width="200" height="200">
+<img src="docs/imgs/foursquare-logo.png" height="100">
 
 This plugin exports [QGIS](http://qgis.org/) vector layers into a format that can be imported into  [Foursquare Studio](https://studio.foursquare.com/) for further analysis or one-click publishing to the web, after signing up for a free [Foursquare Studio](https://studio.foursquare.com/) account.
 
