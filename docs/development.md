@@ -11,7 +11,7 @@ Instructions were confirmed to be working well with a combination of: Python 3.9
 2. We rely on [qgis_plugin_tools](https://github.com/GispoCoding/qgis_plugin_tools), so when cloning the repo, make sure to clone it recursively, with submodules:
 
 ```bash
-git clone --recurse-submodules https://github.com/UnfoldedInc/qgis-plugin.git
+git clone --recurse-submodules https://github.com/foursquare/qgis-plugin.git
 ```
 
 3. Set up tools:
