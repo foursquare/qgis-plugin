@@ -1,2 +1,2 @@
 [report]
-omit = Foursquare/qgis_plugin_tools/*
+omit = kepler.gl/qgis_plugin_tools/*
