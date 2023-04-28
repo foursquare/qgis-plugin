@@ -76,10 +76,11 @@ class ExportPanel(BasePanel):
         self.dlg.cb_geocoder.setChecked(False)
         self.dlg.cb_coordinate.setChecked(False)
 
-        # "Export to Studio" button
+        # Export map to "Studio" button
         self.dlg.btn_export.clicked.connect(self.run)
+        self.dlg.btn_export.setIcon(QIcon(resources_path('icons', 'icon.png')))
 
-        # "Export to kepler.gl" button
+        # Export map to "kepler.gl" button
         # self.dlg.btn_export_kepler.clicked.connect(self.run)
         self.dlg.btn_export_kepler.setIcon(QIcon(resources_path('icons', 'keplergl.png')))
 

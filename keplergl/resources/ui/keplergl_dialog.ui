@@ -543,10 +543,17 @@
                    </property>
                  </spacer>
                </item>
+               <item>
+                <widget class="QLabel">
+                  <property name="text">
+                    <string>Export map to:</string>
+                  </property>
+                </widget>
+               </item>
                 <item>
                   <widget class="QPushButton" name="btn_export">
                     <property name="text">
-                      <string>Export map to Studio</string>
+                      <string>Foursquare Studio</string>
                     </property>
                     <property name="iconSize">
                       <size>
@@ -562,7 +569,7 @@
                 <item>
                   <widget class="QPushButton" name="btn_export_kepler">
                     <property name="text">
-                      <string>Export map to kepler.gl</string>
+                      <string>kepler.gl</string>
                     </property>
                     <property name="iconSize">
                       <size>
