@@ -546,7 +546,23 @@
                 <item>
                   <widget class="QPushButton" name="btn_export">
                     <property name="text">
-                      <string>Export map</string>
+                      <string>Export map to Studio</string>
+                    </property>
+                    <property name="iconSize">
+                      <size>
+                        <width>16</width>
+                        <height>16</height>
+                      </size>
+                    </property>
+                    <property name="flat">
+                      <bool>false</bool>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="btn_export_kepler">
+                    <property name="text">
+                      <string>Export map to kepler.gl</string>
                     </property>
                     <property name="iconSize">
                       <size>
