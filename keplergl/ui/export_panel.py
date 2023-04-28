@@ -84,9 +84,13 @@ class ExportPanel(BasePanel):
         # self.dlg.btn_export_kepler.clicked.connect(self.run)
         self.dlg.btn_export_kepler.setIcon(QIcon(resources_path('icons', 'keplergl.png')))
 
-        # Studio button
+        # Import map to "Studio" button
         self.dlg.btn_open_studio.setIcon(QIcon(resources_path('icons', 'icon.png')))
         self.dlg.btn_open_studio.clicked.connect(lambda _: webbrowser.open(Settings.studio_url.get()))
+
+        # Import map to "kepler.gl" button
+        self.dlg.btn_open_kepler.setIcon(QIcon(resources_path('icons', 'keplergl.png')))
+        # self.dlg.btn_open_kepler.clicked.connect(lambda _: webbrowser.open(Settings.studio_url.get()))
 
         # Refresh
         self.dlg.btn_refresh.setIcon(QgsApplication.getThemeIcon('/mActionRefresh.svg'))

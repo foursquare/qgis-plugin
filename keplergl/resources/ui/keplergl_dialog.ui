@@ -553,7 +553,7 @@
                 <item>
                   <widget class="QPushButton" name="btn_export">
                     <property name="text">
-                      <string>Foursquare Studio</string>
+                      <string> Foursquare Studio</string>
                     </property>
                     <property name="iconSize">
                       <size>
@@ -569,7 +569,7 @@
                 <item>
                   <widget class="QPushButton" name="btn_export_kepler">
                     <property name="text">
-                      <string>kepler.gl</string>
+                      <string> kepler.gl</string>
                     </property>
                     <property name="iconSize">
                       <size>
@@ -583,30 +583,41 @@
                   </widget>
                 </item>
                 <item>
-                  <widget class="QPushButton" name="btn_open_studio">
-                    <property name="maximumSize">
-                      <size>
-                        <width>1000</width>
-                        <height>1000</height>
-                      </size>
+                  <widget class="QLabel">
+                    <property name="text">
+                      <string>Import map to:</string>
                     </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="btn_open_studio">
                     <property name="toolTip">
                       <string>Open Foursquare Studio and export to web</string>
                     </property>
                     <property name="text">
-                      <string>Import to Foursquare Studio</string>
+                      <string> Foursquare Studio</string>
                     </property>
                     <property name="iconSize">
                       <size>
-                        <width>20</width>
-                        <height>20</height>
+                        <width>16</width>
+                        <height>16</height>
                       </size>
                     </property>
-                    <property name="checkable">
-                      <bool>false</bool>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="btn_open_kepler">
+                    <property name="toolTip">
+                      <string>Open kepler.gl</string>
                     </property>
-                    <property name="flat">
-                      <bool>false</bool>
+                    <property name="text">
+                      <string> kepler.gl</string>
+                    </property>
+                    <property name="iconSize">
+                      <size>
+                        <width>16</width>
+                        <height>16</height>
+                      </size>
                     </property>
                   </widget>
                 </item>
