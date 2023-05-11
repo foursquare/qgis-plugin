@@ -1,4 +1,4 @@
-# kepler.gl QGIS plugin by Foursquare
+# kepler QGIS plugin by Foursquare
 
 ![](https://github.com/foursquare/qgis-plugin/workflows/Tests/badge.svg)
 [![codecov.io](https://codecov.io/github/foursquare/qgis-plugin/coverage.svg?branch=main)](https://codecov.io/github/foursquare/qgis-plugin?branch=main)
@@ -35,7 +35,7 @@ Before opening the plugin, users add their datasets to QGIS in the normal way (s
 e.g. [QGIS tutorials](https://www.qgistutorials.com/en/)), perform some data processing tasks if necessary and add
 cartographic styling for the vector layers.
 
-After the user is satisfied with their result and the plugin has been installed, the `kepler.gl` plugin can now be opened
+After the user is satisfied with their result and the plugin has been installed, the `kepler` plugin can now be opened
 under the *Web* tab in QGIS. It opens a new window, which lets the user control the map export process.
 
 ![Main plugin dialog](docs/imgs/main_dialog.png)

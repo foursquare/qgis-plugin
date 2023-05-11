@@ -1,2 +1,2 @@
 [report]
-omit = keplergl/qgis_plugin_tools/*
+omit = kepler/qgis_plugin_tools/*

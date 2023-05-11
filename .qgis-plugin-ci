@@ -1,4 +1,4 @@
-plugin_path: keplergl
+plugin_path: kepler
 github_organization_slug: foursquare
 project_slug: qgis-plugin
 transifex_coordinator: replace-me
