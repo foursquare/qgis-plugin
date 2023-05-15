@@ -21,7 +21,7 @@
 Initial version generated using https://app.quicktype.io/ from json file
 """
 
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Union, Tuple
 from uuid import UUID
 
 from .conversion_utils import (from_int, from_bool, from_float, to_float, from_str, from_list,
@@ -560,21 +560,23 @@ class ColorRange:
     type: str
     category: str
     colors: List[str]
+    color_map: List[Tuple[int, str]]
 
-    def __init__(self, name: str, type: str, category: str, colors: List[str]) -> None:
+    def __init__(self, name: str, type: str, category: str, colors: List[str], color_map: List[Tuple[int, str]]) -> None:
         self.name = name
         self.type = type
         self.category = category
         self.colors = colors
+        self.color_map = color_map
 
     @staticmethod
     def create_default() -> 'ColorRange':
         colors = ["#5A1846", "#900C3F", "#C70039", "#E3611C", "#F1920E", "#FFC300"]
-        return ColorRange("Global Warming", "sequential", "Uber", colors)
+        return ColorRange("Global Warming", "sequential", "Uber", colors, [])
 
     @staticmethod
     def create_custom(colors: List[str]) -> 'ColorRange':
-        return ColorRange("Custom palette", "custom", "Custom", colors)
+        return ColorRange("Custom palette", "custom", "Custom", colors, [])
 
     @staticmethod
     def from_dict(obj: Any) -> 'ColorRange':
@@ -583,7 +585,8 @@ class ColorRange:
         type = from_str(obj.get("type"))
         category = from_str(obj.get("category"))
         colors = from_list(from_str, obj.get("colors"))
-        return ColorRange(name, type, category, colors)
+        color_map = from_list(from_str, obj.get("color_map"))
+        return ColorRange(name, type, category, colors, color_map)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -591,6 +594,10 @@ class ColorRange:
         result["type"] = from_str(self.type)
         result["category"] = from_str(self.category)
         result["colors"] = from_list(from_str, self.colors)
+        color_map: List[Tuple[int, str]]
+        for item in self.color_map:
+            color_map.append([from_union([int,str], item)])
+        result["color_map"] = color_map
         return result
 
 
