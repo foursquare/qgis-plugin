@@ -122,11 +122,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer: QgsGraduatedSymbolRenderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
+        classification_method = renderer.classificationMethod()
         if symbol_type == SymbolType.graduatedSymbol:
-            classification_method = renderer.classificationMethod()
             scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
 
             if not scale_name:
