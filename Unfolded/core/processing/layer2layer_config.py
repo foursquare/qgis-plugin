@@ -122,7 +122,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_advanced_layer_style(self, renderer: QgsGraduatedSymbolRenderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
         if symbol_type == SymbolType.graduatedSymbol:
@@ -176,14 +176,14 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                                          scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
                                          VisualChannels.size_scale)
 
-        # extract lower and upper values for certain graduated symbols
+        # extract lower and upper values for certain graduated symbols]
         if classification_method.id() == 'Logarithmic':
+            vis_config.color_range.color_map = []
             symbol_ranges = renderer.ranges()
-            for i, color in enumerate(fill_colors):
+            for i, col in enumerate(fill_colors):
                 upperValue = symbol_ranges[i].upperValue()
-                vis_config.color_range.color_map.append([upperValue, color])
-
-        LOGGER.info(tr('{}', vis_config.color_range.to_dict()))
+                vis_config.color_range.color_map.append([upperValue, col])
+            visual_channels.color_scale = 'custom'
 
         return color, vis_config, visual_channels
 

@@ -560,9 +560,9 @@ class ColorRange:
     type: str
     category: str
     colors: List[str]
-    color_map: List[Tuple[float, str]]
+    color_map: Optional[List[Tuple[float, str]]]
 
-    def __init__(self, name: str, type: str, category: str, colors: List[str], color_map: List[Tuple[float, str]]=[]) -> None:
+    def __init__(self, name: str, type: str, category: str, colors: List[str], color_map: Optional[List[Tuple[float, str]]] = None) -> None:
         self.name = name
         self.type = type
         self.category = category
@@ -594,10 +594,8 @@ class ColorRange:
         result["type"] = from_str(self.type)
         result["category"] = from_str(self.category)
         result["colors"] = from_list(from_str, self.colors)
-        # color_map: List[Tuple[float, str]] = []
-        # for item in self.color_map:
-        #     color_map.append(from_union([float,str], item))
-        result["colorMap"] = "plz halp"
+        if self.color_map:
+            result["colorMap"] = self.color_map
         return result
 
 

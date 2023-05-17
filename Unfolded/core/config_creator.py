@@ -295,7 +295,6 @@ class ConfigCreator(QObject):
             self.completed.emit()
 
         except Exception as e:
-            LOGGER.exception(e.with_traceback())
             LOGGER.exception('Config creation failed. Check the log for more details', extra=bar_msg(e))
             # noinspection PyUnresolvedReferences
             self.canceled.emit()
