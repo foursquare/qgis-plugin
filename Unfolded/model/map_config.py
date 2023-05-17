@@ -572,16 +572,11 @@ class ColorRange:
     @staticmethod
     def create_default() -> 'ColorRange':
         colors = ["#5A1846", "#900C3F", "#C70039", "#E3611C", "#F1920E", "#FFC300"]
-        return ColorRange("Global Warming", "sequential", "Uber", colors, [])
+        return ColorRange("Global Warming", "sequential", "Uber", colors)
 
     @staticmethod
     def create_custom(colors: List[str]) -> 'ColorRange':
-        return ColorRange("Custom palette", "custom", "Custom", colors, [])
-
-    @staticmethod
-    def create_custom_with_breaks(colors: List[str], breaks: List[int]) -> 'ColorRange':
-        color_map = [[colors[i], breaks[i]] for i, _ in enumerate(colors)]
-        return ColorRange("Custom palette", "custom", "Custom", colors, color_map)
+        return ColorRange("Custom palette", "custom", "Custom", colors)
 
     @staticmethod
     def from_dict(obj: Any) -> 'ColorRange':
