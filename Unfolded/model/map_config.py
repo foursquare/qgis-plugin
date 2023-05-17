@@ -560,9 +560,9 @@ class ColorRange:
     type: str
     category: str
     colors: List[str]
-    color_map: List[Tuple[int, str]]
+    color_map: List[Tuple[float, str]]
 
-    def __init__(self, name: str, type: str, category: str, colors: List[str], color_map: List[Tuple[int, str]]) -> None:
+    def __init__(self, name: str, type: str, category: str, colors: List[str], color_map: List[Tuple[float, str]]=[]) -> None:
         self.name = name
         self.type = type
         self.category = category
@@ -579,14 +579,19 @@ class ColorRange:
         return ColorRange("Custom palette", "custom", "Custom", colors, [])
 
     @staticmethod
+    def create_custom_with_breaks(colors: List[str], breaks: List[int]) -> 'ColorRange':
+        color_map = [[colors[i], breaks[i]] for i, _ in enumerate(colors)]
+        return ColorRange("Custom palette", "custom", "Custom", colors, color_map)
+
+    @staticmethod
     def from_dict(obj: Any) -> 'ColorRange':
         assert isinstance(obj, dict)
         name = from_str(obj.get("name"))
         type = from_str(obj.get("type"))
         category = from_str(obj.get("category"))
         colors = from_list(from_str, obj.get("colors"))
-        color_map = from_list(from_str, obj.get("color_map"))
-        return ColorRange(name, type, category, colors, color_map)
+        # color_map = from_list(from_str, obj.get("colorMap"))
+        return ColorRange(name, type, category, colors, [])
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -594,10 +599,10 @@ class ColorRange:
         result["type"] = from_str(self.type)
         result["category"] = from_str(self.category)
         result["colors"] = from_list(from_str, self.colors)
-        color_map: List[Tuple[int, str]]
-        for item in self.color_map:
-            color_map.append([from_union([int,str], item)])
-        result["color_map"] = color_map
+        # color_map: List[Tuple[float, str]] = []
+        # for item in self.color_map:
+        #     color_map.append(from_union([float,str], item))
+        result["colorMap"] = "plz halp"
         return result
 
 

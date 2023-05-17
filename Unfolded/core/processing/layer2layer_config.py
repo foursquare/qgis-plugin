@@ -122,10 +122,9 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer: QgsGraduatedSymbolRenderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
-        renderer: QgsGraduatedSymbolRenderer
         if symbol_type == SymbolType.graduatedSymbol:
             classification_method = renderer.classificationMethod()
             scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
@@ -165,7 +164,9 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             self.layer.fields()[self.layer.fields().indexOf(renderer.classAttribute())])
         categorizing_field.analyzer_type = None
         categorizing_field.format = None
+
         color_field, stroke_field = [None] * 2
+
         if len(set(fill_colors)) > 1:
             color_field = categorizing_field
         if len(set(stroke_colors)) > 1:
@@ -175,15 +176,24 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                                          scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
                                          VisualChannels.size_scale)
 
+        # extract lower and upper values for certain graduated symbols
+        if classification_method.id() == 'Logarithmic':
+            symbol_ranges = renderer.ranges()
+            for i, color in enumerate(fill_colors):
+                upperValue = symbol_ranges[i].upperValue()
+                vis_config.color_range.color_map.append([upperValue, color])
+
+        LOGGER.info(tr('{}', vis_config.color_range.to_dict()))
+
         return color, vis_config, visual_channels
 
     def _extract_layer_style(self, symbol: QgsSymbol) -> Tuple[List[int], VisConfig]:
-        symbol_opacity: float = symbol.opacity()
         symbol_layer: QgsSymbolLayer = symbol.symbolLayers()[0]
         if symbol_layer.subSymbol() is not None:
             return self._extract_layer_style(symbol_layer.subSymbol())
 
-        sym_type = SymbolLayerType[symbol_layer.layerType()]
+        symbol_opacity: float = symbol.opacity()
+        # sym_type = SymbolLayerType[symbol_layer.layerType()]
         properties = symbol_layer.properties()
 
         # Default values
