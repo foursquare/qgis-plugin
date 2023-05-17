@@ -164,9 +164,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             self.layer.fields()[self.layer.fields().indexOf(renderer.classAttribute())])
         categorizing_field.analyzer_type = None
         categorizing_field.format = None
-
         color_field, stroke_field = [None] * 2
-
         if len(set(fill_colors)) > 1:
             color_field = categorizing_field
         if len(set(stroke_colors)) > 1:
@@ -176,7 +174,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                                          scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
                                          VisualChannels.size_scale)
 
-        # extract lower and upper values for certain graduated symbols]
+        # provide color map for certain graduated symbols (currently just logarithmic)
         if classification_method.id() == 'Logarithmic':
             vis_config.color_range.color_map = []
             symbol_ranges = renderer.ranges()
@@ -188,12 +186,12 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         return color, vis_config, visual_channels
 
     def _extract_layer_style(self, symbol: QgsSymbol) -> Tuple[List[int], VisConfig]:
+        symbol_opacity: float = symbol.opacity()
         symbol_layer: QgsSymbolLayer = symbol.symbolLayers()[0]
         if symbol_layer.subSymbol() is not None:
             return self._extract_layer_style(symbol_layer.subSymbol())
 
-        symbol_opacity: float = symbol.opacity()
-        # sym_type = SymbolLayerType[symbol_layer.layerType()]
+        sym_type = SymbolLayerType[symbol_layer.layerType()]
         properties = symbol_layer.properties()
 
         # Default values
