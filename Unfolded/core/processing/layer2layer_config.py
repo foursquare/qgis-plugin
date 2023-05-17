@@ -21,7 +21,7 @@ import uuid
 from typing import Optional, List, Tuple, Union
 
 from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
-                       QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer, QgsRendererRange,
+                       QgsLineSymbol, QgsFillSymbol, QgsRendererRange,
                        QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer, QgsRendererCategory)
 
 from .base_config_creator_task import BaseConfigCreatorTask
@@ -122,11 +122,14 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_advanced_layer_style(self, renderer: QgsGraduatedSymbolRenderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
-        classification_method = renderer.classificationMethod()
+        requires_custom_breaks: bool = False
         if symbol_type == SymbolType.graduatedSymbol:
+            classification_method = renderer.classificationMethod()
+            if classification_method.id() == 'Logarithmic':
+                requires_custom_breaks = True
             scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
 
             if not scale_name:
@@ -174,10 +177,10 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                                          scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
                                          VisualChannels.size_scale)
 
-        # provide color map for certain graduated symbols (currently just logarithmic)
-        if classification_method.id() == 'Logarithmic':
-            vis_config.color_range.color_map = []
+        # provide color map for certain graduated symbols
+        if requires_custom_breaks:
             symbol_ranges = renderer.ranges()
+            vis_config.color_range.color_map = []
             for i, col in enumerate(fill_colors):
                 upperValue = symbol_ranges[i].upperValue()
                 vis_config.color_range.color_map.append([upperValue, col])
