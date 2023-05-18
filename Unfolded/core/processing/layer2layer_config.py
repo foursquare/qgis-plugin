@@ -18,11 +18,11 @@
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import logging
 import uuid
-from typing import Optional, List, Tuple, Union
+from typing import Optional, List, Tuple, Union, cast
 
 from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
-                       QgsLineSymbol, QgsFillSymbol, QgsRendererRange,
-                       QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer, QgsRendererCategory)
+                       QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer,
+                       QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer)
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import InvalidInputException
@@ -92,8 +92,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
 
         self.setProgress(50)
         if symbol_type == SymbolType.singleSymbol:
-            renderer: QgsSingleSymbolRenderer
-            color, vis_config = self._extract_layer_style(renderer.symbol())
+            color, vis_config = self._extract_layer_style(
+                cast(QgsSingleSymbolRenderer, renderer).symbol())
             visual_channels = VisualChannels.create_single_color_channels()
         elif symbol_type in (SymbolType.graduatedSymbol, SymbolType.categorizedSymbol):
             color, vis_config, visual_channels = self._extract_advanced_layer_style(renderer, layer_type, symbol_type)
@@ -122,7 +122,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer: Union[QgsCategorizedSymbolRenderer, QgsGraduatedSymbolRenderer], layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
         requires_custom_breaks: bool = False
@@ -136,13 +136,10 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                 raise InvalidInputException(tr('Unsupported classification method "{}"', classification_method.id()),
                                             bar_msg=bar_msg(tr(
                                                 'Use Equal Count (Quantile), Equal Interval (Quantize) or Logarithmic')))
-            symbol_range: QgsRendererRange
             styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
             if not styles:
                 raise InvalidInputException(tr('Graduated layer should have at least 1 class'), bar_msg=bar_msg())
         else:
-            renderer: QgsCategorizedSymbolRenderer
-            category: QgsRendererCategory
             scale_name = self.CATEGORIZED_SCALE
             styles = [self._extract_layer_style(category.symbol()) for category in renderer.categories()]
             if not styles:
@@ -183,7 +180,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             vis_config.color_range.color_map = []
             for i, col in enumerate(fill_colors):
                 upperValue = symbol_ranges[i].upperValue()
-                vis_config.color_range.color_map.append([upperValue, col])
+                vis_config.color_range.color_map.append((upperValue, col))
             visual_channels.color_scale = 'custom'
 
         return color, vis_config, visual_channels

@@ -585,8 +585,7 @@ class ColorRange:
         type = from_str(obj.get("type"))
         category = from_str(obj.get("category"))
         colors = from_list(from_str, obj.get("colors"))
-        # color_map = from_list(from_str, obj.get("colorMap"))
-        return ColorRange(name, type, category, colors, [])
+        return ColorRange(name, type, category, colors)
 
     def to_dict(self) -> dict:
         result: dict = {}
