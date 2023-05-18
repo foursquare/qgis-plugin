@@ -56,13 +56,15 @@ From the *About* tab a user can see the basic infomation about the version they 
 
 ### Supported styling and layer types
 
-Currently the plugin supports exporting line, point and polygon geometries. The cartographic capabilities in QGIS are vast and can become very complex, and currently the plugin supports only basic styles.
+Currently the plugin supports exporting **line**, **point** and **polygon** geometries. The cartographic capabilities in QGIS are vast and can become very complex, and currently the plugin supports only basic styles.
 
 The following QGIS styles are supported:
 
  - **Single Symbol with Simple Fill** - These are the basic QGIS styles. With these you can define a fill and a stroke styles (width and color) for a feature.
  - **Categorized** - With categorized styling you can visualize qualitative data. The color palettes used in QGIS visualization are automatically exported.
  - **Graduated** - Graduated styling can be used for sequential or diverging datasets. Currently supported classifications are *quantile*, *equal interval* and *logarithmic*.
+
+If an unsupported feature is detected, the export will be stopped in its entirety.
 
 ## Development
 
