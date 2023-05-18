@@ -8,19 +8,19 @@
 
 This plugin exports [QGIS](http://qgis.org/) vector layers into a format that can be imported into  [Unfolded Studio](https://studio.unfolded.ai/) for further analysis or one-click publishing to the web, after signing up for a free [Unfolded](https://unfolded.ai/) account.
 
-# Documentation 
+# Documentation
 
 This readme contains a short overview of basic functionality of the plugin. Full documentation is available at [docs.unfolded.ai](https://docs.unfolded.ai/integrations/qgis).
 
 ## Requirements
 
-This plugin supports QGIS version 3.16.x, which is the minimum required QGIS version. 
+This plugin supports QGIS version 3.16.x, which is the minimum required QGIS version.
 
 ## Installation
 
-The Plugin is registered in the official QGIS plugin repository and it can be installed directly sfrom QGIS (*Plugins --> Manage and Install Plugins*). 
+The Plugin is registered in the official QGIS plugin repository and it can be installed directly sfrom QGIS (*Plugins --> Manage and Install Plugins*).
 
-A user can also install the plugin from a zip package that you can download from the releases of this repository. 
+A user can also install the plugin from a zip package that you can download from the releases of this repository.
 
 ## Using the plugin
 
@@ -52,7 +52,7 @@ under the *Web* tab in QGIS. It opens a new window, which lets the user control 
   exported on their local disk. A user can also add their personal MapBox API key if they wish to add MapBox basemaps to
   their project. In this tab a user can also define the logging level mainly for development purpose.
 
-From the *About* tab a user can see the basic infomation about the version they are using and find relevant links. 
+From the *About* tab a user can see the basic infomation about the version they are using and find relevant links.
 
 ### Supported styling and layer types
 
@@ -60,9 +60,9 @@ Currently the plugin supports exporting line, point and polygon geometries. The 
 
 The following QGIS styles are supported:
 
- - **Single Symbol with Simple Fill** - These are the basic QGIS styles. With these you can define a fill and a stroke styles (width and color) for a feature. 
- - **Categorized** - With categorized styling you can visualize qualitative data. The color palettes used in QGIS visualization are automatically exported. 
- - **Graduated** - Graduated styling can be used for sequential or diverging datasets. Currently supported classifications are *quantile* and *equal interval*
+ - **Single Symbol with Simple Fill** - These are the basic QGIS styles. With these you can define a fill and a stroke styles (width and color) for a feature.
+ - **Categorized** - With categorized styling you can visualize qualitative data. The color palettes used in QGIS visualization are automatically exported.
+ - **Graduated** - Graduated styling can be used for sequential or diverging datasets. Currently supported classifications are *quantile*, *equal interval* and *logarithmic*.
 
 ## Development
 
