@@ -52,7 +52,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     Licensed by GPLv3
     """
 
-    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile", "Logarithmic": "log"}
+    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile", "Logarithmic": "custom"}
     CATEGORIZED_SCALE = "ordinal"
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, is_visible: bool = True):
@@ -125,11 +125,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     def _extract_advanced_layer_style(self, renderer: Union[QgsCategorizedSymbolRenderer, QgsGraduatedSymbolRenderer], layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
-        requires_custom_breaks: bool = False
         if symbol_type == SymbolType.graduatedSymbol:
             classification_method = renderer.classificationMethod()
-            if classification_method.id() == 'Logarithmic':
-                requires_custom_breaks = True
             scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
 
             if not scale_name:
@@ -175,13 +172,12 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                                          VisualChannels.size_scale)
 
         # provide color map for certain graduated symbols
-        if requires_custom_breaks:
+        if scale_name == 'custom':
             symbol_ranges = renderer.ranges()
             vis_config.color_range.color_map = []
             for i, col in enumerate(fill_colors):
                 upperValue = symbol_ranges[i].upperValue()
                 vis_config.color_range.color_map.append((upperValue, col))
-            visual_channels.color_scale = 'custom'
 
         return color, vis_config, visual_channels
 
