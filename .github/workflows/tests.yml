@@ -33,8 +33,8 @@ jobs:
       - name: Run tests
         run: >
           docker run --rm --net=host --volume `pwd`:/app -w=/app -e QGIS_PLUGIN_IN_CI=1 qgis/qgis:${{ matrix.docker_tags }} sh -c
-          "pip3 install -q pytest pytest-cov && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
-          pytest -v --cov=Unfolded --cov-report=xml"
+          "pip3 install -q pytest-qgis pytest-cov && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
+          pytest-qgis -v --cov=Unfolded --cov-report=xml"
       # Upload coverage report. Will not work if the repo is private
       - name: Upload coverage to Codecov
         if: ${{ matrix.docker_tags == 'latest' && !github.event.repository.private }}
@@ -68,8 +68,8 @@ jobs:
         run: |
           $env:PATH="C:\Program Files\QGIS ${{ matrix.qgis_version }}\bin;$env:PATH"
           $env:QGIS_PLUGIN_IN_CI=1
-          python-qgis-ltr.bat -m pip install -q pytest
-          python-qgis-ltr.bat -m pytest -v
+          python-qgis-ltr.bat -m pip install -q pytest-qgis
+          python-qgis-ltr.bat -m pytest-qgis -v
   pre-release:
     name: "Pre Release"
     runs-on: "ubuntu-latest"
