@@ -18,11 +18,11 @@
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import logging
 import uuid
-from typing import Optional, List, Tuple, Union
+from typing import Optional, List, Tuple, Union, cast
 
 from qgis.core import (QgsVectorLayer, QgsSymbol, QgsFeatureRenderer, QgsSymbolLayer, QgsMarkerSymbol,
-                       QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer, QgsRendererRange,
-                       QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer, QgsRendererCategory)
+                       QgsLineSymbol, QgsFillSymbol, QgsGraduatedSymbolRenderer,
+                       QgsSingleSymbolRenderer, QgsCategorizedSymbolRenderer)
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from ..exceptions import InvalidInputException
@@ -52,7 +52,7 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
     Licensed by GPLv3
     """
 
-    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile"}
+    SUPPORTED_GRADUATED_METHODS = {"EqualInterval": "quantize", "Quantile": "quantile", "Logarithmic": "custom"}
     CATEGORIZED_SCALE = "ordinal"
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, is_visible: bool = True):
@@ -92,8 +92,8 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
 
         self.setProgress(50)
         if symbol_type == SymbolType.singleSymbol:
-            renderer: QgsSingleSymbolRenderer
-            color, vis_config = self._extract_layer_style(renderer.symbol())
+            color, vis_config = self._extract_layer_style(
+                cast(QgsSingleSymbolRenderer, renderer).symbol())
             visual_channels = VisualChannels.create_single_color_channels()
         elif symbol_type in (SymbolType.graduatedSymbol, SymbolType.categorizedSymbol):
             color, vis_config, visual_channels = self._extract_advanced_layer_style(renderer, layer_type, symbol_type)
@@ -122,10 +122,9 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
         # noinspection PyTypeChecker
         return Layer(id_, layer_type_.value, layer_config, visual_channels)
 
-    def _extract_advanced_layer_style(self, renderer, layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
+    def _extract_advanced_layer_style(self, renderer: Union[QgsCategorizedSymbolRenderer, QgsGraduatedSymbolRenderer], layer_type: LayerType, symbol_type: SymbolType) -> Tuple[
         List[int], VisConfig, VisualChannels]:
         """ Extract layer style when layer has graduated or categorized style """
-        renderer: QgsGraduatedSymbolRenderer
         if symbol_type == SymbolType.graduatedSymbol:
             classification_method = renderer.classificationMethod()
             scale_name = self.SUPPORTED_GRADUATED_METHODS.get(classification_method.id())
@@ -133,14 +132,11 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
             if not scale_name:
                 raise InvalidInputException(tr('Unsupported classification method "{}"', classification_method.id()),
                                             bar_msg=bar_msg(tr(
-                                                'Use Equal Count (Quantile) or Equal Interval (Quantize)')))
-            symbol_range: QgsRendererRange
+                                                'Use Equal Count (Quantile), Equal Interval (Quantize) or Logarithmic')))
             styles = [self._extract_layer_style(symbol_range.symbol()) for symbol_range in renderer.ranges()]
             if not styles:
                 raise InvalidInputException(tr('Graduated layer should have at least 1 class'), bar_msg=bar_msg())
         else:
-            renderer: QgsCategorizedSymbolRenderer
-            category: QgsRendererCategory
             scale_name = self.CATEGORIZED_SCALE
             styles = [self._extract_layer_style(category.symbol()) for category in renderer.categories()]
             if not styles:
@@ -174,6 +170,14 @@ class LayerToLayerConfig(BaseConfigCreatorTask):
                                          stroke_field,
                                          scale_name if stroke_field else VisualChannels.stroke_color_scale, None,
                                          VisualChannels.size_scale)
+
+        # provide color map for certain graduated symbols
+        if scale_name == 'custom':
+            symbol_ranges = renderer.ranges()
+            vis_config.color_range.color_map = []
+            for i, col in enumerate(fill_colors):
+                upperValue = symbol_ranges[i].upperValue()
+                vis_config.color_range.color_map.append((upperValue, col))
 
         return color, vis_config, visual_channels
 
