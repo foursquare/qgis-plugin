@@ -1,9 +1,5 @@
 # CHANGELOG
 
-### 1.0.4 - 19/05/2023
-
-* Added support for logarithmic symbols
-
 ### 1.0.3 - 03/03/2023
 
 * Update Studio map import URL
