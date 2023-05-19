@@ -2,3 +2,4 @@ Unfolded/i18n
 /.idea/
 *.gpkg-shm
 *.gpkg-wal
+.vscode
