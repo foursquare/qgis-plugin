@@ -1045,7 +1045,7 @@ class UnfoldedDataset(Dataset):
         self.color = color
         self.source = source
         self.fields = fields
-        self.version = version if version is not None else Dataset.version
+        self.version = version or Dataset.version
 
     @property
     def data(self):
@@ -1079,7 +1079,7 @@ class OldDataset(Dataset):
 
     def __init__(self, data: Data, version: Optional[str] = None) -> None:
         self.data = data
-        self.version = version if version is not None else Dataset.version
+        self.version = version or Dataset.version
 
     @staticmethod
     def from_dict(obj: Any) -> 'OldDataset':
