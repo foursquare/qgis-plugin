@@ -45,6 +45,11 @@ LOGGER = logging.getLogger(f'{plugin_name()}_task')
 # Main thread logger meant to be used in finished method
 LOGGER_MAIN = logging.getLogger(plugin_name())
 
+LONG_FIELD = 'longitude'
+LAT_FIELD = 'latitude'
+LONG_OG_FIELD = 'longitude_orig'
+LAT_OG_FIELD = 'latitude_orig'
+
 
 class LayerToDatasets(BaseConfigCreatorTask):
 
@@ -98,26 +103,34 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         LOGGER.info(tr('Adding layer geometry to fields'))
 
-        crs: QgsCoordinateReferenceSystem = self.layer.crs().authid()
+        crs = self.layer.crs().authid()
         dest_crs = Settings.crs.get()
-        do_transform = crs != dest_crs
+        requires_transform = crs != dest_crs
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             LOGGER.debug('Point layer')
-            if not do_transform:
-                self.layer.addExpressionField('$x', QgsField('longitude', QVariant.Double))
-                self.layer.addExpressionField('$y', QgsField('latitude', QVariant.Double))
-            else:
-                self.layer.addExpressionField(f"x(transform($geometry, '{crs}', '{dest_crs}'))",
-                                              QgsField('longitude', QVariant.Double))
-                self.layer.addExpressionField(f"y(transform($geometry, '{crs}', '{dest_crs}'))",
-                                              QgsField('latitude', QVariant.Double))
+            # if there are already fields with names that we'll use, rename them
+            for field in self.layer.fields():
+                if (field.name()==LONG_FIELD):
+                    field.setName(LONG_OG_FIELD)
+                if (field.name()==LAT_FIELD):
+                    field.setName(LAT_OG_FIELD)
+
+            expressions: Tuple[str, str] = ('$x', '$y')
+            if requires_transform:
+                expressions = (
+                    f"x(transform($geometry, '{crs}', '{dest_crs}'))",
+                    f"y(transform($geometry, '{crs}', '{dest_crs}'))"
+                )
+            self.layer.addExpressionField(
+                expressions[0], QgsField(LONG_FIELD, QVariant.Double))
+            self.layer.addExpressionField(expressions[1], QgsField(LAT_FIELD, QVariant.Double))
             # TODO: z coord
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             LOGGER.debug('Polygon or line layer')
-            expression = ('geom_to_wkt($geometry)' if not do_transform
-                          else f"geom_to_wkt(transform($geometry, '{crs}', '{dest_crs}'))")
-
+            expression: str = 'geom_to_wkt($geometry)'
+            if requires_transform:
+                expression = f"geom_to_wkt(transform($geometry, '{crs}', '{dest_crs}'))"
             self.layer.addExpressionField(expression, QgsField(self.GEOM_FIELD, QVariant.String))
         else:
             raise QgsPluginNotImplementedException(
@@ -133,6 +146,12 @@ class LayerToDatasets(BaseConfigCreatorTask):
         if layer_type == LayerType.Point:
             self.layer.removeExpressionField(field_count - 1)
             self.layer.removeExpressionField(field_count - 2)
+            # # rename back the fields that we may have renamed temporarily
+            # for field in self.layer.fields():
+            #     if (field.name() == LONG_OG_FIELD):
+            #         field.setName(LONG_FIELD)
+            #     if (field.name() == LAT_OG_FIELD):
+            #         field.setName(LAT_FIELD)
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             self.layer.removeExpressionField(field_count - 1)
         else:
@@ -156,7 +175,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         LOGGER.info(tr('Extracting layer data'))
 
-        all_data, source = [None] * 2
+        source, all_data = [None] * 2
         if self.output_directory:
             output_file = self._save_layer_to_file(self.layer, self.output_directory)
             source = output_file.name
