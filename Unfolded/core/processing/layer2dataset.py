@@ -34,7 +34,7 @@ from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
 from ...model.map_config import OldDataset, Data, Field, UnfoldedDataset
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
-from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
+from ...qgis_plugin_tools.tools.exceptions import QgsPluginException, QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
 from ...qgis_plugin_tools.tools.layers import LayerType
 from ...qgis_plugin_tools.tools.resources import plugin_name, resources_path
@@ -112,20 +112,17 @@ class LayerToDatasets(BaseConfigCreatorTask):
         if layer_type == LayerType.Point:
             LOGGER.debug('Point layer')
 
-            # self.layer.startEditing()
+            if not self.layer.isEditable():
+                raise QgsPluginException(bar_msg=bar_msg(tr('The layer ({}) is not editable.', self.layer.name())))
 
-            for field in self.layer.fields():
-                if (field.name().lower()==LONG_FIELD):
-                    with edit(self.layer):
+            with edit(self.layer):
+                for field in self.layer.fields():
+                    if (field.name().lower()==LONG_FIELD):
                         idx = self.layer.fields().indexFromName(field.name())
                         self.layer.renameAttribute(idx, LONG_OG_FIELD)
-                if (field.name().lower()==LAT_FIELD):
-                    with edit(self.layer):
-                        idx = self.layer.fields().indexFromName(field.name())
+                    if (field.name().lower()==LAT_FIELD):
+                        idx = self.layer.fields().indexOf(field.name())
                         self.layer.renameAttribute(idx, LAT_OG_FIELD)
-
-            # self.layer.updateFields()
-            # self.layer.commitChanges()
 
             expressions: Tuple[str, str] = ('$x', '$y')
             if requires_transform:
@@ -133,13 +130,9 @@ class LayerToDatasets(BaseConfigCreatorTask):
                     f"x(transform($geometry, '{crs}', '{dest_crs}'))",
                     f"y(transform($geometry, '{crs}', '{dest_crs}'))"
                 )
-            self.layer.addExpressionField(
-                expressions[0], QgsField(LONG_FIELD, QVariant.Double))
+            self.layer.addExpressionField(expressions[0], QgsField(LONG_FIELD, QVariant.Double))
             self.layer.addExpressionField(expressions[1], QgsField(LAT_FIELD, QVariant.Double))
 
-            # names: list[str] = []
-            # for field in self.layer.fields():
-            #     names.append(field.name())
             LOGGER.info(tr('*********** {}', self.layer.fields().names()))
             # TODO: z coord
         elif layer_type in (LayerType.Polygon, LayerType.Line):
@@ -232,7 +225,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         output_file = output_path / f'{layer.name().replace(" ", "")}.csv'
         LOGGER.debug(f'Saving layer to a file {output_file.name}')
 
-        LOGGER.info(tr('*********** {}', layer.fields().names()))
+        # LOGGER.info(tr('*********** {}', layer.fields().names()))
 
         converter = CsvFieldValueConverter(layer)
 
