@@ -25,7 +25,7 @@ from typing import Optional, List, Tuple
 
 from PyQt5.QtCore import QVariant
 from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem,
-                       QgsProject)
+                       QgsProject, edit)
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from .csv_field_value_converter import CsvFieldValueConverter
@@ -103,18 +103,29 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         LOGGER.info(tr('Adding layer geometry to fields'))
 
+
+
         crs = self.layer.crs().authid()
         dest_crs = Settings.crs.get()
         requires_transform = crs != dest_crs
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             LOGGER.debug('Point layer')
-            # if there are already fields with names that we'll use, rename them
+
+            # self.layer.startEditing()
+
             for field in self.layer.fields():
-                if (field.name()==LONG_FIELD):
-                    field.setName(LONG_OG_FIELD)
-                if (field.name()==LAT_FIELD):
-                    field.setName(LAT_OG_FIELD)
+                if (field.name().lower()==LONG_FIELD):
+                    with edit(self.layer):
+                        idx = self.layer.fields().indexFromName(field.name())
+                        self.layer.renameAttribute(idx, LONG_OG_FIELD)
+                if (field.name().lower()==LAT_FIELD):
+                    with edit(self.layer):
+                        idx = self.layer.fields().indexFromName(field.name())
+                        self.layer.renameAttribute(idx, LAT_OG_FIELD)
+
+            # self.layer.updateFields()
+            # self.layer.commitChanges()
 
             expressions: Tuple[str, str] = ('$x', '$y')
             if requires_transform:
@@ -125,6 +136,11 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self.layer.addExpressionField(
                 expressions[0], QgsField(LONG_FIELD, QVariant.Double))
             self.layer.addExpressionField(expressions[1], QgsField(LAT_FIELD, QVariant.Double))
+
+            # names: list[str] = []
+            # for field in self.layer.fields():
+            #     names.append(field.name())
+            LOGGER.info(tr('*********** {}', self.layer.fields().names()))
             # TODO: z coord
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             LOGGER.debug('Polygon or line layer')
@@ -215,6 +231,8 @@ class LayerToDatasets(BaseConfigCreatorTask):
         """ Save layer to file"""
         output_file = output_path / f'{layer.name().replace(" ", "")}.csv'
         LOGGER.debug(f'Saving layer to a file {output_file.name}')
+
+        LOGGER.info(tr('*********** {}', layer.fields().names()))
 
         converter = CsvFieldValueConverter(layer)
 
