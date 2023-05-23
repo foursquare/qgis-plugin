@@ -3,3 +3,4 @@ Unfolded/i18n
 *.gpkg-shm
 *.gpkg-wal
 .vscode
+.DS_Store
