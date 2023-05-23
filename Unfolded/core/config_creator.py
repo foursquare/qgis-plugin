@@ -262,10 +262,13 @@ class ConfigCreator(QObject):
                 elif isinstance(task, LayerToLayerConfig):
                     layers[layer_uuids.index(task.layer_uuid)] = task.result_layer_conf
 
-            field_formats = {
-                str(dataset.data.id): {field.name: field.format if field.format else None for field in
-                                       dataset.data.fields}
-                for dataset in datasets}
+            field_formats = {}
+            for dataset in datasets:
+                dataId = str(dataset.data.id)
+                field_formats[dataId] = {}
+                for field in dataset.data.fields:
+                    field_formats[dataId][field.name] = field.format
+
             tooltip = Tooltip(FieldsToShow(AnyDict(
                 {layer_uuid: [{"name": name, "format": field_formats[layer_uuid][name]} for name in fields] for
                  layer_uuid, fields in
