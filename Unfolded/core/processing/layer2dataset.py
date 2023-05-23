@@ -47,8 +47,6 @@ LOGGER_MAIN = logging.getLogger(plugin_name())
 
 LONG_FIELD = 'longitude'
 LAT_FIELD = 'latitude'
-LONG_OG_FIELD = 'longitude_orig'
-LAT_OG_FIELD = 'latitude_orig'
 
 
 class LayerToDatasets(BaseConfigCreatorTask):
@@ -73,7 +71,11 @@ class LayerToDatasets(BaseConfigCreatorTask):
             return False
 
     def _convert_to_dataset(self) -> OldDataset:
-        self._add_geom_to_fields()
+        try:
+            self._add_geom_to_fields()
+        except Exception as e:
+            LOGGER.error(type(e).__name__)
+            LOGGER.error(e)
         try:
             self.setProgress(20)
             self._check_if_canceled()
@@ -112,18 +114,6 @@ class LayerToDatasets(BaseConfigCreatorTask):
         if layer_type == LayerType.Point:
             LOGGER.debug('Point layer')
 
-            if not self.layer.isEditable():
-                raise QgsPluginException(bar_msg=bar_msg(tr('The layer ({}) is not editable.', self.layer.name())))
-
-            with edit(self.layer):
-                for field in self.layer.fields():
-                    if (field.name().lower()==LONG_FIELD):
-                        idx = self.layer.fields().indexFromName(field.name())
-                        self.layer.renameAttribute(idx, LONG_OG_FIELD)
-                    if (field.name().lower()==LAT_FIELD):
-                        idx = self.layer.fields().indexOf(field.name())
-                        self.layer.renameAttribute(idx, LAT_OG_FIELD)
-
             expressions: Tuple[str, str] = ('$x', '$y')
             if requires_transform:
                 expressions = (
@@ -132,8 +122,6 @@ class LayerToDatasets(BaseConfigCreatorTask):
                 )
             self.layer.addExpressionField(expressions[0], QgsField(LONG_FIELD, QVariant.Double))
             self.layer.addExpressionField(expressions[1], QgsField(LAT_FIELD, QVariant.Double))
-
-            LOGGER.info(tr('*********** {}', self.layer.fields().names()))
             # TODO: z coord
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             LOGGER.debug('Polygon or line layer')
@@ -155,12 +143,6 @@ class LayerToDatasets(BaseConfigCreatorTask):
         if layer_type == LayerType.Point:
             self.layer.removeExpressionField(field_count - 1)
             self.layer.removeExpressionField(field_count - 2)
-            # # rename back the fields that we may have renamed temporarily
-            # for field in self.layer.fields():
-            #     if (field.name() == LONG_OG_FIELD):
-            #         field.setName(LONG_FIELD)
-            #     if (field.name() == LAT_OG_FIELD):
-            #         field.setName(LAT_FIELD)
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             self.layer.removeExpressionField(field_count - 1)
         else:
@@ -225,15 +207,32 @@ class LayerToDatasets(BaseConfigCreatorTask):
         output_file = output_path / f'{layer.name().replace(" ", "")}.csv'
         LOGGER.debug(f'Saving layer to a file {output_file.name}')
 
-        # LOGGER.info(tr('*********** {}', layer.fields().names()))
-
         converter = CsvFieldValueConverter(layer)
+
+        layer_type = LayerType.from_layer(layer)
+        field_count = len(layer.fields().toList())
+        attribute_ids: list[int] = []
+        for i, field in enumerate(layer.fields()):
+            if layer_type == LayerType.Point:
+                field_name = field.name().lower()
+                if field_name == LONG_FIELD and i != field_count - 2:
+                    LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
+                    continue
+                if field_name == LAT_FIELD and i != field_count - 1:
+                    LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
+                    continue
+            elif layer_type in (LayerType.Polygon, LayerType.Line):
+                if field_name == LayerToDatasets.GEOM_FIELD and i != field_count - 1:
+                    LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
+                    continue
+            attribute_ids.append(i)
 
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
         options.layerOptions = ["SEPARATOR=COMMA"]
         options.fieldValueConverter = converter
+        options.attributes = attribute_ids
 
         if hasattr(QgsVectorFileWriter, "writeAsVectorFormatV3"):
             # noinspection PyCallByClass
