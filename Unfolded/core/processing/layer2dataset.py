@@ -24,8 +24,7 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 
 from PyQt5.QtCore import QVariant
-from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem,
-                       QgsProject, edit)
+from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsProject)
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from .csv_field_value_converter import CsvFieldValueConverter
@@ -34,7 +33,7 @@ from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
 from ...model.map_config import OldDataset, Data, Field, UnfoldedDataset
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
-from ...qgis_plugin_tools.tools.exceptions import QgsPluginException, QgsPluginNotImplementedException
+from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
 from ...qgis_plugin_tools.tools.layers import LayerType
 from ...qgis_plugin_tools.tools.resources import plugin_name, resources_path
