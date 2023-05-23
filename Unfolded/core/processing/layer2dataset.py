@@ -202,7 +202,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         layer_type = LayerType.from_layer(layer)
         field_count = len(layer.fields().toList())
-        attribute_ids: list[int] = []
+        filtered_attribute_ids: list[int] = []
         for i, field in enumerate(layer.fields()):
             # during _add_geom_to_fields() we've added some fields, but we now
             # want to filter out the fields with the same name as to avoid name
@@ -219,14 +219,14 @@ class LayerToDatasets(BaseConfigCreatorTask):
                 if field_name == LayerToDatasets.GEOM_FIELD and i != field_count - 1:
                     LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
                     continue
-            attribute_ids.append(i)
+            filtered_attribute_ids.append(i)
 
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
         options.layerOptions = ["SEPARATOR=COMMA"]
         options.fieldValueConverter = converter
-        options.attributes = attribute_ids
+        options.attributes = filtered_attribute_ids
 
         if hasattr(QgsVectorFileWriter, "writeAsVectorFormatV3"):
             # noinspection PyCallByClass
