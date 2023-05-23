@@ -168,19 +168,19 @@
               "7d193484-21a7-47f4-8cbc-497474a39b64": [
                 {
                   "name": "fid",
-                  "format": null
+                  "format": ""
                 },
                 {
                   "name": "nimi",
-                  "format": null
+                  "format": ""
                 },
                 {
                   "name": "tonnia_vienti",
-                  "format": null
+                  "format": ""
                 },
                 {
                   "name": "tonnia_tuonti",
-                  "format": null
+                  "format": ""
                 },
                 {
                   "format": "YYYY/M/D",
@@ -191,7 +191,7 @@
                   "name": "datetime"
                 },
                 {
-                  "format": null,
+                  "format": "",
                   "name": "bool"
                 }
               ]
