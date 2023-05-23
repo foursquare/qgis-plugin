@@ -37,6 +37,8 @@ LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
 class BaseConfigCreatorTask(QgsTask):
+    LONG_FIELD = 'longitude'
+    LAT_FIELD = 'latitude'
     GEOM_FIELD = 'geometry'
 
     def __init__(self, description: str):

@@ -45,10 +45,6 @@ LOGGER = logging.getLogger(f'{plugin_name()}_task')
 # Main thread logger meant to be used in finished method
 LOGGER_MAIN = logging.getLogger(plugin_name())
 
-LONG_FIELD = 'longitude'
-LAT_FIELD = 'latitude'
-
-
 class LayerToDatasets(BaseConfigCreatorTask):
 
     def __init__(self, layer_uuid: uuid.UUID, layer: QgsVectorLayer, color: Tuple[int, int, int],
@@ -116,15 +112,15 @@ class LayerToDatasets(BaseConfigCreatorTask):
                     f"x(transform($geometry, '{crs}', '{dest_crs}'))",
                     f"y(transform($geometry, '{crs}', '{dest_crs}'))"
                 )
-            self.layer.addExpressionField(expressions[0], QgsField(LONG_FIELD, QVariant.Double))
-            self.layer.addExpressionField(expressions[1], QgsField(LAT_FIELD, QVariant.Double))
+            self.layer.addExpressionField(expressions[0], QgsField(LayerToDatasets.LONG_FIELD, QVariant.Double))
+            self.layer.addExpressionField(expressions[1], QgsField(LayerToDatasets.LAT_FIELD, QVariant.Double))
             # TODO: z coord
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             LOGGER.debug('Polygon or line layer')
             expression: str = 'geom_to_wkt($geometry)'
             if requires_transform:
                 expression = f"geom_to_wkt(transform($geometry, '{crs}', '{dest_crs}'))"
-            self.layer.addExpressionField(expression, QgsField(self.GEOM_FIELD, QVariant.String))
+            self.layer.addExpressionField(expression, QgsField(LayerToDatasets.GEOM_FIELD, QVariant.String))
         else:
             raise QgsPluginNotImplementedException(
                 bar_msg=bar_msg(tr('Unsupported layer wkb type: {}', self.layer.wkbType())))
@@ -209,12 +205,15 @@ class LayerToDatasets(BaseConfigCreatorTask):
         field_count = len(layer.fields().toList())
         attribute_ids: list[int] = []
         for i, field in enumerate(layer.fields()):
+            # during _add_geom_to_fields() we've added some fields, but we now
+            # want to filter out the fields with the same name as to avoid name
+            # colissions
             if layer_type == LayerType.Point:
                 field_name = field.name().lower()
-                if field_name == LONG_FIELD and i != field_count - 2:
+                if field_name == LayerToDatasets.LONG_FIELD and i != field_count - 2:
                     LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
                     continue
-                if field_name == LAT_FIELD and i != field_count - 1:
+                if field_name == LayerToDatasets.LAT_FIELD and i != field_count - 1:
                     LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
                     continue
             elif layer_type in (LayerType.Polygon, LayerType.Line):
