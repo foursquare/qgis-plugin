@@ -71,11 +71,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
             return False
 
     def _convert_to_dataset(self) -> OldDataset:
-        try:
-            self._add_geom_to_fields()
-        except Exception as e:
-            LOGGER.error(type(e).__name__)
-            LOGGER.error(e)
+        self._add_geom_to_fields()
         try:
             self.setProgress(20)
             self._check_if_canceled()
