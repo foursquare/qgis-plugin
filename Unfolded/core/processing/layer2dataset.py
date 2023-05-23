@@ -204,11 +204,11 @@ class LayerToDatasets(BaseConfigCreatorTask):
         field_count = len(layer.fields().toList())
         filtered_attribute_ids: list[int] = []
         for i, field in enumerate(layer.fields()):
+            field_name = field.name().lower()
             # during _add_geom_to_fields() we've added some fields, but we now
             # want to filter out the fields with the same name as to avoid name
             # colissions
             if layer_type == LayerType.Point:
-                field_name = field.name().lower()
                 if field_name == LayerToDatasets.LONG_FIELD and i != field_count - 2:
                     LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
                     continue
