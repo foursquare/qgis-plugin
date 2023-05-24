@@ -188,6 +188,8 @@ class ConfigCreator(QObject):
     def start_config_creation(self) -> None:
         """ Start config creation using background processing tasks """
 
+        # division_by_zero = 1 / 0
+
         self._validate_inputs()
         LOGGER.info('Started config creation')
         LOGGER.debug(f"Tasks are: {self.tasks}")

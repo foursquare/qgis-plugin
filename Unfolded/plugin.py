@@ -82,8 +82,6 @@ class Plugin:
             traces_sample_rate=1.0,
         )
 
-        division_by_zero = 1 / 0
-
     def add_action(
         self,
         icon_path: str,
