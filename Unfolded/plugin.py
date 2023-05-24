@@ -38,7 +38,7 @@ from .ui.dialog import Dialog
 try:
     import pip
 except:
-    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.bin'))
+    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.py'))
     exec(get_pip.read())
     get_pip.close()
     import pip
