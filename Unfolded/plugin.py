@@ -47,7 +47,7 @@ except:
 try:
     import sentry_sdk
 except:
-    pip.main(['install', 'sentry_sdk'])
+    pip.main(['install', 'sentry_sdk==1.24.0'])
     import sentry_sdk
 # prep end
 
