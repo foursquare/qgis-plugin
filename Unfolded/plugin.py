@@ -38,8 +38,9 @@ from .ui.dialog import Dialog
 try:
     import pip
 except:
-    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.bin')).read()
-    exec(get_pip)
+    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.bin'))
+    exec(get_pip.read())
+    get_pip.close()
     import pip
     # just in case the included version is old
     pip.main(['install', '--upgrade', 'pip'])
