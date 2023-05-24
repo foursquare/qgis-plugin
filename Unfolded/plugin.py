@@ -18,7 +18,7 @@
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 
 from typing import Callable, Optional
-import requests
+import os
 
 from PyQt5.QtCore import QTranslator, QCoreApplication
 from PyQt5.QtGui import QIcon
@@ -38,9 +38,8 @@ from .ui.dialog import Dialog
 try:
     import pip
 except:
-    r = requests.get('https://bootstrap.pypa.io/get-pip.py',
-                     allow_redirects=False)
-    exec(r.content)
+    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.bin')).read()
+    exec(get_pip)
     import pip
     # just in case the included version is old
     pip.main(['install', '--upgrade', 'pip'])
