@@ -18,7 +18,6 @@
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 
 from typing import Callable, Optional
-import os
 
 from PyQt5.QtCore import QTranslator, QCoreApplication
 from PyQt5.QtGui import QIcon
@@ -30,26 +29,7 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_log
 from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
-
-# There's no easy way to distribute a QGIS plugin with extra dependencies, and
-# one way is to make sure that pip is installed and then install the required deps.
-# see: https://gis.stackexchange.com/questions/196002/development-of-a-plugin-which-depends-on-an-external-python-library
-# prep
-try:
-    import pip
-except:
-    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.py'))
-    exec(get_pip.read())
-    get_pip.close()
-    import pip
-    # just in case the included version is old
-    pip.main(['install', '--upgrade', 'pip'])
-try:
-    import sentry_sdk
-except:
-    pip.main(['install', 'sentry_sdk==1.24.0'])
-    import sentry_sdk
-# prep end
+from .sentry import init_sentry
 
 class Plugin:
     """QGIS Plugin Implementation."""
@@ -74,13 +54,7 @@ class Plugin:
         self.actions = []
         self.menu = tr(plugin_name())
 
-        sentry_sdk.init(
-            dsn="https://2d2c8d43150e46c6a73bde4f5a039715@o305787.ingest.sentry.io/4505239708172288",
-            # Set traces_sample_rate to 1.0 to capture 100%
-            # of transactions for performance monitoring.
-            # We recommend adjusting this value in production.
-            traces_sample_rate=1.0,
-        )
+        init_sentry()
 
     def add_action(
         self,
