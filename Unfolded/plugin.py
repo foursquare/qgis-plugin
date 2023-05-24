@@ -32,6 +32,10 @@ from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
 
+# There's no easy way to distribute a QGIS plugin with extra dependencies, and
+# one way is to make sure that pip is installed and then install the required deps.
+# see: https://gis.stackexchange.com/questions/196002/development-of-a-plugin-which-depends-on-an-external-python-library
+# prep
 try:
     import pip
 except:
@@ -41,13 +45,12 @@ except:
     import pip
     # just in case the included version is old
     pip.main(['install', '--upgrade', 'pip'])
-
-
 try:
     import sentry_sdk
 except:
     pip.main(['install', 'sentry_sdk'])
     import sentry_sdk
+# prep end
 
 class Plugin:
     """QGIS Plugin Implementation."""
