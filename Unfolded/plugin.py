@@ -30,6 +30,7 @@ from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
 
+from .sentry_sdk import init
 
 class Plugin:
     """QGIS Plugin Implementation."""
@@ -53,6 +54,16 @@ class Plugin:
 
         self.actions = []
         self.menu = tr(plugin_name())
+
+        init(
+            dsn="https://27e762d598b8418bb41980c2acc16e4c@o305787.ingest.sentry.io/5417824",
+            # Set traces_sample_rate to 1.0 to capture 100%
+            # of transactions for performance monitoring.
+            # We recommend adjusting this value in production.
+            traces_sample_rate=1.0,
+        )
+
+        # division_by_zero = 1 / 0
 
     def add_action(
         self,
