@@ -21,7 +21,7 @@ except:
 try:
     import sentry_sdk
 except:
-    pip.main(['install', 'sentry_sdk==1.24.0'])
+    pip.main(['install', 'sentry-sdk==1.24.0'])
     import sentry_sdk
 
 PLUGIN_VERSION = '1.0.4'
