@@ -26,6 +26,7 @@ except:
     import sentry_sdk
 # prep end
 
+PLUGIN_VERSION = '1.0.4'
 
 def init_sentry():
     sentry_sdk.init(
@@ -33,10 +34,10 @@ def init_sentry():
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
-        traces_sample_rate=1.0,
+        traces_sample_rate=0.3,
     )
 
-    sentry_sdk.set_tag('version', '1.0.4')
+    sentry_sdk.set_tag('version', PLUGIN_VERSION)
     sentry_sdk.set_tag('platform.platform', platform.platform())
     sentry_sdk.set_tag('platform.system', platform.system())
     sentry_sdk.set_tag('qgis.version', Qgis.QGIS_VERSION)
