@@ -18,7 +18,6 @@
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 
 from typing import Callable, Optional
-import os
 import requests
 
 from PyQt5.QtCore import QTranslator, QCoreApplication
