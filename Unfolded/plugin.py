@@ -18,6 +18,8 @@
 #  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 
 from typing import Callable, Optional
+import os
+import requests
 
 from PyQt5.QtCore import QTranslator, QCoreApplication
 from PyQt5.QtGui import QIcon
@@ -30,7 +32,22 @@ from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
 
-from .sentry_sdk import init
+try:
+    import pip
+except:
+    r = requests.get('https://bootstrap.pypa.io/get-pip.py',
+                     allow_redirects=False)
+    exec(r.content)
+    import pip
+    # just in case the included version is old
+    pip.main(['install', '--upgrade', 'pip'])
+
+
+try:
+    import sentry_sdk
+except:
+    pip.main(['install', 'sentry_sdk'])
+    import sentry_sdk
 
 class Plugin:
     """QGIS Plugin Implementation."""
@@ -55,7 +72,7 @@ class Plugin:
         self.actions = []
         self.menu = tr(plugin_name())
 
-        init(
+        sentry_sdk.init(
             dsn="https://27e762d598b8418bb41980c2acc16e4c@o305787.ingest.sentry.io/5417824",
             # Set traces_sample_rate to 1.0 to capture 100%
             # of transactions for performance monitoring.
@@ -63,7 +80,7 @@ class Plugin:
             traces_sample_rate=1.0,
         )
 
-        # division_by_zero = 1 / 0
+        division_by_zero = 1 / 0
 
     def add_action(
         self,
