@@ -3,7 +3,7 @@ import platform
 try:
     from qgis.core import Qgis
 except ImportError:
-    # for QGIS version < 3
+    # for QGIS version < 3.x
     from qgis.core import QGis as Qgis
 
 # There's no easy way to distribute a QGIS plugin with extra dependencies, and
