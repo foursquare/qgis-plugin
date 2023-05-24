@@ -9,7 +9,6 @@ except ImportError:
 # There's no easy way to distribute a QGIS plugin with extra dependencies, and
 # one way is to make sure that pip is installed and then install the required deps.
 # see: https://gis.stackexchange.com/questions/196002/development-of-a-plugin-which-depends-on-an-external-python-library
-# prep
 try:
     import pip
 except:
@@ -24,7 +23,6 @@ try:
 except:
     pip.main(['install', 'sentry_sdk==1.24.0'])
     import sentry_sdk
-# prep end
 
 PLUGIN_VERSION = '1.0.4'
 
