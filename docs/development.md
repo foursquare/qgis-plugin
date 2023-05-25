@@ -64,11 +64,16 @@ This should be the end of your setup and if you manage to run `build.py` script 
   - go to "Installed Plugins" and deselect and then again select your plugin in the list, effectively reloading it; or
   - use [plugin-reloader](https://plugins.qgis.org/plugins/plugin_reloader/) plugin (← this has the best DX and is recommended)
 
-For debugging use:
+For debugging, use:
 - dev log (via <kbd>View</kbd> → <kbd>Panels</kbd> → <kbd>Log Messages</kbd>)
   - this gives you multiple output windows for all the different plugins and internal QGIS python interpreter, and is basically the main debugging tool you'll be using
 - REPL Python console (via <kbd>Plugins</kbd> → <kbd>Python Console</kbd>)
   - `qgis` module is available to all the plugins, and is automatically bound to them when executing plugins and is not available as a general dependency that you can freely import and use in normal Python scripts, so this is the only way you have access to it in any Python environment other than within QGIS plugin runtime
+- it's recommended to set up some typechecker and Python language server in your IDE to get a good DX and minimize the risk of errors
+  - for VS Code:
+    - [`mypy`](https://marketplace.visualstudio.com/items?itemName=matangover.mypy) typechecker
+    - [`pylance`](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) language server
+    - also consider adding this config line to your `.vscode/settings.json`: `"python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest", "/Users/dokanovic/.pyenv/versions/3.9.5/lib/python3.9/site-packages"]` (makes sure it can fing `qgis` module as well)
 
 ## Adding or editing  source files
 If you create or edit source files make sure that:
