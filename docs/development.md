@@ -76,7 +76,7 @@ For debugging, use:
     - also consider adding this config line to your `.vscode/settings.json` (this makes sure it can find `qgis` module as well):
       ```json
       {
-        "python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages"]
+        "python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest"]
       }
       ```
 
