@@ -29,9 +29,6 @@ PLUGIN_VERSION = '1.0.4'
 def init_sentry():
     sentry_sdk.init(
         dsn="https://2d2c8d43150e46c6a73bde4f5a039715@o305787.ingest.sentry.io/4505239708172288",
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        # We recommend adjusting this value in production.
         traces_sample_rate=0.1,
     )
 

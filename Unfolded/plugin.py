@@ -36,6 +36,8 @@ class Plugin:
 
     def __init__(self, iface: QgisInterface):
 
+        init_sentry()
+
         self.iface = iface
 
         setup_logger(plugin_name(), iface)
@@ -53,8 +55,6 @@ class Plugin:
 
         self.actions = []
         self.menu = tr(plugin_name())
-
-        init_sentry()
 
     def add_action(
         self,
