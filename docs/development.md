@@ -73,6 +73,7 @@ For debugging, use:
   - for VS Code:
     - [`mypy`](https://marketplace.visualstudio.com/items?itemName=matangover.mypy) typechecker
     - [`pylance`](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) language server
+    - [`Qt for Python`](https://marketplace.visualstudio.com/items?itemName=seanwu.vscode-qt-for-python) for PyQt5 support
     - also consider adding this config line to your `.vscode/settings.json` (this makes sure it can find `qgis` module as well):
       ```json
       {
