@@ -85,7 +85,7 @@ Another useful thing is to have both versions of the plugin installed - the curr
 - install the regular version from the registry
 - before running `python3 build.py deploy` script, update `name` in `metadata.txt` to something like `name=Unfolded-dev`
 - now when you run the script, a new plugin with `Unfolded-dev` name will appear along side the regular one in the QGIS plugins directory and plugins listing
-- ❗️ don't commit these changes to `metadata.txt` when doing a release (unless that's your actual intention ofc; this is just for development)
+- ❗️ don't commit these changes to `metadata.txt` when doing a release (unless that's your actual intention ofc; this is just for development), just keep them in git's unstaged changes e.g.
 - you can also update icon and naming in other places to help differentiate it
 
 | ![image](https://github.com/foursquare/qgis-plugin/assets/1355455/d8c20647-4618-489a-b10b-5c8c50efa7f5) |
