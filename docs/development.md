@@ -55,11 +55,42 @@ This should be the end of your setup and if you manage to run `build.py` script 
 
 ## Development workflow
 
-1. make changes to the plugin inside `/Unfolded` folder
-2. run `python3 build.py deploy` to package the plugin and copy it to the QGIS' plugins folder (this does not publish it, just installs it locally!)
-3. restart QGIS app
+- make changes to the plugin inside `/Unfolded` folder
+- run `python3 build.py deploy`, this packages the plugin and copies it to the QGIS' plugins folder (usually `/Users/<username>/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins`; or see [plugin's dir location](https://gis.stackexchange.com/questions/274311/qgis-3-plugin-folder-location))
+  - this does not publish the plugin to the official plugin registry, just installs it locally! (for releasing it to the remote registry, see [Creating a release](#creating-a-release) section)
+  - additionally, you can set up a filesystem watcher to monitor entire folder and automatically execute the deploy command so you don't have to do it manually every time
+- to use the freshly "deployed" plugin inside QGIS you can, either:
+  - restart QGIS app, and it will reload all plugins; or
+  - go to "Installed Plugins" and deselect and then again select your plugin in the list, effectively reloading it; or
+  - use [plugin-reloader](https://plugins.qgis.org/plugins/plugin_reloader/) plugin (← this has the best DX and is recommended)
 
-And now, a new version of the plugin should be available.
+For debugging, use:
+- dev log (via <kbd>View</kbd> → <kbd>Panels</kbd> → <kbd>Log Messages</kbd>)
+  - this gives you multiple output windows for all the different plugins and internal QGIS python interpreter, and is basically the main debugging tool you'll be using
+- REPL Python console (via <kbd>Plugins</kbd> → <kbd>Python Console</kbd>)
+  - `qgis` module is available to all the plugins, and is automatically bound to them when executing plugins and is not available as a general dependency that you can freely import and use in normal Python scripts, so this is the only way you have access to it in any Python environment other than within QGIS plugin runtime
+- it's recommended to set up some typechecker and Python language server in your IDE to get a good DX and minimize the risk of errors
+  - for VS Code:
+    - [`mypy`](https://marketplace.visualstudio.com/items?itemName=matangover.mypy) typechecker
+    - [`pylance`](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) language server
+    - [`Qt for Python`](https://marketplace.visualstudio.com/items?itemName=seanwu.vscode-qt-for-python) for PyQt5 support
+    - also consider adding this config line to your `.vscode/settings.json` (this makes sure it can find `qgis` module as well):
+      ```json
+      {
+        "python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest"]
+      }
+      ```
+
+Another useful thing is to have both versions of the plugin installed - the current, officially available version and your development version:
+- install the regular version from the registry
+- before running `python3 build.py deploy` script, update `name` in `metadata.txt` to something like `name=Unfolded-dev`
+- now when you run the script, a new plugin with `Unfolded-dev` name will appear along side the regular one in the QGIS plugins directory and plugins listing
+- ❗️ don't commit these changes to `metadata.txt` when doing a release (unless that's your actual intention ofc; this is just for development), just keep them in git's unstaged changes e.g.
+- you can also update icon and naming in other places to help differentiate it
+
+| ![image](https://github.com/foursquare/qgis-plugin/assets/1355455/d8c20647-4618-489a-b10b-5c8c50efa7f5) |
+|:--:|
+| example: both versions of the plugin active (official and dev), with different art |
 
 ## Adding or editing  source files
 If you create or edit source files make sure that:
@@ -74,18 +105,12 @@ If you create or edit source files make sure that:
 * they will be found by [build.py](../Unfolded/build.py) script (`py_files` and `ui_files` values)
 * you consider adding test files for the new functionality
 
-## Deployment
+## QGIS documentation and help
 
-Edit [build.py](../Unfolded/build.py) to contain working values for *profile*, *lrelease* and *pyrcc*. If you are
-running on Windows, make sure the value *QGIS_INSTALLATION_DIR* points to right folder
-
-Run the deployment with:
-```shell script
-python build.py deploy
-```
-
-After deploying and restarting QGIS you should see the plugin in the QGIS installed plugins
-where you have to activate it.
+- QGIS docs: https://docs.qgis.org/3.28/en/docs/user_manual/
+  - make sure you're viewing the docs of the right SDK version
+- GIS stachexchange is your friend: https://gis.stackexchange.com/
+- when googling, adding "PyQGIS" keyword helps narrow down search results quite a lot
 
 ## Testing
 Install Docker, docker-compose and python packages listed in [requirements.txt](../requirements.txt)
