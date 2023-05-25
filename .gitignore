@@ -4,3 +4,4 @@ Unfolded/i18n
 *.gpkg-wal
 .vscode
 .DS_Store
+__pycache__
