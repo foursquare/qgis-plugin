@@ -57,7 +57,7 @@ This should be the end of your setup and if you manage to run `build.py` script 
 
 - make changes to the plugin inside `/Unfolded` folder
 - run `python3 build.py deploy`, this packages the plugin and copies it to the QGIS' plugins folder (usually `/Users/<username>/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins`; or see [plugin's dir location](https://gis.stackexchange.com/questions/274311/qgis-3-plugin-folder-location))
-  - this does not publish the plugin to the official plugin registry, just installs it locally!
+  - this does not publish the plugin to the official plugin registry, just installs it locally! (for releasing it to the remote registry, see [Creating a release](#creating-a-release) section)
   - additionally, you can set up a filesystem watcher to monitor entire folder and automatically execute the deploy command so you don't have to do it manually every time
 - to use the freshly "deployed" plugin inside QGIS you can, either:
   - restart QGIS app, and it will reload all plugins; or
@@ -65,7 +65,7 @@ This should be the end of your setup and if you manage to run `build.py` script 
   - use [plugin-reloader](https://plugins.qgis.org/plugins/plugin_reloader/) plugin (← this has the best DX and is recommended)
 
 For debugging use:
-- dev log (via <kbd>View</kbd> → <kbs>Panels</kbd> → <kbd>Log Messages</kbd>)
+- dev log (via <kbd>View</kbd> → <kbd>Panels</kbd> → <kbd>Log Messages</kbd>)
   - this gives you multiple output windows for all the different plugins and internal QGIS python interpreter, and is basically the main debugging tool you'll be using
 - REPL Python console (via <kbd>Plugins</kbd> → <kbd>Python Console</kbd>)
   - `qgis` module is available to all the plugins, and is automatically bound to them when executing plugins and is not available as a general dependency that you can freely import and use in normal Python scripts, so this is the only way you have access to it in any Python environment other than within QGIS plugin runtime
