@@ -18,7 +18,7 @@ This plugin supports QGIS version 3.16.x, which is the minimum required QGIS ver
 
 ## Installation
 
-The Plugin is registered in the official QGIS plugin repository and it can be installed directly sfrom QGIS (*Plugins --> Manage and Install Plugins*).
+The plugin is registered in the official QGIS plugin repository and it can be installed directly inside QGIS via <kbd>Plugins</kbd> → <kbd>Manage and Install Plugins...</kbd> menu.
 
 A user can also install the plugin from a zip package that you can download from the releases of this repository.
 
