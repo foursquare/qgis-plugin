@@ -73,7 +73,12 @@ For debugging, use:
   - for VS Code:
     - [`mypy`](https://marketplace.visualstudio.com/items?itemName=matangover.mypy) typechecker
     - [`pylance`](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) language server
-    - also consider adding this config line to your `.vscode/settings.json`: `"python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest", "/Users/dokanovic/.pyenv/versions/3.9.5/lib/python3.9/site-packages"]` (makes sure it can fing `qgis` module as well)
+    - also consider adding this config line to your `.vscode/settings.json` (this makes sure it can find `qgis` module as well):
+      ```json
+      {
+        "python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages"]
+      }
+      ```
 
 ## Adding or editing  source files
 If you create or edit source files make sure that:
