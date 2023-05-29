@@ -62,7 +62,7 @@ The following QGIS styles are supported:
 
  - **Single Symbol with Simple Fill** - These are the basic QGIS styles. With these you can define a fill and a stroke styles (width and color) for a feature.
  - **Categorized** - With categorized styling you can visualize qualitative data. The color palettes used in QGIS visualization are automatically exported.
- - **Graduated** - Graduated styling can be used for sequential or diverging datasets. Currently supported classifications are *quantile*, *equal interval* and *logarithmic*.
+ - **Graduated** - Graduated styling can be used for sequential or diverging datasets. Currently supported classifications are *quantile*, *equal interval*, *logarithmic*, *pretty breaks*, and *natural breaks (jenks)*.
 
 If an unsupported feature is detected, the export will be stopped in its entirety.
 
