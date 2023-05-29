@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 1.0.3 - 29/05/2023
+
+* Support for additional symbols: Logarithmic, Pretty Breaks and Natural Breaks (Jenks)
+* Several bugfixes
+
 ### 1.0.3 - 03/03/2023
 
 * Update Studio map import URL
