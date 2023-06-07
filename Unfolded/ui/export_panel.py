@@ -140,12 +140,14 @@ class ExportPanel(BasePanel):
 
                 if layers[0].type() != QgsMapLayer.VectorLayer:
                     LOGGER.warning(tr('Skipping layer {} because it is not a vector layer', layers[0].name()))
+                    continue
 
                 layer = cast(QgsVectorLayer, layers[0])
                 if layer.featureCount() == 0:
                     LOGGER.warning(tr('Skipping layer {} because it is empty', layer.name()))
-                else:
-                    layers_with_visibility.append((layer, is_visible))
+                    continue
+
+                layers_with_visibility.append((layer, is_visible))
         if not layers_with_visibility:
             raise ExportException(tr('No layers selected'),
                                   bar_msg=bar_msg(tr('Select at least on layer to continue export')))
