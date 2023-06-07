@@ -32,6 +32,16 @@ def init_sentry():
         traces_sample_rate=0.1,
     )
 
+    env = 'local'
+    try:
+        # we set this in the release GHA workflow for prod
+        sentry_env_file = open(os.path.join(os.path.dirname(__file__), 'sentry_env'))
+        env = sentry_env_file.readline()
+        sentry_env_file.close()
+    except:
+        pass
+
+    sentry_sdk.set_tag('environment', env)
     sentry_sdk.set_tag('version', PLUGIN_VERSION)
     sentry_sdk.set_tag('platform.platform', platform.platform())
     sentry_sdk.set_tag('platform.system', platform.system())
