@@ -262,19 +262,25 @@ class ConfigCreator(QObject):
                 elif isinstance(task, LayerToLayerConfig):
                     layers[layer_uuids.index(task.layer_uuid)] = task.result_layer_conf
 
-            field_formats = {}
-            for dataset in datasets:
-                dataId = str(dataset.data.id)
-                field_formats[dataId] = {}
-                for field in dataset.data.fields:
-                    field_formats[dataId][field.name] = field.format
+            tooltip_data = {}
+            for layer_uuid, fields in self._shown_fields.items():
+                field_list = []
+                for field_name in fields:
+                    # try to find a field in a dataset so we can get its format
+                    datasetIdx = layer_uuids.index(task.layer_uuid)
+                    dataset = datasets[datasetIdx]
+                    for dataset_field in dataset.data.fields:
+                        if dataset_field.name == field_name:
+                            field_list.append({"name": field_name, "format": dataset_field.format})
 
-            tooltip = Tooltip(FieldsToShow(AnyDict(
-                {layer_uuid: [{"name": name, "format": field_formats[layer_uuid][name]} for name in fields] for
-                 layer_uuid, fields in
-                 self._shown_fields.items()})), Tooltip.compare_mode,
+                tooltip_data[layer_uuid] = field_list
+
+            tooltip = Tooltip(
+                FieldsToShow(AnyDict(tooltip_data)),
+                Tooltip.compare_mode,
                 Tooltip.compare_type,
-                self._interaction_config_values["tooltip_enabled"])
+                self._interaction_config_values["tooltip_enabled"]
+            )
 
             interaction_config = InteractionConfig(tooltip, self._interaction_config_values["brush"],
                                                    self._interaction_config_values["geocoder"],
