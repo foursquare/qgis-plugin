@@ -25,7 +25,7 @@ jobs:
       # sets up an "environment" tag for Sentry
       - name: Set up a Sentry environment
         run: |
-          sed -i '' "s/PLUGIN_ENVIRONMENT='local'/PLUGIN_ENVIRONMENT='production'/" sentry.py
+          sed -i "s/PLUGIN_ENVIRONMENT='local'/PLUGIN_ENVIRONMENT='production'/" Unfolded/sentry.py
 
       - name: Install qgis-plugin-ci
         run: pip3 install qgis-plugin-ci
