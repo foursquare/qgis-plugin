@@ -33,4 +33,4 @@ jobs:
       # When osgeo upload is wanted: --osgeo-username usrname --osgeo-password ${{ secrets.OSGEO_PASSWORD }}
       # When Transifex is wanted: --transifex-token ${{ secrets.TRANSIFEX_TOKEN }}
       - name: Deploy plugin
-        run: qgis-plugin-ci release ${GITHUB_REF/refs\/tags\//} --github-token ${{ secrets.GITHUB_TOKEN }} --disable-submodule-update --osgeo-username ${{ secrets.OSGEO_USERNAME }} --osgeo-password ${{ secrets.OSGEO_PASSWORD }}
+        run: qgis-plugin-ci release ${GITHUB_REF/refs\/tags\//} --github-token ${{ secrets.GITHUB_TOKEN }} --disable-submodule-update --osgeo-username ${{ secrets.OSGEO_USERNAME }} --osgeo-password ${{ secrets.OSGEO_PASSWORD }} --allow-uncommitted-changes
