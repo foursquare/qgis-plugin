@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.0.5 - 09/06/2023
+
+* Additional bug fixes and special case handling
+
 ### 1.0.4 - 29/05/2023
 
 * Support for additional symbols: Logarithmic, Pretty Breaks and Natural Breaks (Jenks)

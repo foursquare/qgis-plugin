@@ -24,7 +24,7 @@ except:
     pip.main(['install', 'sentry-sdk==1.24.0'])
     import sentry_sdk
 
-PLUGIN_VERSION='1.0.4'
+PLUGIN_VERSION='1.0.5'
 PLUGIN_ENVIRONMENT='local'
 
 def init_sentry():
