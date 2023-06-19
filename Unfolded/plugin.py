@@ -29,14 +29,11 @@ from .qgis_plugin_tools.tools.custom_logging import setup_logger, setup_task_log
 from .qgis_plugin_tools.tools.i18n import setup_translation, tr
 from .qgis_plugin_tools.tools.resources import plugin_name, resources_path
 from .ui.dialog import Dialog
-from .sentry import init_sentry
 
 class Plugin:
     """QGIS Plugin Implementation."""
 
     def __init__(self, iface: QgisInterface):
-
-        init_sentry()
 
         self.iface = iface
 
