@@ -30,7 +30,7 @@ jobs:
       - name: Install qgis-plugin-ci
         run: pip3 install qgis-plugin-ci
 
-      # When osgeo upload is wanted: --osgeo-username usrname --osgeo-password ${{ secrets.OSGEO_PASSWORD }}
+      # When osgeo upload is wanted: --osgeo-username usrname --osgeo-password ${{ secrets.OSGEO_PASSWORD_FSQ }}
       # When Transifex is wanted: --transifex-token ${{ secrets.TRANSIFEX_TOKEN }}
       - name: Deploy plugin
-        run: qgis-plugin-ci release ${GITHUB_REF/refs\/tags\//} --github-token ${{ secrets.GITHUB_TOKEN }} --disable-submodule-update --osgeo-username ${{ secrets.OSGEO_USERNAME }} --osgeo-password ${{ secrets.OSGEO_PASSWORD }} --allow-uncommitted-changes
+        run: qgis-plugin-ci release ${GITHUB_REF/refs\/tags\//} --github-token ${{ secrets.GITHUB_TOKEN }} --disable-submodule-update --osgeo-username ${{ secrets.OSGEO_USERNAME_FSQ }} --osgeo-password ${{ secrets.OSGEO_PASSWORD_FSQ }} --allow-uncommitted-changes
