@@ -1,5 +1,5 @@
 [general]
-name=FSQ-dev
+name=Unfolded
 description=Export QGIS Maps to Unfolded Studio and publish them on the web.
 about=This plugin exports a QGIS map into a format that can be imported into <a href="https://studio.unfolded.ai">Unfolded Studio</a> for further analysis or one-click publishing to the web after signing up for a free <a href="https://unfolded.ai">Unfolded</a> account.
 version=0.0.1

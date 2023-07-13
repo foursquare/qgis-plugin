@@ -1,0 +1,6 @@
+[tool.qgis_plugin_dev_tools]
+plugin_package_name = "Unfolded"
+runtime_requires = [
+    "sentry-sdk"
+]
+auto_add_recursive_runtime_dependencies = true

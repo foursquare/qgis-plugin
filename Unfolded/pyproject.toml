@@ -1,0 +1,6 @@
+[tool.setuptools]
+py-modules = []
+
+[project]
+name = "Unfolded"
+version = "1.0.5"

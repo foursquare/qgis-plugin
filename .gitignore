@@ -5,3 +5,6 @@ Unfolded/i18n
 .vscode
 .DS_Store
 __pycache__
+**/*.egg-info
+build
+.mypy_cache
