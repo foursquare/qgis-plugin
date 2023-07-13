@@ -1,4 +1,4 @@
-import os
+import requests
 import platform
 try:
     from qgis.core import Qgis
@@ -12,9 +12,9 @@ except ImportError:
 try:
     import pip
 except:
-    get_pip = open(os.path.join(os.path.dirname(__file__), 'get-pip.py'))
-    exec(get_pip.read())
-    get_pip.close()
+    r = requests.get('https://bootstrap.pypa.io/get-pip.py',
+                     allow_redirects=False)
+    exec(r.content)
     import pip
     # just in case the included version is old
     pip.main(['install', '--upgrade', 'pip'])
