@@ -2,7 +2,7 @@
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
-#  This file is part of Foursquare.
+#  This file is part of kepler QGIS plugin by Foursquare.
 #
 #  kepler QGIS plugin by Foursquare is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
