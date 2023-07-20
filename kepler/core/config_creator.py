@@ -59,7 +59,7 @@ class ConfigCreator(QObject):
     single threaded environments (such as tests).
     """
 
-    UNFOLDED_CONFIG_FILE_NAME = 'config.json'
+    FSQSTUDIO_CONFIG_FILE_NAME = 'config.json'
 
     progress_bar_changed = pyqtSignal([int, int])
     finished = pyqtSignal(dict)
@@ -313,7 +313,7 @@ class ConfigCreator(QObject):
     def _write_output(self, map_config):
         """ Write the configuration as a ZIP file"""
 
-        config_file = self._temp_dir / self.UNFOLDED_CONFIG_FILE_NAME
+        config_file = self._temp_dir / self.FSQSTUDIO_CONFIG_FILE_NAME
         with open(config_file, 'w') as f:
             json.dump(map_config.to_dict(), f)
 

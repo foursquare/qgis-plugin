@@ -1,6 +1,6 @@
-[submodule "Unfolded/qgis_plugin_tools"]
-	path = Unfolded/qgis_plugin_tools
-	url = https://github.com/GispoCoding/qgis_plugin_tools.git
 [submodule "kepler/qgis_plugin_tools"]
 	path = kepler/qgis_plugin_tools
 	url = git@github.com:GispoCoding/qgis_plugin_tools.git
+[submodule "Unfolded/qgis_plugin_tools"]
+	path = Unfolded/qgis_plugin_tools
+	url = https://github.com/GispoCoding/qgis_plugin_tools.git
