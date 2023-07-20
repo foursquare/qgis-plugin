@@ -11,7 +11,7 @@ Instructions were confirmed to be working well with a combination of: Python 3.9
 2. We rely on [qgis_plugin_tools](https://github.com/GispoCoding/qgis_plugin_tools), so when cloning the repo, make sure to clone it recursively, with submodules:
 
 ```bash
-git clone --recurse-submodules https://github.com/UnfoldedInc/qgis-plugin.git
+git clone --recurse-submodules https://github.com/foursquare/qgis-plugin.git
 ```
 
 3. Set up tools:
@@ -42,12 +42,12 @@ export PYTHONPATH=/Applications/Qgis.app/Contents/Resources/python # this makes 
 
 6. The build script:
 
-If you're on Mac, you want to comment out the lines #70 and #71 in `qgis-plugin/Unfolded/qgis_plugin_tools/infrastructure/plugin_maker.py`. This is because Apple returns `"darwin"` as a OS identifier, so this OS check mistakenly thinks it's a Windows machine, and instead, we just let it fall through to the actual case for Mac.
+If you're on Mac, you want to comment out the lines #70 and #71 in `qgis-plugin/kepler/qgis_plugin_tools/infrastructure/plugin_maker.py`. This is because Apple returns `"darwin"` as a OS identifier, so this OS check mistakenly thinks it's a Windows machine, and instead, we just let it fall through to the actual case for Mac.
 
 Now you can run the build script and deploy it to the QGIS' plugins folder:
 
 ```bash
-cd qgis-plugin/Unfolded
+cd qgis-plugin/kepler
 python3 build.py deploy
 ```
 
@@ -55,7 +55,7 @@ This should be the end of your setup and if you manage to run `build.py` script 
 
 ## Development workflow
 
-- make changes to the plugin inside `/Unfolded` folder
+- make changes to the plugin inside `/kepler` folder
 - run `python3 build.py deploy`, this packages the plugin and copies it to the QGIS' plugins folder (usually `/Users/<username>/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins`; or see [plugin's dir location](https://gis.stackexchange.com/questions/274311/qgis-3-plugin-folder-location))
   - this does not publish the plugin to the official plugin registry, just installs it locally! (for releasing it to the remote registry, see [Creating a release](#creating-a-release) section)
   - additionally, you can set up a filesystem watcher to monitor entire folder and automatically execute the deploy command so you don't have to do it manually every time
@@ -77,14 +77,14 @@ For debugging, use:
     - also consider adding this config line to your `.vscode/settings.json` (this makes sure it can find `qgis` module as well):
       ```json
       {
-        "python.analysis.extraPaths": ["./kepler", "./keplergl", "./Unfolded", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest"]
+        "python.analysis.extraPaths": ["./kepler", "./keplergl", "./kepler", "/Applications/Qgis.app/Contents/Resources/python", "/Applications/Qgis.app/Contents/Resources", "${userHome}/.pyenv/versions/3.9.5/lib/python3.9/site-packages", "${userHome}/.pyenv/shims/pytest"]
       }
       ```
 
 Another useful thing is to have both versions of the plugin installed - the current, officially available version and your development version:
 - install the regular version from the registry
-- before running `python3 build.py deploy` script, update `name` in `metadata.txt` to something like `name=Unfolded-dev`
-- now when you run the script, a new plugin with `Unfolded-dev` name will appear along side the regular one in the QGIS plugins directory and plugins listing
+- before running `python3 build.py deploy` script, update `name` in `metadata.txt` to something like `name=kepler-dev`
+- now when you run the script, a new plugin with `kepler-dev` name will appear along side the regular one in the QGIS plugins directory and plugins listing
 - ❗️ don't commit these changes to `metadata.txt` when doing a release (unless that's your actual intention ofc; this is just for development), just keep them in git's unstaged changes e.g.
 - you can also update icon and naming in other places to help differentiate it
 
@@ -100,9 +100,9 @@ If you create or edit source files make sure that:
 
     from ..utils.exceptions import TestException # Good
 
-    from Unfolded.utils.exceptions import TestException # Bad
+    from kepler.utils.exceptions import TestException # Bad
     ```
-* they will be found by [build.py](../Unfolded/build.py) script (`py_files` and `ui_files` values)
+* they will be found by [build.py](../kepler/build.py) script (`py_files` and `ui_files` values)
 * you consider adding test files for the new functionality
 
 ## QGIS documentation and help
@@ -136,7 +136,7 @@ in [.qgis-plugin-ci](../.qgis-plugin-ci) to use Transifex translation.
 * Go to your Transifex site, add some languages and start translating
 * Copy [push_translations.yml](push_translations.yml) file to [workflows](../.github/workflows) folder to enable
   automatic pushing after commits to master
-* Add this badge ![](https://github.com/UnfoldedInc/qgis-plugin/workflows/Translations/badge.svg) to
+* Add this badge ![](https://github.com/foursquare/qgis-plugin/workflows/Translations/badge.svg) to
   the [README](../README.md)
 
 ##### Pulling
@@ -148,7 +148,7 @@ You can however pull manually to test the process.
 
 #### Translating with QT Linguistic (if Transifex not available)
 
-The translation files are in [i18n](../Unfolded/resources/i18n) folder. Translatable content in python files is code
+The translation files are in [i18n](../kepler/resources/i18n) folder. Translatable content in python files is code
 such as `tr(u"Hello World")`.
 
 To update language *.ts* files to contain newest lines to translate, run
