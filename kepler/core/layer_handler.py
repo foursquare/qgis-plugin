@@ -36,7 +36,7 @@ class LayerHandler:
 
     @staticmethod
     def add_fsq_studio_basemaps() -> List[QgsRasterLayer]:
-        """ Add unfolded basemaps to the project """
+        """ Add FSQ Studio basemaps to the project """
         # noinspection PyArgumentList
         qgs_project = QgsProject.instance()
 

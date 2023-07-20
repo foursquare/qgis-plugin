@@ -45,11 +45,11 @@ class BaseConfigCreatorTask(QgsTask):
         super().__init__(description, QgsTask.CanCancel)
         self.exception: Optional[Exception] = None
 
-    def _qgis_field_to_unfolded_field(self, field: QgsField) -> Field:
+    def _qgis_field_to_fsqstudio_field(self, field: QgsField) -> Field:
         """
         Analyze information about the field
         :param field: QGIS field
-        :return: Unfolded field
+        :return: FSQ Studio field
         """
         field_name = field.name()
         field_type = field.type()

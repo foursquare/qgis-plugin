@@ -31,7 +31,7 @@ from .csv_field_value_converter import CsvFieldValueConverter
 from ..exceptions import ProcessInterruptedException
 from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
-from ...model.map_config import OldDataset, Data, Field, UnfoldedDataset
+from ...model.map_config import OldDataset, Data, Field, FSQStudioDataset
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
@@ -81,7 +81,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self._check_if_canceled()
 
             if self.output_directory:
-                dataset = UnfoldedDataset(self.layer_uuid, self.layer.name(), list(self.color), source, fields)
+                dataset = FSQStudioDataset(self.layer_uuid, self.layer.name(), list(self.color), source, fields)
             else:
                 data = Data(self.layer_uuid, self.layer.name(), list(self.color), all_data, fields)
                 dataset = OldDataset(data)
@@ -147,7 +147,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         LOGGER.info(tr('Extracting fields'))
 
         for field in self.layer.fields():
-            fields.append(self._qgis_field_to_unfolded_field(field))
+            fields.append(self._qgis_field_to_fsqstudio_field(field))
         return fields
 
     def _extract_all_data(self) -> Tuple[Optional[str], Optional[List]]:

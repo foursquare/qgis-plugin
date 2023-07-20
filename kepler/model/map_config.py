@@ -1024,13 +1024,13 @@ class Data:
 
 
 class Dataset:
-    """ Common superclass for UnfoldedDataset and OldDataset"""
+    """ Common superclass for FSQStudioDataset and OldDataset"""
     version: str = 'v1'
     data: Data
     source: str
 
 
-class UnfoldedDataset(Dataset):
+class FSQStudioDataset(Dataset):
     id: UUID
     label: str
     color: List[int]
@@ -1052,7 +1052,7 @@ class UnfoldedDataset(Dataset):
         return self
 
     @staticmethod
-    def from_dict(obj: Any) -> 'UnfoldedDataset':
+    def from_dict(obj: Any) -> 'FSQStudioDataset':
         assert isinstance(obj, dict)
         id = UUID(obj.get("id"))
         label = from_str(obj.get("label"))
@@ -1060,7 +1060,7 @@ class UnfoldedDataset(Dataset):
         source = from_str(obj.get("source"))
         fields = from_list(Field.from_dict, obj.get("fields"))
         version = from_str(obj.get("version"))
-        return UnfoldedDataset(id, label, color, source, fields, version)
+        return FSQStudioDataset(id, label, color, source, fields, version)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1132,11 +1132,11 @@ class Info:
 
 
 class MapConfig:
-    datasets: List[Union[UnfoldedDataset, OldDataset]]
+    datasets: List[Union[FSQStudioDataset, OldDataset]]
     config: Config
     info: Info
 
-    def __init__(self, datasets: List[Union[Dataset, UnfoldedDataset, OldDataset]], config: Config,
+    def __init__(self, datasets: List[Union[Dataset, FSQStudioDataset, OldDataset]], config: Config,
                  info: Info) -> None:
         self.datasets = datasets
         self.config = config
@@ -1149,15 +1149,15 @@ class MapConfig:
         if datasets and datasets[0].get("data"):
             datasets = from_list(OldDataset.from_dict, obj.get("datasets"))
         else:
-            datasets = from_list(UnfoldedDataset.from_dict, obj.get("datasets"))
+            datasets = from_list(FSQStudioDataset.from_dict, obj.get("datasets"))
         config = Config.from_dict(obj.get("config"))
         info = Info.from_dict(obj.get("info"))
         return MapConfig(datasets, config, info)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        if self.datasets and isinstance(self.datasets[0], UnfoldedDataset):
-            result["datasets"] = from_list(lambda x: to_class(UnfoldedDataset, x), self.datasets)
+        if self.datasets and isinstance(self.datasets[0], FSQStudioDataset):
+            result["datasets"] = from_list(lambda x: to_class(FSQStudioDataset, x), self.datasets)
         else:
             result["datasets"] = from_list(lambda x: to_class(OldDataset, x), self.datasets)
         result["config"] = to_class(Config, self.config)
