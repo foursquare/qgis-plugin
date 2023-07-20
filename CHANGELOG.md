@@ -2,7 +2,7 @@
 
 ### 1.0.5 - 09/06/2023
 
-* Additional bug fixes and special case handling
+* Additional bug fixes
 
 ### 1.0.4 - 29/05/2023
 
