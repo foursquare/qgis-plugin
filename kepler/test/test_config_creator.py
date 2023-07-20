@@ -1,21 +1,21 @@
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded QGIS plugin
+#  Gispo Ltd., hereby disclaims all copyright interest in the program kepler QGIS plugin by Foursquare
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
-#  This file is part of Unfolded QGIS plugin.
+#  This file is part of kepler QGIS plugin by Foursquare.
 #
-#  Unfolded QGIS plugin is free software: you can redistribute it and/or modify
+#  kepler QGIS plugin by Foursquare is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 2 of the License, or
 #  (at your option) any later version.
 #
-#  Unfolded QGIS plugin is distributed in the hope that it will be useful,
+#  kepler QGIS plugin by Foursquare is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+#  along with kepler QGIS plugin by Foursquare.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import datetime
 import time
 import uuid
@@ -60,23 +60,23 @@ def config_creator(tmpdir_pth, mock_datetime_now) -> ConfigCreator:
 def test_map_config_creation_w_simple_points(config_creator, simple_harbour_points):
     with config_creator as cf:
         time_zone = time.strftime('%Z%z')
-        expected_map_config = get_map_config('harbours_config_point.json')
-        expected_map_config.info.created_at = expected_map_config.info.created_at.replace("EET+0200", time_zone)
+        excpected_map_config = get_map_config('harbours_config_point.json')
+        excpected_map_config.info.created_at = excpected_map_config.info.created_at.replace("EET+0200", time_zone)
         cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
                      QColor.fromRgb(0, 92, 255), True)
         cf._start_config_creation()
 
         map_config = get_loaded_map_config(cf.created_configuration_path)
 
-        assert map_config.config.to_dict() == expected_map_config.config.to_dict()
+        assert map_config.config.to_dict() == excpected_map_config.config.to_dict()
     assert not cf._temp_dir.exists()
 
 
-def test_map_config_creation_with_unfolded_format(config_creator, simple_harbour_points):
+def test_map_config_creation_with_foursquare_format(config_creator, simple_harbour_points):
     with config_creator as cf:
         time_zone = time.strftime('%Z%z')
-        expected_map_config = get_map_config('harbours_config_with_unfolded_datasets.json')
-        expected_map_config.info.created_at = expected_map_config.info.created_at.replace("EET+0200", time_zone)
+        excpected_map_config = get_map_config('harbours_config_with_foursquare_datasets.json')
+        excpected_map_config.info.created_at = excpected_map_config.info.created_at.replace("EET+0200", time_zone)
         cf.add_layer(uuid.UUID('7d193484-21a7-47f4-8cbc-497474a39b64'), simple_harbour_points,
                      QColor.fromRgb(0, 92, 255), True)
         cf._start_config_creation()
@@ -86,7 +86,7 @@ def test_map_config_creation_with_unfolded_format(config_creator, simple_harbour
         with ZipFile(cf.created_configuration_path, 'r') as zip_file:
             assert [n for n in zip_file.namelist()] == ['config.json', 'harbours.csv']
         map_config = get_loaded_map_config(cf.created_configuration_path)
-        assert map_config.to_dict() == expected_map_config.to_dict()
+        assert map_config.to_dict() == excpected_map_config.to_dict()
 
     assert not cf._temp_dir.exists()
 

@@ -1,21 +1,21 @@
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded QGIS plugin
+#  Gispo Ltd., hereby disclaims all copyright interest in the program kepler QGIS plugin by Foursquare
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
-#  This file is part of Unfolded QGIS plugin.
+#  This file is part of kepler QGIS plugin by Foursquare.
 #
-#  Unfolded QGIS plugin is free software: you can redistribute it and/or modify
+#  kepler QGIS plugin by Foursquare is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 2 of the License, or
 #  (at your option) any later version.
 #
-#  Unfolded QGIS plugin is distributed in the hope that it will be useful,
+#  kepler QGIS plugin by Foursquare is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+#  along with kepler QGIS plugin by Foursquare.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import pytest
 from qgis.core import QgsLayerTree
 
@@ -25,17 +25,17 @@ from ..qgis_plugin_tools.testing.utilities import is_running_inside_ci
 
 
 @pytest.mark.skipif(is_running_inside_ci(), reason='In CI')
-def test_add_unfolded_basemaps(new_project, initialize_settings):
-    layers = LayerHandler.add_unfolded_basemaps()
+def test_add_foursquare_basemaps(new_project, initialize_settings):
+    layers = LayerHandler.add_foursquare_basemaps()
     assert len(layers) == 7
     assert all([layer.isValid() for layer in layers])
-    newly_created = LayerHandler.add_unfolded_basemaps()
+    newly_created = LayerHandler.add_foursquare_basemaps()
     assert newly_created == []
 
 
 @pytest.mark.skipif(is_running_inside_ci(), reason='In CI')
 def test_get_current_basemap_name(new_project, initialize_settings):
-    LayerHandler.add_unfolded_basemaps()
+    LayerHandler.add_foursquare_basemaps()
     layer_name = LayerHandler.get_current_basemap_name()
     assert layer_name == 'dark'
 

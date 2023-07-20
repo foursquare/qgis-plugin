@@ -1,5 +1,5 @@
-plugin_path: Unfolded
-github_organization_slug: UnfoldedInc
+plugin_path: kepler
+github_organization_slug: foursquare
 project_slug: qgis-plugin
 transifex_coordinator: replace-me
 transifex_organization: replace-me

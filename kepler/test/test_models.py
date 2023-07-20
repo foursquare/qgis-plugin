@@ -1,21 +1,21 @@
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded QGIS plugin
+#  Gispo Ltd., hereby disclaims all copyright interest in the program kepler QGIS plugin by Foursquare
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
-#  This file is part of Unfolded QGIS plugin.
+#  This file is part of kepler QGIS plugin by Foursquare.
 #
-#  Unfolded QGIS plugin is free software: you can redistribute it and/or modify
+#  kepler QGIS plugin by Foursquare is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 2 of the License, or
 #  (at your option) any later version.
 #
-#  Unfolded QGIS plugin is distributed in the hope that it will be useful,
+#  kepler QGIS plugin by Foursquare is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+#  along with kepler QGIS plugin by Foursquare.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import json
 
 from ..model.map_config import MapConfig
@@ -65,8 +65,8 @@ def test_map_config_model_polygon_polygons():
     assert map_config.to_dict() == map_config_dict
 
 
-def test_unfolded_config_format():
-    with open(plugin_test_data_path('config', 'harbours_config_with_unfolded_datasets.json')) as f:
+def test_foursquare_config_format():
+    with open(plugin_test_data_path('config', 'harbours_config_with_foursquare_datasets.json')) as f:
         map_config_dict = json.load(f)
     map_config = MapConfig.from_dict(map_config_dict)
     assert map_config.to_dict() == map_config_dict

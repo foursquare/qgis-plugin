@@ -1,21 +1,21 @@
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Unfolded QGIS plugin
+#  Gispo Ltd., hereby disclaims all copyright interest in the program kepler QGIS plugin by Foursquare
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
-#  This file is part of Unfolded QGIS plugin.
+#  This file is part of kepler QGIS plugin by Foursquare.
 #
-#  Unfolded QGIS plugin is free software: you can redistribute it and/or modify
+#  kepler QGIS plugin by Foursquare is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 2 of the License, or
 #  (at your option) any later version.
 #
-#  Unfolded QGIS plugin is distributed in the hope that it will be useful,
+#  kepler QGIS plugin by Foursquare is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with Unfolded QGIS plugin.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
+#  along with kepler QGIS plugin by Foursquare.  If not, see <https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html>.
 import uuid
 
 import pytest
@@ -132,8 +132,8 @@ def test_csv_export_with_output_dir(layer, expected_csv, alg, tmp_path, request)
     assert converted_data == expected_data
 
 
-def test_unfolded_dataset_format(simple_harbour_points, alg, tmp_path):
-    map_config = get_map_config('harbours_config_with_unfolded_datasets.json')
+def test_foursquare_dataset_format(simple_harbour_points, alg, tmp_path):
+    map_config = get_map_config('harbours_config_with_foursquare_datasets.json')
     alg.layer = simple_harbour_points
     alg.output_directory = tmp_path
     status = alg.run()
