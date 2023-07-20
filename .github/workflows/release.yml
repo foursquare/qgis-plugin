@@ -30,6 +30,10 @@ jobs:
       - name: Install qgis-plugin-ci
         run: pip3 install qgis-plugin-ci
 
+      # the current OSGEO_USERNAME_FSQ and OSGEO_PASSWORD_FSQ are tied to:
+      # user: https://plugins.qgis.org/plugins/user/foursquare
+      # email: dokanovic@foursquare.com
+      #
       # When osgeo upload is wanted: --osgeo-username usrname --osgeo-password ${{ secrets.OSGEO_PASSWORD_FSQ }}
       # When Transifex is wanted: --transifex-token ${{ secrets.TRANSIFEX_TOKEN }}
       - name: Deploy plugin
