@@ -1,4 +1,4 @@
-# Foursquare's Studio and kepler QGIS plugin
+# kepler QGIS plugin by Foursquare
 
 ![](https://github.com/foursquare/qgis-plugin/workflows/Tests/badge.svg)
 [![codecov.io](https://codecov.io/github/foursquare/qgis-plugin/coverage.svg?branch=main)](https://codecov.io/github/foursquare/qgis-plugin?branch=main)
