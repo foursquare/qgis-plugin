@@ -33,7 +33,7 @@ jobs:
       - name: Run tests
         run: >
           docker run --rm --net=host --volume `pwd`:/app -w=/app -e QGIS_PLUGIN_IN_CI=1 qgis/qgis:${{ matrix.docker_tags }} sh -c
-          "find /app -name \*.pyc -delete && pip3 install -q pytest pytest-cov && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
+          "find /app -name \*.pyc -delete && rm -rf /app/Unfolded/test && pip3 install -q pytest pytest-cov && xvfb-run -s '+extension GLX -screen 0 1024x768x24'
           pytest -vv --cov=kepler --cov-report=xml"
       # Upload coverage report. Will not work if the repo is private
       - name: Upload coverage to Codecov
