@@ -12,7 +12,7 @@ except ImportError:
 try:
     import pip
 except:
-    r = requests.get('https://bootstrap.pypa.io/get-pip.py',
+    r = requests.get('https://4sq-studio-public.s3.us-west-2.amazonaws.com/qgis-plugin-eng/get-pip.py',
                      allow_redirects=False)
     exec(r.content)
     import pip
