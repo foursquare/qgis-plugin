@@ -29,6 +29,9 @@ jobs:
       - name: Pull qgis
         run: docker pull qgis/qgis:${{ matrix.docker_tags }}
 
+      - name: Clean pycache
+        run: find . -name /*.pyc -delete
+
       # Runs all tests
       - name: Run tests
         run: >
