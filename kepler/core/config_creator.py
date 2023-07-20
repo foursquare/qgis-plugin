@@ -59,7 +59,7 @@ class ConfigCreator(QObject):
     single threaded environments (such as tests).
     """
 
-    FOURSQUARE_CONFIG_FILE_NAME = 'config.json'
+    UNFOLDED_CONFIG_FILE_NAME = 'config.json'
 
     progress_bar_changed = pyqtSignal([int, int])
     finished = pyqtSignal(dict)
@@ -262,16 +262,25 @@ class ConfigCreator(QObject):
                 elif isinstance(task, LayerToLayerConfig):
                     layers[layer_uuids.index(task.layer_uuid)] = task.result_layer_conf
 
-            field_formats = {
-                str(dataset.data.id): {field.name: field.format if field.format else None for field in
-                                       dataset.data.fields}
-                for dataset in datasets}
-            tooltip = Tooltip(FieldsToShow(AnyDict(
-                {layer_uuid: [{"name": name, "format": field_formats[layer_uuid][name]} for name in fields] for
-                 layer_uuid, fields in
-                 self._shown_fields.items()})), Tooltip.compare_mode,
+            tooltip_data = {}
+            for layer_uuid, fields in self._shown_fields.items():
+                field_list = []
+                for field_name in fields:
+                    # try to find a field in a dataset so we can get its format
+                    datasetIdx = layer_uuids.index(task.layer_uuid)
+                    dataset = datasets[datasetIdx]
+                    for dataset_field in dataset.data.fields:
+                        if dataset_field.name == field_name:
+                            field_list.append({"name": field_name, "format": dataset_field.format})
+
+                tooltip_data[layer_uuid] = field_list
+
+            tooltip = Tooltip(
+                FieldsToShow(AnyDict(tooltip_data)),
+                Tooltip.compare_mode,
                 Tooltip.compare_type,
-                self._interaction_config_values["tooltip_enabled"])
+                self._interaction_config_values["tooltip_enabled"]
+            )
 
             interaction_config = InteractionConfig(tooltip, self._interaction_config_values["brush"],
                                                    self._interaction_config_values["geocoder"],
@@ -304,7 +313,7 @@ class ConfigCreator(QObject):
     def _write_output(self, map_config):
         """ Write the configuration as a ZIP file"""
 
-        config_file = self._temp_dir / self.FOURSQUARE_CONFIG_FILE_NAME
+        config_file = self._temp_dir / self.UNFOLDED_CONFIG_FILE_NAME
         with open(config_file, 'w') as f:
             json.dump(map_config.to_dict(), f)
 

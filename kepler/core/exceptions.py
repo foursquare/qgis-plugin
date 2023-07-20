@@ -1,8 +1,8 @@
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Foursquare
+#  Gispo Ltd., hereby disclaims all copyright interest in the program kepler QGIS plugin by Foursquare
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
-#  This file is part of Foursquare .
+#  This file is part of kepler QGIS plugin by Foursquare.
 #
 #  kepler QGIS plugin by Foursquare is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

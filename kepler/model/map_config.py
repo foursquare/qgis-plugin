@@ -21,7 +21,7 @@
 Initial version generated using https://app.quicktype.io/ from json file
 """
 
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Union, Tuple
 from uuid import UUID
 
 from .conversion_utils import (from_int, from_bool, from_float, to_float, from_str, from_list,
@@ -560,12 +560,14 @@ class ColorRange:
     type: str
     category: str
     colors: List[str]
+    color_map: Optional[List[Tuple[float, str]]]
 
-    def __init__(self, name: str, type: str, category: str, colors: List[str]) -> None:
+    def __init__(self, name: str, type: str, category: str, colors: List[str], color_map: Optional[List[Tuple[float, str]]] = None) -> None:
         self.name = name
         self.type = type
         self.category = category
         self.colors = colors
+        self.color_map = color_map
 
     @staticmethod
     def create_default() -> 'ColorRange':
@@ -591,6 +593,8 @@ class ColorRange:
         result["type"] = from_str(self.type)
         result["category"] = from_str(self.category)
         result["colors"] = from_list(from_str, self.colors)
+        if self.color_map:
+            result["colorMap"] = self.color_map
         return result
 
 
@@ -1020,13 +1024,13 @@ class Data:
 
 
 class Dataset:
-    """ Common superclass for FoursquareDataset and OldDataset"""
+    """ Common superclass for UnfoldedDataset and OldDataset"""
     version: str = 'v1'
     data: Data
     source: str
 
 
-class FoursquareDataset(Dataset):
+class UnfoldedDataset(Dataset):
     id: UUID
     label: str
     color: List[int]
@@ -1041,14 +1045,14 @@ class FoursquareDataset(Dataset):
         self.color = color
         self.source = source
         self.fields = fields
-        self.version = version if version is not None else Dataset.version
+        self.version = version or Dataset.version
 
     @property
     def data(self):
         return self
 
     @staticmethod
-    def from_dict(obj: Any) -> 'FoursquareDataset':
+    def from_dict(obj: Any) -> 'UnfoldedDataset':
         assert isinstance(obj, dict)
         id = UUID(obj.get("id"))
         label = from_str(obj.get("label"))
@@ -1056,7 +1060,7 @@ class FoursquareDataset(Dataset):
         source = from_str(obj.get("source"))
         fields = from_list(Field.from_dict, obj.get("fields"))
         version = from_str(obj.get("version"))
-        return FoursquareDataset(id, label, color, source, fields, version)
+        return UnfoldedDataset(id, label, color, source, fields, version)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1075,7 +1079,7 @@ class OldDataset(Dataset):
 
     def __init__(self, data: Data, version: Optional[str] = None) -> None:
         self.data = data
-        self.version = version if version is not None else Dataset.version
+        self.version = version or Dataset.version
 
     @staticmethod
     def from_dict(obj: Any) -> 'OldDataset':
@@ -1092,7 +1096,7 @@ class OldDataset(Dataset):
 
 
 class Info:
-    app: str = 'kepler'
+    app: str = 'kepler.gl'
     created_at: str
     title: str
     description: str
@@ -1128,11 +1132,11 @@ class Info:
 
 
 class MapConfig:
-    datasets: List[Union[FoursquareDataset, OldDataset]]
+    datasets: List[Union[UnfoldedDataset, OldDataset]]
     config: Config
     info: Info
 
-    def __init__(self, datasets: List[Union[Dataset, FoursquareDataset, OldDataset]], config: Config,
+    def __init__(self, datasets: List[Union[Dataset, UnfoldedDataset, OldDataset]], config: Config,
                  info: Info) -> None:
         self.datasets = datasets
         self.config = config
@@ -1145,15 +1149,15 @@ class MapConfig:
         if datasets and datasets[0].get("data"):
             datasets = from_list(OldDataset.from_dict, obj.get("datasets"))
         else:
-            datasets = from_list(FoursquareDataset.from_dict, obj.get("datasets"))
+            datasets = from_list(UnfoldedDataset.from_dict, obj.get("datasets"))
         config = Config.from_dict(obj.get("config"))
         info = Info.from_dict(obj.get("info"))
         return MapConfig(datasets, config, info)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        if self.datasets and isinstance(self.datasets[0], FoursquareDataset):
-            result["datasets"] = from_list(lambda x: to_class(FoursquareDataset, x), self.datasets)
+        if self.datasets and isinstance(self.datasets[0], UnfoldedDataset):
+            result["datasets"] = from_list(lambda x: to_class(UnfoldedDataset, x), self.datasets)
         else:
             result["datasets"] = from_list(lambda x: to_class(OldDataset, x), self.datasets)
         result["config"] = to_class(Config, self.config)

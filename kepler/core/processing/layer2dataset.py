@@ -24,15 +24,14 @@ from pathlib import Path
 from typing import Optional, List, Tuple
 
 from PyQt5.QtCore import QVariant
-from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsCoordinateReferenceSystem,
-                       QgsProject)
+from qgis.core import (QgsVectorLayer, QgsField, QgsVectorFileWriter, QgsProject)
 
 from .base_config_creator_task import BaseConfigCreatorTask
 from .csv_field_value_converter import CsvFieldValueConverter
 from ..exceptions import ProcessInterruptedException
 from ..utils import set_csv_field_size_limit
 from ...definitions.settings import Settings
-from ...model.map_config import OldDataset, Data, Field, FoursquareDataset
+from ...model.map_config import OldDataset, Data, Field, UnfoldedDataset
 from ...qgis_plugin_tools.tools.custom_logging import bar_msg
 from ...qgis_plugin_tools.tools.exceptions import QgsPluginNotImplementedException
 from ...qgis_plugin_tools.tools.i18n import tr
@@ -44,7 +43,6 @@ LOGGER = logging.getLogger(f'{plugin_name()}_task')
 
 # Main thread logger meant to be used in finished method
 LOGGER_MAIN = logging.getLogger(plugin_name())
-
 
 class LayerToDatasets(BaseConfigCreatorTask):
 
@@ -83,7 +81,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
             self._check_if_canceled()
 
             if self.output_directory:
-                dataset = FoursquareDataset(self.layer_uuid, self.layer.name(), list(self.color), source, fields)
+                dataset = UnfoldedDataset(self.layer_uuid, self.layer.name(), list(self.color), source, fields)
             else:
                 data = Data(self.layer_uuid, self.layer.name(), list(self.color), all_data, fields)
                 dataset = OldDataset(data)
@@ -98,27 +96,30 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         LOGGER.info(tr('Adding layer geometry to fields'))
 
-        crs: QgsCoordinateReferenceSystem = self.layer.crs().authid()
+
+
+        crs = self.layer.crs().authid()
         dest_crs = Settings.crs.get()
-        do_transform = crs != dest_crs
+        requires_transform = crs != dest_crs
         layer_type = LayerType.from_layer(self.layer)
         if layer_type == LayerType.Point:
             LOGGER.debug('Point layer')
-            if not do_transform:
-                self.layer.addExpressionField('$x', QgsField('longitude', QVariant.Double))
-                self.layer.addExpressionField('$y', QgsField('latitude', QVariant.Double))
-            else:
-                self.layer.addExpressionField(f"x(transform($geometry, '{crs}', '{dest_crs}'))",
-                                              QgsField('longitude', QVariant.Double))
-                self.layer.addExpressionField(f"y(transform($geometry, '{crs}', '{dest_crs}'))",
-                                              QgsField('latitude', QVariant.Double))
+
+            expressions: Tuple[str, str] = ('$x', '$y')
+            if requires_transform:
+                expressions = (
+                    f"x(transform($geometry, '{crs}', '{dest_crs}'))",
+                    f"y(transform($geometry, '{crs}', '{dest_crs}'))"
+                )
+            self.layer.addExpressionField(expressions[0], QgsField(LayerToDatasets.LONG_FIELD, QVariant.Double))
+            self.layer.addExpressionField(expressions[1], QgsField(LayerToDatasets.LAT_FIELD, QVariant.Double))
             # TODO: z coord
         elif layer_type in (LayerType.Polygon, LayerType.Line):
             LOGGER.debug('Polygon or line layer')
-            expression = ('geom_to_wkt($geometry)' if not do_transform
-                          else f"geom_to_wkt(transform($geometry, '{crs}', '{dest_crs}'))")
-
-            self.layer.addExpressionField(expression, QgsField(self.GEOM_FIELD, QVariant.String))
+            expression: str = 'geom_to_wkt($geometry)'
+            if requires_transform:
+                expression = f"geom_to_wkt(transform($geometry, '{crs}', '{dest_crs}'))"
+            self.layer.addExpressionField(expression, QgsField(LayerToDatasets.GEOM_FIELD, QVariant.String))
         else:
             raise QgsPluginNotImplementedException(
                 bar_msg=bar_msg(tr('Unsupported layer wkb type: {}', self.layer.wkbType())))
@@ -146,7 +147,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
         LOGGER.info(tr('Extracting fields'))
 
         for field in self.layer.fields():
-            fields.append(self._qgis_field_to_foursquare_field(field))
+            fields.append(self._qgis_field_to_unfolded_field(field))
         return fields
 
     def _extract_all_data(self) -> Tuple[Optional[str], Optional[List]]:
@@ -156,7 +157,7 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         LOGGER.info(tr('Extracting layer data'))
 
-        all_data, source = [None] * 2
+        source, all_data = [None] * 2
         if self.output_directory:
             output_file = self._save_layer_to_file(self.layer, self.output_directory)
             source = output_file.name
@@ -199,11 +200,33 @@ class LayerToDatasets(BaseConfigCreatorTask):
 
         converter = CsvFieldValueConverter(layer)
 
+        layer_type = LayerType.from_layer(layer)
+        field_count = len(layer.fields().toList())
+        filtered_attribute_ids: list[int] = []
+        for i, field in enumerate(layer.fields()):
+            field_name = field.name().lower()
+            # during _add_geom_to_fields() we've added some fields, but we now
+            # want to filter out the fields with the same name as to avoid name
+            # colissions
+            if layer_type == LayerType.Point:
+                if field_name == LayerToDatasets.LONG_FIELD and i != field_count - 2:
+                    LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
+                    continue
+                if field_name == LayerToDatasets.LAT_FIELD and i != field_count - 1:
+                    LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
+                    continue
+            elif layer_type in (LayerType.Polygon, LayerType.Line):
+                if field_name == LayerToDatasets.GEOM_FIELD and i != field_count - 1:
+                    LOGGER.info(tr('Skipping attribute: {} ({})', field.name(), i))
+                    continue
+            filtered_attribute_ids.append(i)
+
         options = QgsVectorFileWriter.SaveVectorOptions()
         options.driverName = "csv"
         options.fileEncoding = "utf-8"
         options.layerOptions = ["SEPARATOR=COMMA"]
         options.fieldValueConverter = converter
+        options.attributes = filtered_attribute_ids
 
         if hasattr(QgsVectorFileWriter, "writeAsVectorFormatV3"):
             # noinspection PyCallByClass

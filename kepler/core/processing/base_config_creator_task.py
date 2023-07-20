@@ -1,4 +1,4 @@
-#  Gispo Ltd., hereby disclaims all copyright interest in the program Foursquare
+#  Gispo Ltd., hereby disclaims all copyright interest in the program kepler QGIS plugin by Foursquare
 #  Copyright (C) 2021 Gispo Ltd (https://www.gispo.fi/).
 #
 #
@@ -37,17 +37,19 @@ LOGGER_MAIN = logging.getLogger(plugin_name())
 
 
 class BaseConfigCreatorTask(QgsTask):
+    LONG_FIELD = 'longitude'
+    LAT_FIELD = 'latitude'
     GEOM_FIELD = 'geometry'
 
     def __init__(self, description: str):
         super().__init__(description, QgsTask.CanCancel)
         self.exception: Optional[Exception] = None
 
-    def _qgis_field_to_foursquare_field(self, field: QgsField) -> Field:
+    def _qgis_field_to_unfolded_field(self, field: QgsField) -> Field:
         """
         Analyze information about the field
         :param field: QGIS field
-        :return: Foursquare field
+        :return: Unfolded field
         """
         field_name = field.name()
         field_type = field.type()

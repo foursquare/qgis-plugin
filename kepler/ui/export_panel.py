@@ -21,11 +21,11 @@ import logging
 import uuid
 import webbrowser
 from pathlib import Path
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, cast
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QComboBox, QTableWidget, QTableWidgetItem, QCheckBox
-from qgis.core import QgsProject, QgsVectorLayer, QgsApplication
+from qgis.core import QgsProject, QgsVectorLayer, QgsApplication, QgsMapLayer
 from qgis.gui import QgsMapCanvas
 from qgis.utils import iface
 
@@ -80,7 +80,7 @@ class ExportPanel(BasePanel):
         self.dlg.btn_export.clicked.connect(self.run)
 
         # Studio button
-        self.dlg.btn_open_studio.setIcon(QIcon(resources_path('icons', 'icon.png')))
+        self.dlg.btn_open_studio.setIcon(QIcon(resources_path('icons', 'icon.svg')))
         self.dlg.btn_open_studio.clicked.connect(lambda _: webbrowser.open(Settings.studio_url.get()))
 
         # Refresh
@@ -137,7 +137,17 @@ class ExportPanel(BasePanel):
                 if not layers:
                     raise ExportException(tr('No layers found with name {}!', layer_name),
                                           bar_msg=bar_msg(tr('Open the dialog again to refresh the layers')))
-                layers_with_visibility.append((layers[0], is_visible))
+
+                if layers[0].type() != QgsMapLayer.VectorLayer:
+                    LOGGER.warning(tr('Skipping layer {} because it is not a vector layer', layers[0].name()))
+                    continue
+
+                layer = cast(QgsVectorLayer, layers[0])
+                if layer.featureCount() == 0:
+                    LOGGER.warning(tr('Skipping layer {} because it is empty', layer.name()))
+                    continue
+
+                layers_with_visibility.append((layer, is_visible))
         if not layers_with_visibility:
             raise ExportException(tr('No layers selected'),
                                   bar_msg=bar_msg(tr('Select at least on layer to continue export')))

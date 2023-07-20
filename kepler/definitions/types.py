@@ -20,7 +20,7 @@ import enum
 
 
 @enum.unique
-class FoursquareLayerType(enum.Enum):
+class UnfoldedLayerType(enum.Enum):
     Point = 'point'
     Geojson = 'geojson'
 
