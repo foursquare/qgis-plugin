@@ -1,3 +1,4 @@
 [report]
-omit = kepler/qgis_plugin_tools/*
-omit = Unfolded/*
+omit =
+        kepler/qgis_plugin_tools/*
+        Unfolded/*
